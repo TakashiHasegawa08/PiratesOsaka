@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # ホストとコンテナのポートをマッピング
+    volumes:
+      - .:/app       # プロジェクトファイルをコンテナ内にマウント
+      - /app/node_modules  # node_modulesはローカルにマウントしない
+    stdin_open: true
+    tty: true

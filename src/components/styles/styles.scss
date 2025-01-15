@@ -1,0 +1,11 @@
+// SCSS Modules
+@use './mixins/breakpoints.scss';
+@use './main.scss';
+@use './HamburgerMenu.scss';
+@use './footer.scss';
+@use './music.scss';
+@use './IllustrationWorks.scss';
+
+// Slick Carousel Styles
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';

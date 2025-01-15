@@ -1,0 +1,275 @@
+@charset "UTF-8";
+@use './mixins/breakpoints'as breakpoints;
+
+
+.outer {
+    position: relative;
+
+    &::before {
+        position: fixed;
+        content: '';
+        background-image: -webkit-linear-gradient(#DEDFE3 2%, #AEB3B9 95%),
+            -webkit-radial-gradient(33% 100%, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+        background-image: linear-gradient(#DEDFE3 2%, #AEB3B9 95%),
+            radial-gradient(33% 100%, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+        background-blend-mode: screen;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+    }
+
+    .all_wrap {
+        max-width: 400px;
+        width: 100%;
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        background-color: white;
+
+        #intro {
+            max-width: 400px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 102;
+            overflow: hidden;
+
+
+            .player_wrap {
+                position: relative;
+                background-color: white;
+                padding: 12px 0;
+
+                .player {
+                    width: 280px;
+                    height: 280px;
+                    display: block;
+                    margin: 0 auto;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center left;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+
+                    @media screen and (max-width: 400px) {
+                        height: 60vw;
+                        width: 60vw;
+                        display: block;
+                        margin: 0 auto;
+                    }
+                }
+            }
+
+        }
+
+        .selection {
+            width: 100%;
+            position: relative;
+            padding: 340px 5% 35px;
+            box-sizing: border-box;
+            overflow-y: scroll;
+
+            @media screen and (max-width: 400px) {
+                padding: 70vw 5% 50px;
+            }
+
+            h1 {
+                font-size: 25px;
+                font-family: 'Noto Sans JP', sans-serif;
+                font-weight: 700;
+                line-height: 1.2;
+                margin-bottom: 10px;
+            }
+
+            .credit {
+                font-size: min(3.3vw, 13px);
+                letter-spacing: .1em;
+                line-height: 1.6;
+                margin-bottom: 5px;
+            }
+
+            .T_HASE_rogo {
+                width: 90px;
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+
+.btn_wrap {
+    position: absolute;
+    right: 9px;
+    bottom: 5px;
+    width: 48px;
+    z-index: 101;
+
+    .player-timer-btn {
+        cursor: pointer;
+    }
+}
+
+
+
+
+.soundList {
+    margin-top: 32px;
+    margin-bottom: 63px;
+    position: relative;
+    z-index: 100;
+
+    .store_lists {
+        display: flex;
+        gap: 3%;
+    }
+}
+
+.soundList-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    cursor: pointer;
+}
+
+.soundList-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    margin-right: 20px;
+}
+
+
+
+.soundList-title {
+    font-size: min(3.4vw, 14px);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.soundList-description {
+    font-size: 0.7rem;
+    display: block;
+    color: #c7c7c7;
+}
+
+#audioVisualizer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+}
+
+.volume_box {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    padding-bottom: 10px;
+
+    .volume_wrap {
+        display: flex;
+        width: 37%;
+        align-items: center;
+        justify-content: flex-end;
+        margin: 5px 0px 0 0;
+
+        .tag {
+            font-size: 12px;
+            margin-right: 4px;
+        }
+
+        #volumeControl {
+            background: #d0d0d0;
+            display: block;
+            position: relative;
+            z-index: 10;
+            text-align: right;
+            padding: 2px 5px;
+        }
+    }
+
+}
+
+
+
+
+
+/* ボリュームバーのスタイリング */
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: #d0d0d0;
+    /* バーの背景色 */
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #3f3f3f;
+    /* スライダーの色 */
+    cursor: pointer;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+#footer {
+    background-color: black;
+    padding: 30px 5%;
+
+    .copyright {
+        font-size: min(3.0vw, 11px);
+        text-align: center;
+        color: white;
+        letter-spacing: .1em;
+        line-height: 1.6;
+    }
+}
+
+.other_link {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    a {
+        width: 65%;
+        display: block;
+    }
+
+    p.lead {
+        text-align: center;
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+}
+
+
+
+.sp-only {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .PC-only {
+        display: none !important;
+    }
+
+    .sp-only {
+        display: block !important;
+    }
+
+}

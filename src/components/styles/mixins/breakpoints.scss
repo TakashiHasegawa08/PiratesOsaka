@@ -1,0 +1,25 @@
+// ブレイクポイントの変数
+$desktop: 1200px;
+$tab: 1080px;
+$sp: 768px;
+
+// タブレット用のミックスイン
+@mixin tab {
+    @media screen and (max-width: #{$tab}) {
+        @content;
+    }
+}
+
+// スマホ用のミックスイン
+@mixin sp {
+    @media screen and (max-width: #{$sp}) {
+        @content;
+    }
+}
+
+// 汎用ミックスイン（任意のブレイクポイントを指定可能）
+@mixin respond($breakpoint) {
+    @media screen and (max-width: #{$breakpoint}) {
+        @content;
+    }
+}
