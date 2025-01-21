@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import Header from "./Header";
 import Footer from "./Footer";
+import Title from "./Title";
 
 Modal.setAppElement("#root"); // アプリのルート要素を指定
 
@@ -10,34 +11,27 @@ function IllustrationWorks() {
   const [loading, setLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [scrollPos, setScrollPos] = useState(0);
+
+  const [visiblePosts, setVisiblePosts] = useState(30);
 
   useEffect(() => {
-    fetchPosts(page);
-  }, [page]);
+    fetchPosts();
+  }, []);
 
-  const fetchPosts = async (page) => {
+  const fetchPosts = async () => {
     try {
       const apiUrl =
         process.env.NODE_ENV === "development"
-          ? `http://localhost:10039/wp-json/wp/v2/portfolio?per_page=50&page=${page}&_embed`
-          : `https://pirates-osaka.com/wp-json/wp/v2/portfolio?per_page=50&page=${page}&_embed`;
+          ? `http://localhost:10039/wp-json/wp/v2/portfolio?per_page=50&_embed`
+          : `https://pirates-osaka.com/wp-json/wp/v2/portfolio?per_page=50&_embed`;
 
       const response = await fetch(apiUrl);
       if (!response.ok) {
-        if (response.status === 400) {
-          setHasMore(false);
-        } else {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-      } else {
-        const data = await response.json();
-        setPosts((prevPosts) => [...prevPosts, ...data]);
-        if (data.length < 50) {
-          setHasMore(false);
-        }
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      const data = await response.json();
+      setPosts(data);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -46,29 +40,49 @@ function IllustrationWorks() {
   };
 
   const openModal = (image) => {
-    setSelectedImage(image);
-    setModalIsOpen(true);
+    const scrollbarWidth = getScrollbarWidth();
+    setScrollPos(window.pageYOffset); // 現在のスクロール位置を保存
+    document.body.style.overflow = "hidden"; // 背景を固定
+    document.body.style.marginRight = `${scrollbarWidth}px`; // スクロールバー分調整
+    setSelectedImage(image); // 画像データをセット
+    setModalIsOpen(true); // モーダルを開く
   };
 
   const closeModal = () => {
-    setModalIsOpen(false);
-    setSelectedImage(null);
+    document.body.style.overflow = ""; // 背景スクロールを再有効化
+    document.body.style.marginRight = ""; // スクロールバー調整解除
+    window.scrollTo(0, scrollPos); // スクロール位置を復元
+    setModalIsOpen(false); // モーダルを閉じる
+    setSelectedImage(null); // 画像データをリセット
   };
 
-  const loadMore = () => {
-    if (hasMore) {
-      setPage((prevPage) => prevPage + 1);
-    }
+  const getScrollbarWidth = () => {
+    const outer = document.createElement("div");
+    outer.style.visibility = "hidden";
+    outer.style.overflow = "scroll";
+    document.body.appendChild(outer);
+
+    const inner = document.createElement("div");
+    outer.appendChild(inner);
+
+    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+    outer.parentNode.removeChild(outer);
+
+    return scrollbarWidth;
+  };
+
+  const loadMorePosts = () => {
+    setVisiblePosts((prev) => prev + 10);
   };
 
   return (
-    <div>
+    <div id="illustPage">
       <Header />
       <main>
-        {/* <h1>Illustration Works</h1> */}
-        <div className="contents-inner">
+        <div className="contents_inner">
+          <Title>Illustration Works</Title>
           <div className="gallery">
-            {posts.map((post) => {
+            {posts.slice(0, visiblePosts).map((post) => {
               const thumbnailUrl =
                 post._embedded &&
                 post._embedded["wp:featuredmedia"] &&
@@ -97,25 +111,26 @@ function IllustrationWorks() {
               );
             })}
           </div>
+          <div id="load-more-container">
+            {visiblePosts < posts.length && (
+              <button id="more-button" onClick={loadMorePosts}>
+                view more images
+                <img
+                  src="/img/illustrationWorks_img/more_arrow.svg"
+                  alt="開く"
+                />
+              </button>
+            )}
+          </div>
         </div>
         {loading && <p>Loading...</p>}
-        {hasMore && !loading && (
-          <div id="load-more-container">
-            <button id="load-more" onClick={loadMore}>
-              <p>and more…</p>
-              <img
-                src="/img/illustrationWorks_img/more_arrow.svg"
-                alt="and more"
-              />
-            </button>
-          </div>
-        )}
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
           contentLabel="Image Modal"
           className="modal-content"
-          overlayClassName="modal-overlay"
+          overlayClassName={`modal-overlay ${modalIsOpen ? "open" : ""}`}
+          shouldCloseOnOverlayClick={true}
         >
           <div className="modal-main">
             <div className="modal-main_inner">

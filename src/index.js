@@ -6,11 +6,12 @@ import PostDetail from "./components/PostDetail"; // 個別投稿
 import Other from "./components/Other"; // Otherページ
 import Music from "./components/Music"; // Musicページ
 import IllustrationWorks from "./components/IllustrationWorks"; // IllustrationWorksページ
+import Blog from "./components/Blog"; // blogページ
 import "./components/styles/styles.scss";
 
 function App() {
   return (
-    // 本番環境・ローカル環境と、ステージング環境（サブディレクトリ）切り替え   <Router basename="/test01">
+    // 本番環境・ローカル環境と、ステージング環境（サブディレクトリ）   <Router basename="/test01">
     <Router>
       <Routes>
         <Route path="/" element={<Posts />} /> {/* トップページ */}
@@ -19,6 +20,7 @@ function App() {
         <Route path="/music" element={<Music />} /> {/* Musicページ */}
         <Route path="/illustrationWorks" element={<IllustrationWorks />} />{" "}
         {/* IllustrationWorksページ */}
+        <Route path="/blog" element={<Blog />} /> {/* blogページ */}
       </Routes>
     </Router>
   );

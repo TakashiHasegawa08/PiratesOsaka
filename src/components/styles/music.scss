@@ -1,37 +1,25 @@
 @charset "UTF-8";
 @use './mixins/breakpoints'as breakpoints;
 
+#musicPage {
 
-.outer {
-    position: relative;
+    .contents_inner {
+        @include breakpoints.sp {
+            max-width: 500px;
+            width: 100%;
+        }
+    }
 
-
-    .all_wrap {
-        max-width: 400px;
-        width: 100%;
-        display: block;
-        margin: 0 auto;
+    .outer {
         position: relative;
-        background-color: white;
 
-
-        .selection {
+        .soundSelection {
             width: 100%;
             position: relative;
-            padding: 30px 5% 35px;
             box-sizing: border-box;
-            overflow-y: scroll;
 
-            @media screen and (max-width: 400px) {
-                padding: 70vw 5% 50px;
-            }
-
-            h1 {
-                font-size: 25px;
-                font-family: 'Noto Sans JP', sans-serif;
-                font-weight: 700;
-                line-height: 1.2;
-                margin-bottom: 10px;
+            @media screen and (max-width: 450px) {
+                padding: 0vw 0% 50px;
             }
 
             .credit {
@@ -40,171 +28,206 @@
                 line-height: 1.6;
                 margin-bottom: 5px;
             }
+        }
 
-            .T_HASE_rogo {
-                width: 90px;
-                margin-bottom: 20px;
+        .T_HASE_rogo {
+            width: 70px;
+            margin-bottom: 20px;
+        }
+    }
+
+
+    .btn_wrap {
+        position: absolute;
+        right: 9px;
+        bottom: 5px;
+        width: 48px;
+        z-index: 81;
+
+        .player-timer-btn {
+            cursor: pointer;
+        }
+    }
+
+
+
+    .soundList {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        row-gap: 20px;
+        // margin-top: 32px;
+        margin-bottom: 63px;
+        position: relative;
+        z-index: 80;
+
+        .soundList-item {
+            width: calc((100% - (15px * 3)) / 4);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            row-gap: 10px;
+            align-items: center;
+            margin-bottom: 2rem;
+            cursor: pointer;
+
+            @media screen and (max-width: 1050px) {
+                width: calc((100% - (15px * 2)) / 3);
             }
+
+            @include breakpoints.sp {
+                flex-direction: row;
+                width: 100%;
+            }
+
+            .store_lists {
+                display: flex;
+                gap: 3%;
+            }
+
+            .image-wrapper {
+                position: relative;
+                overflow: hidden;
+
+                @include breakpoints.sp {
+                    overflow: inherit;
+                }
+
+                .soundModal_open {
+                    width: 70px;
+                    height: 70px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 2;
+
+                    @include breakpoints.sp {
+                        width: 40px;
+                        height: 40px;
+                    }
+                }
+
+                .soundList-image {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                    transition: transform 0.3s ease;
+
+                    @include breakpoints.sp {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 4px;
+                    }
+
+                    &:hover {
+                        transform: scale(1.1);
+
+                        @include breakpoints.sp {
+                            transform: inherit;
+                        }
+                    }
+                }
+            }
+
+            .soundList-title {
+                font-size: min(3.4vw, 14px);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .soundList-description {
+                font-size: 0.7rem;
+                display: block;
+                color: #c7c7c7;
+            }
+
         }
     }
-}
 
-
-.btn_wrap {
-    position: absolute;
-    right: 9px;
-    bottom: 5px;
-    width: 48px;
-    z-index: 81;
-
-    .player-timer-btn {
-        cursor: pointer;
+    #audioVisualizer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        z-index: 1;
     }
-}
 
 
-
-
-.soundList {
-    margin-top: 32px;
-    margin-bottom: 63px;
-    position: relative;
-    z-index: 80;
-
-    .store_lists {
+    .other_link {
         display: flex;
-        gap: 3%;
-    }
-}
-
-.soundList-item {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-bottom: 2rem;
-    cursor: pointer;
-}
-
-.soundList-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 6px;
-    margin-right: 20px;
-}
-
-
-
-.soundList-title {
-    font-size: min(3.4vw, 14px);
-    font-weight: bold;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.soundList-description {
-    font-size: 0.7rem;
-    display: block;
-    color: #c7c7c7;
-}
-
-#audioVisualizer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
-}
-
-.volume_box {
-    display: flex;
-    justify-content: center;
-    background-color: white;
-    padding-bottom: 10px;
-
-    .volume_wrap {
-        display: flex;
-        width: 37%;
+        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
-        margin: 5px 0px 0 0;
 
-        .tag {
-            font-size: 12px;
-            margin-right: 4px;
-        }
-
-        #volumeControl {
-            background: #d0d0d0;
+        a {
+            // width: 65%;
             display: block;
-            position: relative;
-            z-index: 10;
-            text-align: right;
-            padding: 2px 5px;
+        }
+
+        p.lead {
+            text-align: center;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
     }
 
-}
+    .gemiRogo {
+        max-width: 300px;
+        width: 100%;
+    }
 
+    .soundModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
 
+        &.hidden {
+            display: none;
+        }
+    }
 
-
-
-/* ボリュームバーのスタイリング */
-input[type=range] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 2px;
-    background: #d0d0d0;
-    /* バーの背景色 */
-    outline: none;
-}
-
-input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 10px;
-    height: 10px;
-    background: #3f3f3f;
-    /* スライダーの色 */
-    cursor: pointer;
-}
-
-input[type=range]:focus {
-    outline: none;
-}
-
-#footer {
-    background-color: black;
-    padding: 30px 5%;
-
-    .copyright {
-        font-size: min(3.0vw, 11px);
+    .soundModal-content {
+        position: relative;
         text-align: center;
-        color: white;
-        letter-spacing: .1em;
-        line-height: 1.6;
+
+        .close-btn {
+            position: absolute;
+            top: -50px;
+            right: 0px;
+            background: transparent;
+            width: 40px;
+            height: auto;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            color: white;
+            letter-spacing: .05em;
+            line-height: 1.5;
+        }
     }
-}
 
-.other_link {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-
-    a {
-        width: 65%;
-        display: block;
+    .visualizer-container {
+        width: 80vw;
+        height: 50vh;
     }
 
-    p.lead {
-        text-align: center;
-        font-size: 12px;
-        margin-bottom: 10px;
+    audio#modalAudio {
+        position: absolute;
+        transform: translate(-50%, 0%);
+        left: 50%;
+        bottom: -90px;
     }
-}
-
-.T_HASE_rogo {
-    width: 70px;
 }

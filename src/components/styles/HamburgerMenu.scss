@@ -6,9 +6,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    background: #ffffff;
     z-index: 100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: opacity 0.3s, visibility 0.3s;
 
     &.hidden {
@@ -26,6 +24,11 @@
 
     .contents_inner {
         max-width: 1000px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 7px;
     }
 
     .pc-nav {
@@ -39,116 +42,184 @@
         margin: 0;
 
         li {
-            font-size: 15px;
+            font-size: 22px;
             line-height: 1;
         }
 
         a {
+            position: relative;
             text-decoration: none;
             color: #333;
+            padding-bottom: 3px;
+            transition: color 0.3s ease-in-out;
+            font-family: "Oswald",
+                serif;
+            font-weight: 600;
 
-            &:hover {
-                color: #007bff;
+            &.active {
+                color: var(--pink01);
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 0;
+                height: 1px;
+                background-color: var(--pink01);
+                transition: width 0.3s ease-in-out;
+            }
+
+            &:hover::after {
+                width: 100%;
             }
         }
     }
+
 }
 
-.sp-header-nav_box_ham {
+// sp版　ハンバーガーメニュー
+.outerMenu {
     position: fixed;
-    transition: all 0.3s;
-    cursor: pointer;
-    display: block;
+    top: 0vh;
     right: 0;
-    top: 0px;
-    width: 70px;
-    height: 70px;
-    z-index: 201;
-
-    .sp-header-nav_box_ham_line {
-        content: "";
-        display: block;
-        position: absolute;
-        transition: all 0.6s ease;
-        background-color: #1a1a1a;
-        width: 30px;
-        height: 2px;
-
-        &.line-1 {
-            top: 25px;
-            right: 17.5px;
-        }
-
-        &.line-2 {
-            top: 35px;
-            right: 17.5px;
-        }
-
-        &.line-3 {
-            top: 45px;
-            right: 17.5px;
-        }
-    }
-
-    &.clicked {
-        .line-1 {
-            transform: rotate(315deg);
-            top: 35px;
-        }
-
-        .line-2 {
-            opacity: 0;
-        }
-
-        .line-3 {
-            transform: rotate(-315deg);
-            top: 35px;
-        }
-    }
-}
-
-.sp-nav_nav-list {
-    position: fixed;
-    width: 100%;
-    top: -1000px;
-    transition: all 0.2s;
-    height: 100%;
     z-index: 200;
 
-    &.nav-opened {
-        top: 0px;
-    }
+    .checkboxToggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 2;
+        cursor: pointer;
+        width: 60px;
+        height: 60px;
+        opacity: 0;
 
-    &_box {
-        list-style: none;
-        text-align: center;
-        background-color: white;
-        padding: 10% 0;
-        display: flex;
-        flex-direction: column;
-        row-gap: 30px;
+        &:checked+.hamburger>div {
+            transform: rotate(135deg);
 
-        &_list {
-            margin: 0 auto;
-            margin-bottom: 40px;
-            width: 100%;
+            &:before,
+            &:after {
+                top: 0;
+                transform: rotate(90deg);
+            }
 
-            a {
-                color: black;
-                font-size: 18px;
-                text-decoration: underline;
-                text-underline-offset: 4px;
-                text-decoration-thickness: 1px;
+            &:after {
+                opacity: 0;
             }
         }
     }
-}
 
-.sp-nav_nav-list_box {
-    li {
-        a {
-            @include breakpoints.sp {
-                font-size: 16px;
+    .hamburger {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        width: 50px;
+        height: 50px;
+        padding: 0.5em 1em;
+        background: var(--black01);
+        border-radius: 0.12em;
+        cursor: pointer;
+        transition: box-shadow 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        >div {
+            position: relative;
+            width: 100%;
+            height: 2px;
+            background: #fefefe;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:before,
+            &:after {
+                content: '';
+                position: absolute;
+                top: -10px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background: inherit;
+                transition: all 0.4s ease;
+            }
+
+            &:after {
+                top: 10px;
+            }
+        }
+    }
+
+    .menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        visibility: hidden;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .bg {
+            width: 200vw;
+            height: 200vw;
+            background: var(--pink02);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .inner {
+                opacity: 0;
+                transition: opacity 0.4s ease;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .navList {
+                    list-style: none;
+                    padding: 0;
+
+                    li {
+                        margin: 1em 0;
+                        font-size: 21px;
+                        text-align: center;
+
+                        a {
+                            text-decoration: none;
+                            color: #fefefe;
+                            transition: color 0.4s ease;
+                            font-family: "Oswald",
+                                serif;
+                            font-weight: 600;
+                            font-size: 22px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .menuOpen {
+        pointer-events: auto;
+        visibility: visible;
+
+        .bg {
+            transform: scale(1);
+
+            .inner {
+                opacity: 1;
             }
         }
     }

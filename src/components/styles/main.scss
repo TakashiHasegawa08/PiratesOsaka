@@ -54,12 +54,26 @@ img {
     vertical-align: top;
 }
 
+:root {
+    --black01: #000000;
+    // --pink01: #fe4fa6;
+    // --pink02: rgb(254, 79, 166, 0.7);
+    --pink01: #ff17b5;
+    --pink02: rgba(68, 68, 68, 0.9);
+}
+
 
 .image-wrapper {
     position: relative;
     display: inline-block;
 
+    a {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
 
+    // 後で削除
     &::after {
         position: absolute;
         content: "";
@@ -69,7 +83,8 @@ img {
         top: 0;
         left: 0;
         z-index: 1;
-        opacity: 1; // 必要に応じて調整
+        opacity: 1;
+        pointer-events: none;
     }
 }
 
@@ -97,12 +112,23 @@ a {
 }
 
 
-h2 {
-    font-size: 18px;
+
+.oswald_400 {
+    font-family: "Oswald", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.oswald_600 {
+    font-family: "Oswald", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
 }
 
 .contents_inner {
-    max-width: 500px;
+    max-width: 1000px;
     width: 100%;
     display: block;
     margin: 0 auto;
@@ -112,25 +138,30 @@ h2 {
         font-size: 15px;
         letter-spacing: .05em;
         line-height: 1.4;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
+
+        @include breakpoints.sp {
+            margin-bottom: 9px;
+        }
     }
 
     h1 {
-        font-size: 25px;
+        font-size: 28px;
+        letter-spacing: .05em;
+        line-height: 1.4;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    h2 {
+        font-size: 22px;
         letter-spacing: .05em;
         line-height: 1.4;
         margin-bottom: 15px;
     }
 
-    // h2 {
-    //     font-size: 22px;
-    //     letter-spacing: .05em;
-    //     line-height: 1.4;
-    //     margin-bottom: 15px;
-    // }
-
     h3 {
-        font-size: 20px;
+        font-size: 19px;
         letter-spacing: .05em;
         line-height: 1.4;
         margin-bottom: 15px;
@@ -149,8 +180,14 @@ h2 {
     }
 }
 
+.categoryTitle {
+    font-family: "Oswald",
+        serif;
+    font-weight: 600;
+}
+
 .key-visual {
-    overflow: hidden;
+    // overflow: hidden;
     margin-bottom: 35px;
 
     .kv_slider {
@@ -163,21 +200,187 @@ h2 {
 }
 
 .header-logo {
-    img {
-        max-width: 50px;
-    }
+    // position: fixed;
+    // top: 10px;
+    // left: 10px;
+    z-index: 102;
+    max-width: 50px;
 
     @include breakpoints.sp {
         position: fixed;
         top: 10px;
         left: 10px;
-        z-index: 102;
+        max-width: 40px;
+    }
+}
 
-        img {
-            max-width: 70px;
+.postCategory {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    row-gap: 13px;
+}
+
+.postCategoryLink {
+    color: rgb(114, 114, 114);
+    font-size: 13px;
+    letter-spacing: .05em;
+    line-height: 1;
+    text-align: center;
+    background-color: rgb(238, 238, 238);
+    border-radius: 4px;
+    padding: 3px 6px;
+    transition: .3s;
+
+    p {
+        margin-bottom: 0;
+    }
+
+    &:hover {
+        color: white;
+        background-color: #5c5c5c;
+    }
+}
+
+.postDate {
+    color: rgb(113, 113, 113);
+}
+
+.postWrap {
+    display: flex;
+    column-gap: 15px;
+    row-gap: 20px;
+    flex-wrap: wrap;
+
+    .post {
+        width: calc((100% - (15px * 2)) / 3);
+        overflow: hidden;
+
+        @include breakpoints.sp {
+            width: calc((100% - (15px * 1)) / 2);
+        }
+
+        .image-wrapper {
+            width: 100%;
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            margin-bottom: 6px;
+
+            img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        h3.title {
+            font-size: 17px;
+
+            @include breakpoints.sp {
+                font-size: 16px;
+            }
+        }
+
+        .post-excerpt {
+            p {
+                font-size: 14px;
+
+                @include breakpoints.sp {
+                    font-size: 13px;
+                }
+            }
+
+        }
+
+        .postDate {
+            font-size: 12px;
+
+            @include breakpoints.sp {
+                font-size: 11px;
+            }
+        }
+    }
+}
+
+.post-thumbnail {
+    max-width: 400px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.responsive-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.responsive-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+header.header {
+    margin-bottom: 80px;
+
+    @include breakpoints.sp {
+        margin-bottom: 60px;
+    }
+}
+
+footer.footer {
+    margin-top: 60px;
+
+    @include breakpoints.sp {
+        margin-top: 40px;
+    }
+}
+
+.slick-arrow {
+    z-index: 200;
+    background: inherit !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+
+    &.slick-prev {
+        left: calc(100% / 3 * 1 - 22px);
+
+        @include breakpoints.sp {
+            left: 10px;
+        }
+
+        &::before {
+            content: none;
         }
     }
 
+    &.slick-next {
+        right: calc(100% / 3 * 1 - 22px);
+
+        @include breakpoints.sp {
+            right: 10px;
+        }
+
+        &::before {
+            content: none;
+        }
+    }
+}
+
+.arrowText {
+    font-size: 20px;
+    color: black;
 }
 
 .PC-only {

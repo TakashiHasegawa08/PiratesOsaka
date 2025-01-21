@@ -1,7 +1,6 @@
 // src/components/Header.js
 import React from "react";
 import HamburgerMenu from "./HamburgerMenu";
-import { Link } from "react-router-dom";
 
 function Header() {
   return (
@@ -9,11 +8,11 @@ function Header() {
       {/* ハンバーガーメニュー */}
       <HamburgerMenu />
       {/* ロゴ */}
-      <div className="header-logo">
+      {/* <div className="header-logo">
         <Link to="/">
-          <img src="/img/header_rogo.jpg" alt="header_rogo" />
+          <img src="/img/header_rogo.png" alt="header_rogo" />
         </Link>
-      </div>
+      </div> */}
     </header>
   );
 }

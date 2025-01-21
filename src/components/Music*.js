@@ -1,16 +1,25 @@
 import React, { useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import Title from "./Title";
 
 function Music() {
   useEffect(() => {
-    let source; // オーディオソースを保持するためのグローバル変数
+    let source;
 
     const playBtn = document.querySelector(".player-timer-btn");
     const song = document.querySelector(".song");
     const sounds = document.querySelectorAll(".soundList-item");
     const player = document.querySelector(".player");
     const volumeControl = document.getElementById("volumeControl");
+
+    // 要素が存在しない場合は早期リターン
+    if (!playBtn || !song || !player || !volumeControl || sounds.length === 0) {
+      console.error(
+        "必要な要素が見つかりません。DOMの構造を確認してください。"
+      );
+      return;
+    }
 
     const setInitialSong = () => {
       const initialSound = sounds[0];
@@ -29,53 +38,6 @@ function Music() {
         { once: true }
       );
     };
-
-    const canvas = document.getElementById("audioVisualizer");
-    const ctx = canvas.getContext("2d");
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    let analyser = audioCtx.createAnalyser();
-    let dataArray, bufferLength;
-
-    const initAudioVisualizer = () => {
-      if (!source) {
-        source = audioCtx.createMediaElementSource(song);
-        source.connect(analyser);
-      }
-      analyser.connect(audioCtx.destination);
-      analyser.fftSize = 2048;
-      bufferLength = analyser.frequencyBinCount;
-      dataArray = new Uint8Array(bufferLength);
-
-      drawVisualizer();
-    };
-
-    let animationId;
-
-    const drawVisualizer = () => {
-      animationId = requestAnimationFrame(drawVisualizer);
-      analyser.getByteFrequencyData(dataArray);
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      let barWidth = canvas.width / 180;
-      let barHeight;
-      let x = 0;
-
-      for (let i = 0; i < 60; i++) {
-        let index = Math.floor((i * bufferLength) / 130);
-        barHeight = dataArray[index] / 3;
-
-        ctx.fillStyle = "rgb(255, 255, 255,0.6)";
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-        x += barWidth * 3;
-      }
-    };
-
-    song.addEventListener("ended", () => {
-      cancelAnimationFrame(animationId);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
 
     const fadeIn = (duration = 1) => {
       let volume = 0;
@@ -109,12 +71,6 @@ function Music() {
           fadeIn();
           song.play();
           playBtn.src = "common/image/stop.svg";
-          if (audioCtx.state === "suspended") {
-            audioCtx.resume();
-          }
-          initAudioVisualizer();
-
-          song.removeEventListener("canplaythrough", playSong);
         };
 
         song.addEventListener("canplaythrough", playSong);
@@ -123,9 +79,6 @@ function Music() {
         fadeOut(3, () => {
           song.pause();
           playBtn.src = "common/image/play.svg";
-          audioCtx.suspend();
-          cancelAnimationFrame(animationId);
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
         });
       }
     });
@@ -144,8 +97,6 @@ function Music() {
           song.currentTime = startTime;
         });
 
-        initAudioVisualizer();
-
         if (!song.paused) {
           song.pause();
         }
@@ -159,7 +110,7 @@ function Music() {
     });
 
     return () => {
-      audioCtx.close(); // AudioContext を解放
+      // 必要ならここでクリーンアップ処理
     };
   }, []);
 
@@ -170,6 +121,7 @@ function Music() {
       title: "Do Dance feat.MaiShiroi",
       sound: "/sounds/DoDance.mp3",
       image: "/img/music_img/Do_Dance_jacket_3000px.webp",
+      site: "https://n0.com/a/vvg3fenyenhm",
       startTime: 1,
       stores: [
         {
@@ -203,6 +155,7 @@ function Music() {
       title: "Gravity of Kiss feat.よつは",
       sound: "/sounds/track12_GravityofKiss.mp3",
       image: "/img/music_img/jacket12_Gravity_of_Kiss.webp",
+      site: "https://nodee.net/a/dix4qwey",
       startTime: 59,
       stores: [
         {
@@ -236,6 +189,7 @@ function Music() {
       title: "Missing You feat.kyon.",
       sound: "/sounds/track17_MissingYou.mp3",
       image: "/img/music_img/jacket17_MissingYou.webp",
+      site: "https://nodee.net/a/4iwrck9v",
       startTime: 61,
       stores: [
         {
@@ -269,6 +223,7 @@ function Music() {
       title: "トワイライト ドライブ feat.kyon.",
       sound: "/sounds/track16_Twilight_Drive.mp3",
       image: "/img/music_img/jacket16_Twilight_Drive.webp",
+      site: "https://nodee.net/a/erynwuk3",
       startTime: 61,
       stores: [
         {
@@ -302,6 +257,7 @@ function Music() {
       title: "Chance in the Moment feat.suna",
       sound: "/sounds/track04_Chance_in_the_moment.mp3",
       image: "/img/music_img/jacket04_Chance_in_the_moment.webp",
+      site: "https://nodee.net/a/4z0j71t9",
       startTime: 1,
       stores: [
         {
@@ -335,6 +291,7 @@ function Music() {
       title: "Hurry up! feat.イズキ",
       sound: "/sounds/track15_HurryUp.mp3",
       image: "/img/music_img/jacket15_HurryUp.webp",
+      site: "https://nodee.net/a/fbwt48v9",
       startTime: 1,
       stores: [
         {
@@ -368,6 +325,7 @@ function Music() {
       title: "Farewell Song feat.花摘藍",
       sound: "/sounds/track14_Farewell_Song.mp3",
       image: "/img/music_img/jacket14_Farewell_Song.webp",
+      site: "https://nodee.net/a/nzmcy815",
       startTime: 59,
       stores: [
         {
@@ -401,6 +359,7 @@ function Music() {
       title: "真と偽 feat.amane",
       sound: "/sounds/track13_shintogi.mp3",
       image: "/img/music_img/jacket13_shintogi.webp",
+      site: "https://nodee.net/a/rzn3esad",
       startTime: 59,
       stores: [
         {
@@ -434,6 +393,7 @@ function Music() {
       title: "ラスト ステーション feat.amane",
       sound: "/sounds/track11_last_station.mp3",
       image: "/img/music_img/jacket11_last_station.webp",
+      site: "https://nodee.net/a/gi5y0xk8",
       startTime: 45,
       stores: [
         {
@@ -468,6 +428,7 @@ function Music() {
       title: "J-O-Y feat.イズキ",
       sound: "/sounds/track01_JOY.mp3",
       image: "/img/music_img/jacket01_JOY.webp",
+      site: "https://nodee.net/a/wgx9f31i",
       startTime: 48,
       stores: [
         {
@@ -501,6 +462,7 @@ function Music() {
       title: "Fallin' Angels feat.Sammy",
       sound: "/sounds/track02_Fallin_Angels.mp3",
       image: "/img/music_img/jacket02_Fallin_Angels.webp",
+      site: "https://nodee.net/a/pi3fr6dv",
       startTime: 1,
       stores: [
         {
@@ -535,6 +497,7 @@ function Music() {
       title: "C'mon C'mon!",
       sound: "/sounds/track05_Cmon_Cmon.mp3",
       image: "/img/music_img/jacket05_Cmon_Cmon.webp",
+      site: "https://nodee.net/a/3warn27j",
       startTime: 1,
       stores: [
         {
@@ -569,6 +532,7 @@ function Music() {
       title: "紫陽花 feat.Y",
       sound: "/sounds/track06_ajisai.mp3",
       image: "/img/music_img/jacket06_ajisai.webp",
+      site: "https://nodee.net/a/bygd021f",
       startTime: 1,
       stores: [
         {
@@ -602,6 +566,7 @@ function Music() {
       title: "ハナレテイテモ feat.maya ando",
       sound: "/sounds/track07_hanareteitemo.mp3",
       image: "/img/music_img/jacket07_hanareteitemo.webp",
+      site: "https://nodee.net/a/u79zi8m1",
       startTime: 1,
       stores: [
         {
@@ -635,6 +600,7 @@ function Music() {
       title: "クロール feat.Yasu",
       sound: "/sounds/track08_crawl.mp3",
       image: "/img/music_img/jacket08_crawl.webp",
+      site: "https://nodee.net/a/q3a1zps7",
       startTime: 1,
       stores: [
         {
@@ -668,6 +634,7 @@ function Music() {
       title: "Knocking on a closed door feat.zz",
       sound: "/sounds/track09_Knocking_onaclosed_door.mp3",
       image: "/img/music_img/jacket09_Knocking_onaclosed_door.webp",
+      site: "https://nodee.net/a/ptaxzc5v",
       startTime: 1,
       stores: [
         {
@@ -701,6 +668,7 @@ function Music() {
       title: "Blue Capillaries",
       sound: "/sounds/track10_Blue_Capillaries.mp3",
       image: "/img/music_img/jacket10_Blue_Capillaries.webp",
+      site: "https://nodee.net/a/ah473kgb",
       startTime: 1,
       stores: [
         {
@@ -734,6 +702,7 @@ function Music() {
       title: "Do Dance VOCALOID mix",
       sound: "/sounds/DoDanceVOCALOID.mp3",
       image: "/img/music_img/Do Dance_jacket_mono_3000px.webp",
+      site: "https://n0.com/a/ypr9wsa20bwp",
       startTime: 1,
       stores: [
         {
@@ -767,58 +736,23 @@ function Music() {
   ];
 
   return (
-    <div>
+    <div id="musicPage">
       <Header />
       <main className="contents_inner">
+        <Title>Music Works</Title>
         <div className="outer">
-          <article className="all_wrap">
-            {/* イントロ部分 */}
-            <div id="intro">
-              <button type="button" id="navbtn"></button>
-              <div className="player_wrap">
-                <section className="player">
-                  <audio
-                    className="song"
-                    src="/sounds/track08_crawl.mp3"
-                    loop
-                  ></audio>
-                  <canvas id="audioVisualizer"></canvas>
-                  <div className="btn_wrap">
-                    <img
-                      src="/img/music_img/play.svg"
-                      alt=""
-                      className="player-timer-btn"
-                    />
-                  </div>
-                </section>
-              </div>
-              <div className="volume_box PC-only">
-                <div className="volume_wrap">
-                  <p className="tag">volume</p>
-                  <input
-                    type="range"
-                    id="volumeControl"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    defaultValue="1"
-                  />
-                </div>
-              </div>
+          <div className="creditWrap">
+            <p className="credit">All songs written, composed, programmed by</p>
+            <div className="T_HASE_rogo">
+              <img
+                src="/img/music_img/T_HASE_rogo_300px.jpg"
+                alt="T.HASE logo"
+              />
             </div>
-
+          </div>
+          <article className="">
             {/* 楽曲リスト */}
-            <section className="selection">
-              <h1 className="title">Music Works</h1>
-              <p className="credit">
-                All songs written, composed, programmed by
-              </p>
-              <div className="T_HASE_rogo">
-                <img
-                  src="/img/music_img/T_HASE_rogo_300px.jpg"
-                  alt="T.HASE logo"
-                />
-              </div>
+            <section className="soundSelection">
               <div className="soundList_wrap">
                 <div className="soundList">
                   {soundList.map((song, index) => (
@@ -830,11 +764,17 @@ function Music() {
                       data-start-time={song.startTime}
                     >
                       <div className="image-wrapper">
-                        <img
-                          src={song.image}
-                          alt={song.title}
-                          className="soundList-image"
-                        />
+                        <a
+                          href={song.site}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src={song.image}
+                            alt={song.title}
+                            className="soundList-image"
+                          />
+                        </a>
                       </div>
                       <div className="soundList-text">
                         <p className="soundList-title">{song.title}</p>
@@ -865,7 +805,9 @@ function Music() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <img src="/img/music_img/Gemi_title.jpg" alt="Geminids2" />
+                  <div className="gemiRogo image-wrapper">
+                    <img src="/img/music_img/Gemi_title.jpg" alt="Geminids2" />
+                  </div>
                 </a>
               </div>
             </section>
@@ -873,6 +815,18 @@ function Music() {
         </div>
       </main>
       <Footer />
+      {/* モーダル */}
+      <div id="musicModal" className="modal hidden">
+        <div className="modal-content">
+          <button id="closeModal" className="close-btn">
+            ×
+          </button>
+          <div className="visualizer-container">
+            <canvas id="audioVisualizer"></canvas>
+          </div>
+          <audio id="modalAudio" controls></audio>
+        </div>
+      </div>
     </div>
   );
 }

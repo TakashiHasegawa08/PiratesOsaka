@@ -1,0 +1,124 @@
+@charset "UTF-8";
+@use './mixins/breakpoints'as breakpoints;
+
+#blogPage {
+    .layout {
+        display: flex;
+        column-gap: 50px;
+
+        @include breakpoints.sp {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 200px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            row-gap: 40px;
+
+            @include breakpoints.sp {
+                width: 100%;
+                margin-top: 60px;
+            }
+
+            h4 {
+                color: white;
+                text-align: center;
+                background-color: gray;
+                padding: 4px;
+            }
+
+            .sidebar-section {
+                .tagWrap {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    row-gap: 15px;
+                }
+
+                .pickupWrap {
+                    display: flex;
+                    flex-direction: column;
+                    row-gap: 10px;
+
+                    li {
+                        a {
+                            font-size: 12px;
+                        }
+
+                        border-bottom: 1px dashed #ccc;
+                        padding-bottom: 10px;
+                    }
+
+                    li:last-child {
+                        border-bottom: none;
+                    }
+                }
+            }
+        }
+
+        .postBox {
+            width: calc(100% - 50px - 200px);
+            position: relative;
+
+            @include breakpoints.sp {
+                width: 100%;
+            }
+
+            &::before {
+                position: absolute;
+                content: '';
+                width: 1px;
+                height: 100%;
+                background-color: rgb(232, 232, 232);
+                top: 0;
+                right: -25px;
+
+                @include breakpoints.sp {
+                    content: none;
+                }
+            }
+        }
+
+        .bologContents {
+            margin-top: 50px;
+
+            @include breakpoints.sp {
+                margin-top: 30px;
+            }
+
+            img {
+                max-width: 500px;
+                width: 100%;
+            }
+        }
+
+        .sb-icon {
+            width: 29px;
+        }
+
+        .sb-speech-bubble {
+            background: rgb(224, 247, 248);
+            padding: 3px 4px;
+            display: inline-block;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .sb-speaker {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sb-icon {
+            img {
+                margin-bottom: 0 !important;
+            }
+        }
+    }
+}

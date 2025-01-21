@@ -25,8 +25,7 @@ module.exports = {
     publicPath: process.env.PUBLIC_PATH || "/", // 公開パス (環境変数から取得)
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/, // JavaScript ファイルを対象
         exclude: /node_modules/, // node_modules を除外
         use: {
@@ -85,15 +84,13 @@ module.exports = {
       filename: "styles.css", // 出力するCSSファイル名
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, "public"), // コピー元ディレクトリ
-          to: path.resolve(__dirname, "dist"), // コピー先ディレクトリ
-          globOptions: {
-            ignore: ["**/index.html"], // index.htmlを除外
-          },
+      patterns: [{
+        from: path.resolve(__dirname, "public"), // コピー元ディレクトリ
+        to: path.resolve(__dirname, "dist"), // コピー先ディレクトリ
+        globOptions: {
+          ignore: ["**/index.html"], // index.htmlを除外
         },
-      ],
+      }, ],
     }),
     new webpack.DefinePlugin({
       "process.env.REACT_APP_API_BASE_URL": JSON.stringify(
@@ -110,15 +107,13 @@ module.exports = {
     compress: true,
     port: 3000,
     hot: true,
-    proxy: [
-      {
-        context: ["/wp-json"],
-        target: "http://localhost:10009",
-        // target: "http://localhost:10028",
-        secure: false,
-        changeOrigin: true,
-      },
-    ],
+    proxy: [{
+      context: ["/wp-json"],
+      // target: "http://localhost:10009",
+      target: "http://localhost:10028",
+      secure: false,
+      changeOrigin: true,
+    }, ],
   },
 
   resolve: {

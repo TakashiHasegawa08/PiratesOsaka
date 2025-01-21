@@ -1,42 +1,39 @@
 @charset "UTF-8";
 @use './mixins/breakpoints'as breakpoints;
 
-/* 全体のラップ */
-.all_wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
+#illustPage {
 
-/* コンテンツ内包 */
-.contents-inner {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
 
-/* ギャラリー */
-.gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
 
-    .list {
-        width: calc((100% - 60px) / 4);
-        box-sizing: border-box;
-        position: relative;
+        @include breakpoints.sp {
+            gap: 10px;
+        }
+
+        .list {
+            width: calc((100% - (15px * 4)) / 5);
+            box-sizing: border-box;
+            position: relative;
+
+            @include breakpoints.sp {
+                width: calc((100% - (10px * 2)) / 3);
+            }
+
+            img {
+                width: 100%;
+                height: auto;
+                display: block;
+                cursor: pointer;
+            }
+        }
     }
+
 }
 
-
-.list img {
-    width: 100%;
-    height: auto;
-    display: block;
-    cursor: pointer;
-}
 
 /* モーダルの背景 */
 .modal-overlay {
@@ -46,11 +43,19 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
-    /* 半透明の黒背景 */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* モーダルが開いているとき */
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* モーダルコンテンツ */
@@ -58,13 +63,19 @@
     position: relative;
     background: #fff;
     padding: 20px;
-    border-radius: 8px;
     max-width: 700px;
-    /* モーダルの最大幅 */
     width: 90%;
-    /* モバイル対応で幅を調整 */
     max-height: 90%;
-    overflow: auto;
+    overflow: scroll;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* モーダルが開いているときのアニメーション */
+.modal-overlay.open .modal-content {
+    transform: scale(1);
+    opacity: 1;
 }
 
 .modal-content img {
@@ -91,28 +102,37 @@
 }
 
 .btn-close img {
-    width: 24px;
-    height: 24px;
+    width: 50px;
+    height: 50px;
 }
 
 /* 「さらに表示」ボタン */
 #load-more-container {
     margin: 20px 0;
     text-align: center;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-#load-more {
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background: none;
+    #more-button {
+        color: black;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 10px;
 
-    img {
-        width: 50px;
+        img {
+            width: 42px;
+        }
     }
 }
+
+
 
 /* レスポンシブ対応 */
 @include breakpoints.sp {

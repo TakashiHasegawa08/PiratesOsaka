@@ -1,115 +1,121 @@
 import React, { useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import Title from "./Title";
 
 function Music() {
   useEffect(() => {
-    let source;
+    const modal = document.getElementById("musicModal");
+    const closeModal = document.getElementById("closeModal");
+    const modalAudio = document.getElementById("modalAudio");
+    const canvas = document.getElementById("audioVisualizer");
+    const ctx = canvas.getContext("2d");
 
-    const playBtn = document.querySelector(".player-timer-btn");
-    const song = document.querySelector(".song");
-    const sounds = document.querySelectorAll(".soundList-item");
-    const player = document.querySelector(".player");
-    const volumeControl = document.getElementById("volumeControl");
+    // AudioContextを再利用するための変数
+    let audioContext;
+    let sourceNode;
+    let analyser;
+    let dataArray;
 
-    // 要素が存在しない場合は早期リターン
-    if (!playBtn || !song || !player || !volumeControl || sounds.length === 0) {
-      console.error(
-        "必要な要素が見つかりません。DOMの構造を確認してください。"
-      );
-      return;
-    }
+    const openModal = (sound, title, startTime = 0) => {
+      modalAudio.src = sound;
 
-    const setInitialSong = () => {
-      const initialSound = sounds[0];
-      const songData = initialSound.getAttribute("data-sound");
-      const imageUrl = initialSound.getAttribute("data-image");
-      const startTime = initialSound.getAttribute("data-start-time");
+      // 再生開始位置を指定
+      modalAudio.currentTime = startTime;
 
-      song.src = songData;
-      player.style.backgroundImage = `url(${imageUrl})`;
+      modalAudio.play();
+      modal.classList.remove("hidden");
 
-      song.addEventListener(
-        "loadedmetadata",
-        () => {
-          song.currentTime = startTime;
-        },
-        { once: true }
-      );
-    };
+      // 曲名をモーダルに表示
+      const modalTitle = document.getElementById("modalTitle");
+      modalTitle.textContent = title; // 曲名をセット
 
-    const fadeIn = (duration = 1) => {
-      let volume = 0;
-      song.volume = volume;
-      const interval = setInterval(() => {
-        volume += 1 / (duration * 60);
-        if (volume >= 1) {
-          volume = 1;
-          clearInterval(interval);
-        }
-        song.volume = volume;
-      }, 1000 / 60);
-    };
+      // AudioContextの初期化または再利用
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        sourceNode = audioContext.createMediaElementSource(modalAudio);
+        analyser = audioContext.createAnalyser();
+        sourceNode.connect(analyser);
+        analyser.connect(audioContext.destination);
 
-    const fadeOut = (duration = 0.1, callback = () => {}) => {
-      let volume = song.volume;
-      const interval = setInterval(() => {
-        volume -= 1 / (duration * 20);
-        if (volume <= 0) {
-          volume = 0;
-          clearInterval(interval);
-          callback();
-        }
-        song.volume = volume;
-      }, 1000 / 60);
-    };
-
-    playBtn.addEventListener("click", () => {
-      if (song.paused) {
-        const playSong = () => {
-          fadeIn();
-          song.play();
-          playBtn.src = "common/image/stop.svg";
-        };
-
-        song.addEventListener("canplaythrough", playSong);
-        song.load();
-      } else {
-        fadeOut(3, () => {
-          song.pause();
-          playBtn.src = "common/image/play.svg";
-        });
+        // データ配列の初期化（fftSizeをデフォルトのまま使用）
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
       }
+
+      const drawVisualizer = () => {
+        if (!analyser) return;
+
+        analyser.getByteFrequencyData(dataArray);
+
+        // Canvasの解像度調整
+        const dpr = window.devicePixelRatio || 1; // デバイスピクセル比
+        const displayWidth = canvas.clientWidth;
+        const displayHeight = canvas.clientHeight;
+
+        if (
+          canvas.width !== displayWidth * dpr ||
+          canvas.height !== displayHeight * dpr
+        ) {
+          canvas.width = displayWidth * dpr;
+          canvas.height = displayHeight * dpr;
+          ctx.scale(dpr, dpr); // 解像度に合わせたスケール
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = canvas.width / (dataArray.length / 5 / dpr); // 線の数を調整
+        const amplificationFactor = 2.2; // バーの高さを調整するための倍率
+        const maxBarHeight = canvas.height / dpr; // 最大バー高さをスケールに基づいて制限
+
+        dataArray.forEach((value, index) => {
+          if (index % 2 !== 0) return;
+
+          let adjustedValue = Math.pow(value, 0.85);
+          let barHeight =
+            (adjustedValue / 288) * maxBarHeight * amplificationFactor;
+
+          if (barHeight > maxBarHeight) {
+            barHeight = maxBarHeight;
+          }
+
+          const x = (index / 2) * barWidth;
+
+          ctx.strokeStyle = "white";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(x, canvas.height / dpr);
+          ctx.lineTo(x, canvas.height / dpr - barHeight);
+          ctx.stroke();
+        });
+
+        requestAnimationFrame(drawVisualizer);
+      };
+
+      drawVisualizer();
+    };
+
+    closeModal.addEventListener("click", () => {
+      modal.classList.add("hidden");
+      modalAudio.pause();
     });
 
+    const sounds = document.querySelectorAll(".soundList-item");
     sounds.forEach((sound) => {
-      sound.addEventListener("click", function () {
-        const songData = this.getAttribute("data-sound");
-        const imageUrl = this.getAttribute("data-image");
-        const startTime = parseFloat(this.getAttribute("data-start-time"));
-
-        song.src = songData;
-        player.style.backgroundImage = `url(${imageUrl})`;
-        playBtn.src = "common/image/play.svg";
-
-        song.addEventListener("loadedmetadata", () => {
-          song.currentTime = startTime;
-        });
-
-        if (!song.paused) {
-          song.pause();
-        }
+      sound.addEventListener("click", () => {
+        const soundData = sound.getAttribute("data-sound");
+        const title = sound.querySelector(".soundList-title").textContent; // 曲名を取得
+        const startTime =
+          parseFloat(sound.getAttribute("data-start-time")) || 0; // startTimeを取得
+        openModal(soundData, title, startTime);
       });
     });
 
-    setInitialSong();
-
-    volumeControl.addEventListener("input", () => {
-      song.volume = volumeControl.value;
-    });
-
     return () => {
-      // 必要ならここでクリーンアップ処理
+      if (audioContext) {
+        audioContext.close();
+      }
+      sounds.forEach((sound) => sound.removeEventListener("click", openModal));
+      closeModal.removeEventListener("click", () => {});
     };
   }, []);
 
@@ -120,7 +126,8 @@ function Music() {
       title: "Do Dance feat.MaiShiroi",
       sound: "/sounds/DoDance.mp3",
       image: "/img/music_img/Do_Dance_jacket_3000px.webp",
-      startTime: 1,
+      site: "https://n0.com/a/vvg3fenyenhm",
+      startTime: 45,
       stores: [
         {
           href: "https://music.apple.com/jp/album/do-dance-single/1779931690",
@@ -153,6 +160,7 @@ function Music() {
       title: "Gravity of Kiss feat.よつは",
       sound: "/sounds/track12_GravityofKiss.mp3",
       image: "/img/music_img/jacket12_Gravity_of_Kiss.webp",
+      site: "https://nodee.net/a/dix4qwey",
       startTime: 59,
       stores: [
         {
@@ -186,6 +194,7 @@ function Music() {
       title: "Missing You feat.kyon.",
       sound: "/sounds/track17_MissingYou.mp3",
       image: "/img/music_img/jacket17_MissingYou.webp",
+      site: "https://nodee.net/a/4iwrck9v",
       startTime: 61,
       stores: [
         {
@@ -219,6 +228,7 @@ function Music() {
       title: "トワイライト ドライブ feat.kyon.",
       sound: "/sounds/track16_Twilight_Drive.mp3",
       image: "/img/music_img/jacket16_Twilight_Drive.webp",
+      site: "https://nodee.net/a/erynwuk3",
       startTime: 61,
       stores: [
         {
@@ -252,6 +262,7 @@ function Music() {
       title: "Chance in the Moment feat.suna",
       sound: "/sounds/track04_Chance_in_the_moment.mp3",
       image: "/img/music_img/jacket04_Chance_in_the_moment.webp",
+      site: "https://nodee.net/a/4z0j71t9",
       startTime: 1,
       stores: [
         {
@@ -285,6 +296,7 @@ function Music() {
       title: "Hurry up! feat.イズキ",
       sound: "/sounds/track15_HurryUp.mp3",
       image: "/img/music_img/jacket15_HurryUp.webp",
+      site: "https://nodee.net/a/fbwt48v9",
       startTime: 1,
       stores: [
         {
@@ -318,6 +330,7 @@ function Music() {
       title: "Farewell Song feat.花摘藍",
       sound: "/sounds/track14_Farewell_Song.mp3",
       image: "/img/music_img/jacket14_Farewell_Song.webp",
+      site: "https://nodee.net/a/nzmcy815",
       startTime: 59,
       stores: [
         {
@@ -351,6 +364,7 @@ function Music() {
       title: "真と偽 feat.amane",
       sound: "/sounds/track13_shintogi.mp3",
       image: "/img/music_img/jacket13_shintogi.webp",
+      site: "https://nodee.net/a/rzn3esad",
       startTime: 59,
       stores: [
         {
@@ -384,6 +398,7 @@ function Music() {
       title: "ラスト ステーション feat.amane",
       sound: "/sounds/track11_last_station.mp3",
       image: "/img/music_img/jacket11_last_station.webp",
+      site: "https://nodee.net/a/gi5y0xk8",
       startTime: 45,
       stores: [
         {
@@ -418,6 +433,7 @@ function Music() {
       title: "J-O-Y feat.イズキ",
       sound: "/sounds/track01_JOY.mp3",
       image: "/img/music_img/jacket01_JOY.webp",
+      site: "https://nodee.net/a/wgx9f31i",
       startTime: 48,
       stores: [
         {
@@ -451,6 +467,7 @@ function Music() {
       title: "Fallin' Angels feat.Sammy",
       sound: "/sounds/track02_Fallin_Angels.mp3",
       image: "/img/music_img/jacket02_Fallin_Angels.webp",
+      site: "https://nodee.net/a/pi3fr6dv",
       startTime: 1,
       stores: [
         {
@@ -485,6 +502,7 @@ function Music() {
       title: "C'mon C'mon!",
       sound: "/sounds/track05_Cmon_Cmon.mp3",
       image: "/img/music_img/jacket05_Cmon_Cmon.webp",
+      site: "https://nodee.net/a/3warn27j",
       startTime: 1,
       stores: [
         {
@@ -519,6 +537,7 @@ function Music() {
       title: "紫陽花 feat.Y",
       sound: "/sounds/track06_ajisai.mp3",
       image: "/img/music_img/jacket06_ajisai.webp",
+      site: "https://nodee.net/a/bygd021f",
       startTime: 1,
       stores: [
         {
@@ -552,6 +571,7 @@ function Music() {
       title: "ハナレテイテモ feat.maya ando",
       sound: "/sounds/track07_hanareteitemo.mp3",
       image: "/img/music_img/jacket07_hanareteitemo.webp",
+      site: "https://nodee.net/a/u79zi8m1",
       startTime: 1,
       stores: [
         {
@@ -585,6 +605,7 @@ function Music() {
       title: "クロール feat.Yasu",
       sound: "/sounds/track08_crawl.mp3",
       image: "/img/music_img/jacket08_crawl.webp",
+      site: "https://nodee.net/a/q3a1zps7",
       startTime: 1,
       stores: [
         {
@@ -618,6 +639,7 @@ function Music() {
       title: "Knocking on a closed door feat.zz",
       sound: "/sounds/track09_Knocking_onaclosed_door.mp3",
       image: "/img/music_img/jacket09_Knocking_onaclosed_door.webp",
+      site: "https://nodee.net/a/ptaxzc5v",
       startTime: 1,
       stores: [
         {
@@ -651,6 +673,7 @@ function Music() {
       title: "Blue Capillaries",
       sound: "/sounds/track10_Blue_Capillaries.mp3",
       image: "/img/music_img/jacket10_Blue_Capillaries.webp",
+      site: "https://nodee.net/a/ah473kgb",
       startTime: 1,
       stores: [
         {
@@ -684,6 +707,7 @@ function Music() {
       title: "Do Dance VOCALOID mix",
       sound: "/sounds/DoDanceVOCALOID.mp3",
       image: "/img/music_img/Do Dance_jacket_mono_3000px.webp",
+      site: "https://n0.com/a/ypr9wsa20bwp",
       startTime: 1,
       stores: [
         {
@@ -717,23 +741,23 @@ function Music() {
   ];
 
   return (
-    <div>
+    <div id="musicPage">
       <Header />
       <main className="contents_inner">
+        <Title>Music Works</Title>
         <div className="outer">
+          <div className="creditWrap">
+            <p className="credit">All songs written, composed, programmed by</p>
+            <div className="T_HASE_rogo">
+              <img
+                src="/img/music_img/T_HASE_rogo_300px.jpg"
+                alt="T.HASE logo"
+              />
+            </div>
+          </div>
           <article className="">
             {/* 楽曲リスト */}
-            <section className="selection">
-              <h1 className="title">Music Works</h1>
-              <p className="credit">
-                All songs written, composed, programmed by
-              </p>
-              <div className="T_HASE_rogo">
-                <img
-                  src="/img/music_img/T_HASE_rogo_300px.jpg"
-                  alt="T.HASE logo"
-                />
-              </div>
+            <section className="soundSelection">
               <div className="soundList_wrap">
                 <div className="soundList">
                   {soundList.map((song, index) => (
@@ -750,6 +774,9 @@ function Music() {
                           alt={song.title}
                           className="soundList-image"
                         />
+                        <div className="soundModal_open">
+                          <img src="/img/soundModal_open.svg" alt="" />
+                        </div>
                       </div>
                       <div className="soundList-text">
                         <p className="soundList-title">{song.title}</p>
@@ -780,7 +807,7 @@ function Music() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <div className="image-wrapper">
+                  <div className="gemiRogo image-wrapper">
                     <img src="/img/music_img/Gemi_title.jpg" alt="Geminids2" />
                   </div>
                 </a>
@@ -790,6 +817,19 @@ function Music() {
         </div>
       </main>
       <Footer />
+      {/* モーダル */}
+      <div id="musicModal" className="soundModal hidden">
+        <div className="soundModal-content">
+          <button id="closeModal" className="close-btn">
+            <img src="/img/soundModal_close.svg" alt="閉じる" />
+          </button>
+          <h2 id="modalTitle" className="modal-title"></h2> {/* 曲名を表示 */}
+          <div className="visualizer-container">
+            <canvas id="audioVisualizer"></canvas>
+          </div>
+          <audio id="modalAudio" controls></audio>
+        </div>
+      </div>
     </div>
   );
 }
