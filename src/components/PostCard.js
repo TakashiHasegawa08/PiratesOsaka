@@ -49,7 +49,7 @@ function PostCard({ post }) {
   };
 
   return (
-    <div className="post">
+    <div className="post js-scroll">
       <Link to={`/post/${post.slug}`}>
         <div className="image-wrapper">
           <img
@@ -58,9 +58,7 @@ function PostCard({ post }) {
           />
         </div>
 
-        <h3 className="title">
-          <Link to={`/post/${post.slug}`}>{post.title.rendered}</Link>
-        </h3>
+        <h3 className="title">{post.title.rendered}</h3>
         <div className="post-excerpt">
           <p>{getExcerpt()}</p>
         </div>

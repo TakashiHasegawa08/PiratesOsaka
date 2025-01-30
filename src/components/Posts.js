@@ -4,9 +4,10 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Pagination from "./Pagination";
 import PostCard from "./PostCard";
+// import KV from "./KV";
+import Title from "./Title";
 
 // カスタム矢印コンポーネント
-// カスタム「次へ」ボタンコンポーネント
 const CustomNextArrow = (props) => {
   const { className, style, onClick } = props;
   return (
@@ -83,6 +84,10 @@ function Posts() {
   return (
     <div>
       <Header />
+      <div className="contents_inner">
+        <Title>Pirate Osaka</Title>
+      </div>
+      {/* <KV /> */}
 
       <div className="key-visual">
         <Slider {...sliderSettings}>

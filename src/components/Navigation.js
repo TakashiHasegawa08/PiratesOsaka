@@ -45,6 +45,40 @@ const Navigation = ({ onClose, isMobile = false }) => {
             Blog
           </Link>
         </li>
+        <li>
+          <a
+            href="https://piratesbooks.lovesick.jp/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className={location.pathname === "/book" ? "active" : ""}
+          >
+            Book
+          </a>
+        </li>
+        <li>
+          <Link
+            to="/companyprofile"
+            onClick={onClose}
+            className={location.pathname === "/companyprofile" ? "active" : ""}
+          >
+            Company
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/companyprofile/#form"
+            onClick={onClose}
+            className={
+              location.pathname === "/companyprofile" &&
+              location.hash === "#form"
+                ? "active"
+                : ""
+            }
+          >
+            Contact
+          </Link>
+        </li>
       </ul>
     </nav>
   );

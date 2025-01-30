@@ -81,6 +81,14 @@
                     content: none;
                 }
             }
+
+            h1 {
+                font-size: 25px;
+
+                @include breakpoints.sp {
+                    font-size: 23px;
+                }
+            }
         }
 
         .bologContents {

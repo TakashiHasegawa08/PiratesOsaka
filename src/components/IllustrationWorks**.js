@@ -99,7 +99,7 @@ function IllustrationWorks() {
                 post._embedded["wp:featuredmedia"][0]?.alt_text;
 
               return (
-                <div key={post.id} className="list js-scroll">
+                <div key={post.id} className="list">
                   {thumbnailUrl && (
                     <div
                       className="gallery-item"

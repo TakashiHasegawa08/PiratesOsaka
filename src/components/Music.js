@@ -11,6 +11,8 @@ function Music() {
     const canvas = document.getElementById("audioVisualizer");
     const ctx = canvas.getContext("2d");
 
+    document.title = "Music Works | 株式会社パイレーツ大阪";
+
     // AudioContextを再利用するための変数
     let audioContext;
     let sourceNode;
@@ -116,6 +118,7 @@ function Music() {
       }
       sounds.forEach((sound) => sound.removeEventListener("click", openModal));
       closeModal.removeEventListener("click", () => {});
+      // soundItems.forEach((item) => observer.unobserve(item));
     };
   }, []);
 
@@ -263,7 +266,7 @@ function Music() {
       sound: "/sounds/track04_Chance_in_the_moment.mp3",
       image: "/img/music_img/jacket04_Chance_in_the_moment.webp",
       site: "https://nodee.net/a/4z0j71t9",
-      startTime: 1,
+      startTime: 44,
       stores: [
         {
           href: "https://music.apple.com/jp/album/chance-in-the-moment-feat-suna-single/1703934373",
@@ -297,7 +300,7 @@ function Music() {
       sound: "/sounds/track15_HurryUp.mp3",
       image: "/img/music_img/jacket15_HurryUp.webp",
       site: "https://nodee.net/a/fbwt48v9",
-      startTime: 1,
+      startTime: 54,
       stores: [
         {
           href: "https://music.apple.com/jp/album/hurry-up-single/1747675156",
@@ -538,7 +541,7 @@ function Music() {
       sound: "/sounds/track06_ajisai.mp3",
       image: "/img/music_img/jacket06_ajisai.webp",
       site: "https://nodee.net/a/bygd021f",
-      startTime: 1,
+      startTime: 70,
       stores: [
         {
           href: "https://music.apple.com/jp/album/hydrangea-single/1687637990",
@@ -572,7 +575,7 @@ function Music() {
       sound: "/sounds/track07_hanareteitemo.mp3",
       image: "/img/music_img/jacket07_hanareteitemo.webp",
       site: "https://nodee.net/a/u79zi8m1",
-      startTime: 1,
+      startTime: 43,
       stores: [
         {
           href: "https://music.apple.com/jp/album/%E3%83%8F%E3%83%8A%E3%83%AC%E3%83%86%E3%82%A4%E3%83%86%E3%83%A2-feat-maya-ando/1675222616?i=1675222617",
@@ -606,7 +609,7 @@ function Music() {
       sound: "/sounds/track08_crawl.mp3",
       image: "/img/music_img/jacket08_crawl.webp",
       site: "https://nodee.net/a/q3a1zps7",
-      startTime: 1,
+      startTime: 69,
       stores: [
         {
           href: "https://music.apple.com/jp/album/crawl-feat-yasu-single/1645071254",
@@ -763,7 +766,7 @@ function Music() {
                   {soundList.map((song, index) => (
                     <div
                       key={index}
-                      className="soundList-item"
+                      className="soundList-item js-scroll"
                       data-sound={song.sound}
                       data-image={song.image}
                       data-start-time={song.startTime}

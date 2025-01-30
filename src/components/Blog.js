@@ -16,6 +16,7 @@ function Blog() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const location = useLocation();
+  document.title = "Blog | 株式会社パイレーツ大阪";
 
   useEffect(() => {
     fetchCategories();

@@ -1,0 +1,58 @@
+@charset "UTF-8";
+@use './mixins/breakpoints'as breakpoints;
+
+
+
+// 全体のスタイル
+#KV {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+
+    @include breakpoints.sp {
+        top: 0vh;
+    }
+
+    canvas {
+        display: block;
+        width: 100vw;
+        height: 70vh;
+        cursor: pointer;
+        position: relative;
+
+    }
+
+    .kv-text {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 5rem;
+        color: #333; // デフォルト文字色
+        text-align: center;
+
+        @include breakpoints.sp {
+            font-size: 1.5rem; // SPサイズに調整
+            position: relative;
+            top: 7vh;
+        }
+    }
+
+    .kv-animation {
+        animation: fadeIn 1s ease-in-out forwards;
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    }
+}

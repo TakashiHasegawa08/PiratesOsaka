@@ -151,6 +151,10 @@ a {
         line-height: 1.4;
         margin-bottom: 15px;
         font-weight: 600;
+
+        @include breakpoints.sp {
+            font-size: 22px;
+        }
     }
 
     h2 {
@@ -158,6 +162,10 @@ a {
         letter-spacing: .05em;
         line-height: 1.4;
         margin-bottom: 15px;
+
+        @include breakpoints.sp {
+            font-size: 20px;
+        }
     }
 
     h3 {
@@ -177,6 +185,10 @@ a {
         letter-spacing: .05em;
         line-height: 1.4;
         margin-bottom: 15px;
+
+        @include breakpoints.sp {
+            font-size: 17px;
+        }
     }
 }
 
@@ -188,6 +200,7 @@ a {
 
 .key-visual {
     // overflow: hidden;
+    margin-top: 60vh;
     margin-bottom: 35px;
 
     .kv_slider {
@@ -242,6 +255,18 @@ a {
     }
 }
 
+.js-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease,
+        transform 0.5s ease;
+
+    &.appear {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .postDate {
     color: rgb(113, 113, 113);
 }
@@ -266,6 +291,7 @@ a {
             aspect-ratio: 16 / 9;
             overflow: hidden;
             margin-bottom: 6px;
+            overflow: hidden;
 
             img {
                 position: absolute;
@@ -275,6 +301,17 @@ a {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                transition: transform 0.3s ease;
+            }
+
+            &:hover {
+                img {
+                    transform: translate(-50%, -50%) scale(1.15);
+
+                    @include breakpoints.sp {
+                        transform: inherit;
+                    }
+                }
             }
         }
 
@@ -330,10 +367,10 @@ a {
 }
 
 header.header {
-    margin-bottom: 80px;
+    margin-bottom: 100px;
 
     @include breakpoints.sp {
-        margin-bottom: 60px;
+        margin-bottom: 80px;
     }
 }
 
