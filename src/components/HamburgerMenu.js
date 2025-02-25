@@ -56,8 +56,8 @@ const HamburgerMenu = () => {
         <div className="contents_inner">
           <div className="header-logo">
             <Link to="/">
-              {/* 後で差し替え */}
-              {/* <img src="/img/header_rogo.png" alt="header_rogo" /> */}
+              {/* 後で差し替え（POロゴ） */}
+              <img src="/img/header_rogo.png" alt="header_rogo" />
             </Link>
           </div>
           <Navigation />
@@ -67,8 +67,8 @@ const HamburgerMenu = () => {
       {/* ハンバーガーメニュー */}
       <div className="header-logo sp-only">
         <Link to="/">
-          {/* 後で差し替え */}
-          {/* <img src="/img/header_rogo.png" alt="header_rogo" /> */}
+          {/* 後で差し替え（POロゴ） */}
+          <img src="/img/header_rogo.png" alt="header_rogo" />
         </Link>
       </div>
       <div className="outerMenu sp-only">

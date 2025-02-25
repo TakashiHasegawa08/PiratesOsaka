@@ -35,9 +35,11 @@ function Blog() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/categories`
-      );
+      // 環境変数を削除し、API URL を直接指定
+      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/categories`;
+      console.log("Fetching categories from:", apiUrl); // デバッグ用
+
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -50,9 +52,11 @@ function Blog() {
 
   const fetchPosts = async (page) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/posts?_embed&per_page=20&page=${page}`
-      );
+      // 環境変数を削除し、API URL を直接指定
+      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}`;
+      console.log("Fetching posts from:", apiUrl); // デバッグ用
+
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -68,9 +72,11 @@ function Blog() {
 
   const fetchPostsByCategory = async (categoryId, page) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/posts?_embed&per_page=20&page=${page}&categories=${categoryId}`
-      );
+      // 環境変数を削除し、API URL を直接指定
+      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}&categories=${categoryId}`;
+      console.log("Fetching posts by category from:", apiUrl); // デバッグ用
+
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }

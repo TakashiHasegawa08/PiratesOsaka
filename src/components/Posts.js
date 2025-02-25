@@ -4,7 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Pagination from "./Pagination";
 import PostCard from "./PostCard";
-// import KV from "./KV";
+import KV from "./KV";
 import Title from "./Title";
 
 // カスタム矢印コンポーネント
@@ -41,7 +41,11 @@ function Posts() {
 
   const fetchPosts = async (page) => {
     try {
-      const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/posts?_embed&per_page=20&page=${page}`;
+      // 環境変数を削除してURLを直接指定
+      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}`;
+
+      console.log("Fetching posts from:", apiUrl); // デバッグ用ログ
+
       const response = await fetch(apiUrl);
 
       if (!response.ok) {
@@ -55,6 +59,7 @@ function Posts() {
       setPosts(data);
     } catch (error) {
       console.error("Error fetching posts:", error);
+      alert("記事データの取得に失敗しました。管理者にお問い合わせください。");
     }
   };
 
@@ -87,21 +92,33 @@ function Posts() {
       <div className="contents_inner">
         <Title>Pirate Osaka</Title>
       </div>
-      {/* <KV /> */}
+      <KV />
 
       <div className="key-visual">
         <Slider {...sliderSettings}>
           <div className="kv_slider">
-            <img src="/img/PO_KV_slider01.jpg" alt="スライダー画像1" />
+            <a href="/music">
+              <img src="/img/PO_KV_slider01.jpg" alt="スライダー画像1" />
+            </a>
           </div>
           <div className="kv_slider">
-            <img src="/img/PO_KV_slider02.jpg" alt="スライダー画像2" />
+            <a
+              href="https://iwashiz.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/img/PO_KV_slider03.jpg" alt="スライダー画像3" />
+            </a>
           </div>
+
           <div className="kv_slider">
-            <img src="/img/PO_KV_slider03.jpg" alt="スライダー画像3" />
-          </div>
-          <div className="kv_slider">
-            <img src="/img/PO_KV_slider04.jpg" alt="スライダー画像4" />
+            <a
+              href="https://piratesbooks.lovesick.jp/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/img/PO_KV_slider02.jpg" alt="スライダー画像2" />
+            </a>
           </div>
         </Slider>
       </div>

@@ -20,9 +20,11 @@ function PostDetail() {
 
   const fetchPost = async () => {
     try {
-      const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/posts?_embed&slug=${slug}`;
-      const response = await fetch(apiUrl);
+      // 環境変数を削除し、API URL を直接指定
+      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&slug=${slug}`;
+      console.log("Fetching post from:", apiUrl); // デバッグ用
 
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -32,7 +34,9 @@ function PostDetail() {
         setPost(data[0]); // 現在の投稿をセット
 
         // 前後の投稿を取得
-        const prevNextApiUrl = `${process.env.REACT_APP_API_BASE_URL}/posts?_embed&per_page=2&order=asc&orderby=date&exclude=${data[0].id}`;
+        const prevNextApiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=2&order=asc&orderby=date&exclude=${data[0].id}`;
+        console.log("Fetching prev/next posts from:", prevNextApiUrl); // デバッグ用
+
         const prevNextResponse = await fetch(prevNextApiUrl);
         const prevNextData = await prevNextResponse.json();
 
@@ -52,9 +56,11 @@ function PostDetail() {
 
   const fetchCategories = async () => {
     try {
-      const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/categories`;
-      const response = await fetch(apiUrl);
+      // 環境変数を削除し、API URL を直接指定
+      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/categories`;
+      console.log("Fetching categories from:", apiUrl); // デバッグ用
 
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }

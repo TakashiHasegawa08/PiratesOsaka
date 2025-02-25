@@ -25,7 +25,7 @@ function IllustrationWorks() {
       const apiUrl =
         process.env.NODE_ENV === "development"
           ? `http://localhost:10039/wp-json/wp/v2/portfolio?per_page=50&_embed`
-          : `https://pirates-osaka.com/wp-json/wp/v2/portfolio?per_page=50&_embed`;
+          : `https://pirates-osaka.com/illustrationWorks/wp-json/wp/v2/portfolio?per_page=50&_embed`;
 
       const response = await fetch(apiUrl);
       if (!response.ok) {

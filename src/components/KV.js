@@ -11,7 +11,7 @@ const KV = () => {
   useEffect(() => {
     const loadImageAndGeneratePoints = async () => {
       const img = new Image();
-      img.src = "/img/dummy_text.png";
+      img.src = "/img/PO_KV_2503.png";
       img.crossOrigin = "anonymous";
 
       img.onload = () => {

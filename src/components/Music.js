@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Title from "./Title";
 
 function Music() {
+  const openModalRef = useRef(null); // useRefを用意して、openModalを格納する
+
   useEffect(() => {
     const modal = document.getElementById("musicModal");
     const closeModal = document.getElementById("closeModal");
@@ -13,44 +15,44 @@ function Music() {
 
     document.title = "Music Works | 株式会社パイレーツ大阪";
 
-    // AudioContextを再利用するための変数
     let audioContext;
     let sourceNode;
     let analyser;
     let dataArray;
 
     const openModal = (sound, title, startTime = 0) => {
+      // modalAudio.src = sound;
+      // modalAudio.currentTime = startTime;
+      // modalAudio.play();
       modalAudio.src = sound;
 
-      // 再生開始位置を指定
-      modalAudio.currentTime = startTime;
-
-      modalAudio.play();
+      modalAudio.addEventListener(
+        "loadedmetadata",
+        () => {
+          modalAudio.currentTime = startTime;
+          modalAudio.play();
+        },
+        { once: true } // イベントリスナーが1回だけ実行されるようにする
+      );
       modal.classList.remove("hidden");
 
-      // 曲名をモーダルに表示
       const modalTitle = document.getElementById("modalTitle");
-      modalTitle.textContent = title; // 曲名をセット
+      modalTitle.textContent = title;
 
-      // AudioContextの初期化または再利用
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         sourceNode = audioContext.createMediaElementSource(modalAudio);
         analyser = audioContext.createAnalyser();
         sourceNode.connect(analyser);
         analyser.connect(audioContext.destination);
-
-        // データ配列の初期化（fftSizeをデフォルトのまま使用）
         dataArray = new Uint8Array(analyser.frequencyBinCount);
       }
 
       const drawVisualizer = () => {
         if (!analyser) return;
-
         analyser.getByteFrequencyData(dataArray);
 
-        // Canvasの解像度調整
-        const dpr = window.devicePixelRatio || 1; // デバイスピクセル比
+        const dpr = window.devicePixelRatio || 1;
         const displayWidth = canvas.clientWidth;
         const displayHeight = canvas.clientHeight;
 
@@ -60,14 +62,13 @@ function Music() {
         ) {
           canvas.width = displayWidth * dpr;
           canvas.height = displayHeight * dpr;
-          ctx.scale(dpr, dpr); // 解像度に合わせたスケール
+          ctx.scale(dpr, dpr);
         }
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        const barWidth = canvas.width / (dataArray.length / 5 / dpr); // 線の数を調整
-        const amplificationFactor = 2.2; // バーの高さを調整するための倍率
-        const maxBarHeight = canvas.height / dpr; // 最大バー高さをスケールに基づいて制限
+        const barWidth = canvas.width / (dataArray.length / 5 / dpr);
+        const amplificationFactor = 2.2;
+        const maxBarHeight = canvas.height / dpr;
 
         dataArray.forEach((value, index) => {
           if (index % 2 !== 0) return;
@@ -96,29 +97,18 @@ function Music() {
       drawVisualizer();
     };
 
+    openModalRef.current = openModal; // useRefにopenModalを格納する
+
     closeModal.addEventListener("click", () => {
       modal.classList.add("hidden");
       modalAudio.pause();
-    });
-
-    const sounds = document.querySelectorAll(".soundList-item");
-    sounds.forEach((sound) => {
-      sound.addEventListener("click", () => {
-        const soundData = sound.getAttribute("data-sound");
-        const title = sound.querySelector(".soundList-title").textContent; // 曲名を取得
-        const startTime =
-          parseFloat(sound.getAttribute("data-start-time")) || 0; // startTimeを取得
-        openModal(soundData, title, startTime);
-      });
     });
 
     return () => {
       if (audioContext) {
         audioContext.close();
       }
-      sounds.forEach((sound) => sound.removeEventListener("click", openModal));
       closeModal.removeEventListener("click", () => {});
-      // soundItems.forEach((item) => observer.unobserve(item));
     };
   }, []);
 
@@ -158,6 +148,109 @@ function Music() {
         },
       ],
     },
+    // notFound feat.kyon.
+    {
+      title: "notFound feat.kyon.",
+      sound: "/sounds/notFound.mp3",
+      image: "/img/music_img/notFound_1000px.webp",
+      site: "https://nodee.net/a/et2tnus7k4md",
+      startTime: 59,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/notfound-single/1793738516",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/intl-ja/album/1I2cDDLyM7Y97lPLW4l89S",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/playlist?list=OLAK5uy_kWlLfooeMBM0tTxIpY1gORUKd-bqyfO2c",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://www.amazon.co.jp/music/player/albums/B0DVGXSD1K?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_KvxFM1eexSupmDSZnelzNYFwn",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/webapp/album/mb0000000004240915",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/et2tnus7k4md",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+    // Jumping Now feat.ゆきみもっち
+    {
+      title: "Jumping Now feat.ゆきみもっち",
+      sound: "/sounds/JumpingNow.mp3",
+      image: "/img/music_img/Jumping_Now_1000px.webp",
+      site: "https://nodee.net/a/m1rs7dpbuit6",
+      startTime: 45,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/jumping-now-single/1796146721",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/intl-ja/album/7JAG6jGpVKXkVHrkAx0hVt",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=43HR8yFEivI",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://www.amazon.co.jp/music/player/albums/B0DX1MJ131?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_hPo96l4alXWbIqWF1nreG0oyx",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/webapp/album/mb00000000042cdb4f",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/m1rs7dpbuit6",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+    // CHOCOLATE LADY feat. momono.
+    {
+      title: "CHOCOLATE LADY feat. momono.",
+      sound: "/sounds/CHOCOLATELADY.mp3",
+      image: "/img/music_img/CHOCOLATE_LADY_jacket_1000px.webp",
+      site: "https://nodee.net/a/iteh26ixu6sf",
+      startTime: 43,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/chocolate-lady-single/1792329905",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/intl-ja/album/140zKxQCTjPpRls5HNId1o",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=HQFyqsvP1hw",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://www.amazon.co.jp/music/player/albums/B0DTV5FYYT?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_ybygFCYLBw8ZAtmjGfbBoc20U",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/webapp/album/mb000000000420b407",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/iteh26ixu6sf",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+
     // Gravity of Kiss feat.よつは
     {
       title: "Gravity of Kiss feat.よつは",
@@ -749,17 +842,18 @@ function Music() {
       <main className="contents_inner">
         <Title>Music Works</Title>
         <div className="outer">
-          <div className="creditWrap">
-            <p className="credit">All songs written, composed, programmed by</p>
-            <div className="T_HASE_rogo">
-              <img
-                src="/img/music_img/T_HASE_rogo_300px.jpg"
-                alt="T.HASE logo"
-              />
-            </div>
-          </div>
           <article className="">
-            {/* 楽曲リスト */}
+            <div className="creditWrap">
+              <p className="credit">
+                All songs written, composed, programmed by
+              </p>
+              <div className="T_HASE_rogo">
+                <img
+                  src="/img/music_img/T_HASE_rogo_300px.jpg"
+                  alt="T.HASE logo"
+                />
+              </div>
+            </div>
             <section className="soundSelection">
               <div className="soundList_wrap">
                 <div className="soundList">
@@ -769,9 +863,18 @@ function Music() {
                       className="soundList-item js-scroll"
                       data-sound={song.sound}
                       data-image={song.image}
-                      data-start-time={song.startTime}
                     >
-                      <div className="image-wrapper">
+                      {/* 画像クリック時にモーダルを開く */}
+                      <div
+                        className="image-wrapper"
+                        onClick={() =>
+                          openModalRef.current(
+                            song.sound,
+                            song.title,
+                            song.startTime
+                          )
+                        }
+                      >
                         <img
                           src={song.image}
                           alt={song.title}
@@ -781,6 +884,7 @@ function Music() {
                           <img src="/img/soundModal_open.svg" alt="" />
                         </div>
                       </div>
+
                       <div className="soundList-text">
                         <p className="soundList-title">{song.title}</p>
                         <ul className="store_lists">
@@ -790,6 +894,11 @@ function Music() {
                                 href={store.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={(event) => {
+                                  event.stopPropagation(); // クリックイベントの伝播を防ぐ
+                                  event.preventDefault(); // 既定の動作を防ぐ
+                                  window.open(store.href, "_blank"); // 外部リンクを開く
+                                }}
                               >
                                 <img src={store.icon} alt={song.title} />
                               </a>
@@ -801,32 +910,17 @@ function Music() {
                   ))}
                 </div>
               </div>
-              <div className="other_link">
-                <p className="lead">
-                  Girls vocal unit "Geminids2" produced by T.HASE
-                </p>
-                <a
-                  href="https://geminids2.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="gemiRogo image-wrapper">
-                    <img src="/img/music_img/Gemi_title.jpg" alt="Geminids2" />
-                  </div>
-                </a>
-              </div>
             </section>
           </article>
         </div>
       </main>
       <Footer />
-      {/* モーダル */}
       <div id="musicModal" className="soundModal hidden">
         <div className="soundModal-content">
           <button id="closeModal" className="close-btn">
             <img src="/img/soundModal_close.svg" alt="閉じる" />
           </button>
-          <h2 id="modalTitle" className="modal-title"></h2> {/* 曲名を表示 */}
+          <h2 id="modalTitle" className="modal-title"></h2>
           <div className="visualizer-container">
             <canvas id="audioVisualizer"></canvas>
           </div>

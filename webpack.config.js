@@ -2,103 +2,87 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
-// require("dotenv").config({ path: path.resolve(__dirname, ".env.local") });
+
 require("dotenv").config({
   path: path.resolve(__dirname, `.env.${process.env.NODE_ENV || "local"}`),
 });
 
-// console.log("NODE_ENV:", process.env.NODE_ENV);
-// console.log("REACT_APP_API_BASE_URL:", process.env.REACT_APP_API_BASE_URL);
-// console.log("PUBLIC_PATH:", process.env.PUBLIC_PATH);
-
 module.exports = {
-  mode: "development",
-  // 本番環境アップ時
-  // mode: "production",
-  devtool: "source-map", // ソースマップを有効化
-  // entry: ["./src/components/styles/tailwind.css", "./src/index.js"],
-  entry: ["./src/index.js"],
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
+  devtool: process.env.NODE_ENV === "production" ? false : "source-map",
+  entry: {
+    main: "./src/index.js",
+  },
   output: {
-    path: path.resolve(__dirname, "dist"), // 出力先
-    filename: "bundle.js", // 出力するJSファイル名
-    publicPath: process.env.PUBLIC_PATH || "/", // 公開パス (環境変数から取得)
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].[contenthash].js", // ユニークなファイル名
+    publicPath: process.env.PUBLIC_PATH || "/",
   },
   module: {
-    rules: [{
-        test: /\.js$/, // JavaScript ファイルを対象
-        exclude: /node_modules/, // node_modules を除外
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
         use: {
-          loader: "babel-loader", // Babelでトランスパイル
+          loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"], // JavaScriptとReactのプリセット
+            presets: ["@babel/preset-env", "@babel/preset-react"],
           },
         },
       },
       {
-        test: /\.css$/, // CSS ファイルを対象
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: true, // CSSのソースマップを有効化
-            },
-          },
-          {
-            loader: "postcss-loader",
-            options: {
-              postcssOptions: {
-                plugins: [require("autoprefixer")], // 必要なプラグイン
-              },
-              sourceMap: true,
-            },
-          },
-        ],
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
       {
-        test: /\.scss$/, // SCSS ファイルを対象
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: true, // CSSのソースマップを有効化
-            },
-          },
-          {
-            loader: "sass-loader",
-            options: {
-              sourceMap: true, // SCSSのソースマップを有効化
-            },
-          },
-        ],
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./public/index.html", // テンプレートHTMLファイル
+      template: "./public/index.html",
     }),
     new MiniCssExtractPlugin({
-      filename: "styles.css", // 出力するCSSファイル名
+      filename: "styles.[contenthash].css",
     }),
     new CopyWebpackPlugin({
-      patterns: [{
-        from: path.resolve(__dirname, "public"), // コピー元ディレクトリ
-        to: path.resolve(__dirname, "dist"), // コピー先ディレクトリ
-        globOptions: {
-          ignore: ["**/index.html"], // index.htmlを除外
+      patterns: [
+        {
+          from: path.resolve(__dirname, "public"),
+          to: path.resolve(__dirname, "dist"),
+          globOptions: {
+            ignore: ["**/index.html"],
+          },
         },
-      }, ],
+      ],
     }),
     new webpack.DefinePlugin({
       "process.env.REACT_APP_API_BASE_URL": JSON.stringify(
         process.env.REACT_APP_API_BASE_URL
-      ), // 環境変数を定義
-      "process.env.PUBLIC_PATH": JSON.stringify(process.env.PUBLIC_PATH), // 環境変数を定義
+      ),
+      "process.env.PUBLIC_PATH": JSON.stringify(process.env.PUBLIC_PATH),
     }),
   ],
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      name: false,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
+    runtimeChunk: "single",
+    minimize: process.env.NODE_ENV === "production",
+    minimizer: [new TerserPlugin()],
+  },
   devServer: {
     historyApiFallback: true,
     static: {
@@ -107,16 +91,19 @@ module.exports = {
     compress: true,
     port: 3000,
     hot: true,
-    proxy: [{
-      context: ["/wp-json"],
-      // target: "http://localhost:10009",
-      target: "http://localhost:10028",
-      secure: false,
-      changeOrigin: true,
-    }, ],
+    proxy:
+      process.env.NODE_ENV === "development"
+        ? [
+            {
+              context: ["/wp-json"],
+              target: "http://localhost:10028",
+              secure: false,
+              changeOrigin: true,
+            },
+          ]
+        : [],
   },
-
   resolve: {
-    modules: ["node_modules"], // モジュール解決ディレクトリ
+    modules: ["node_modules"],
   },
 };
