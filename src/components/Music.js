@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Header from "./Header";
+import { Helmet } from "react-helmet";
 import Footer from "./Footer";
 import Title from "./Title";
 
@@ -28,12 +29,17 @@ function Music() {
 
       modalAudio.addEventListener(
         "loadedmetadata",
-        () => {
-          modalAudio.currentTime = startTime;
-          modalAudio.play();
+        async () => {
+          try {
+            await modalAudio.play();
+            modalAudio.currentTime = startTime;
+          } catch (error) {
+            console.error("再生エラー:", error);
+          }
         },
-        { once: true } // イベントリスナーが1回だけ実行されるようにする
+        { once: true }
       );
+
       modal.classList.remove("hidden");
 
       const modalTitle = document.getElementById("modalTitle");
@@ -114,6 +120,74 @@ function Music() {
 
   // 楽曲データ
   const soundList = [
+    // Can't Stop the Music feat.MaiShiroi
+    {
+      title: "Can't Stop the Music feat.MaiShiroi",
+      sound: "/sounds/CantStopTheMusic.mp3",
+      image: "/img/music_img/Can't_stop_the_music_Jacket_3000px.webp",
+      site: "https://nodee.net/a/heg3jfacp72v",
+      startTime: 52,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/cant-stop-the-music-single/1800537892",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/1GORktTJzbBMBDMh4q2Axf",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=R2NumbwMqos&si=ILEUSG6albJGDBXz",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0DZH6RGLT?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_POh0O74WNINj7wUl5Y15kv12Y",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb00000000043b1c80&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://nodee.net/a/heg3jfacp72v",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+    // ユラ-ユラ feat.ゆきみもっち
+    {
+      title: "ユラ-ユラ feat.ゆきみもっち",
+      sound: "/sounds/yurayura.mp3",
+      image: "/img/music_img/yurayura.webp",
+      site: "https://nodee.net/a/q01ydzp407sw",
+      startTime: 38,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/yura-yura-single/1804566969",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/2AsWxsHPjZnQedVbyJSSUr",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=xXiivnyHwV8&si=7vdVT1KHHsvuuXJ6",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0F2HSKPGP?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_PFW5zN3TXGC2D6TouTQ9HYx4R",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb000000000446edce&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://nodee.net/a/q01ydzp407sw",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // Do Dance feat.MaiShiroi
     {
       title: "Do Dance feat.MaiShiroi",
@@ -838,6 +912,27 @@ function Music() {
 
   return (
     <div id="musicPage">
+      {/* OGP設定 */}
+      <Helmet>
+        <title>Music Works | 株式会社パイレーツ大阪</title>
+        <meta
+          property="og:title"
+          content="Music Works | 株式会社パイレーツ大阪"
+        />
+        <meta
+          property="og:description"
+          content="T.HASEが手がけた楽曲を試聴・配信リンクからチェックできます。"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://pirates-osaka.com/music" />
+        <meta
+          property="og:image"
+          content="https://pirates-osaka.com/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg"
+        />
+        <meta property="og:site_name" content="株式会社パイレーツ大阪" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
       <Header />
       <main className="contents_inner">
         <Title>Music Works</Title>

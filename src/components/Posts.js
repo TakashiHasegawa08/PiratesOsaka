@@ -110,6 +110,15 @@ function Posts() {
               <img src="/img/PO_KV_slider03.jpg" alt="スライダー画像3" />
             </a>
           </div>
+          <div className="kv_slider">
+            <a
+              href="https://geminids2.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/img/PO_KV_slider04.jpg" alt="スライダー画像4" />
+            </a>
+          </div>
 
           <div className="kv_slider">
             <a
@@ -117,7 +126,7 @@ function Posts() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/img/PO_KV_slider02.jpg" alt="スライダー画像2" />
+              <img src="/img/PO_KV_slider02.jpg" alt="スライダー画像3" />
             </a>
           </div>
         </Slider>
