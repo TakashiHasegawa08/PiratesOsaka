@@ -92,7 +92,7 @@ function Posts() {
       <div className="contents_inner">
         <Title>Pirate Osaka</Title>
       </div>
-      <KV />
+      {/* <KV /> */}
 
       <div className="key-visual">
         <Slider {...sliderSettings}>

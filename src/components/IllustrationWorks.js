@@ -12,27 +12,29 @@ function IllustrationWorks() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [scrollPos, setScrollPos] = useState(0);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
   document.title = "Illustration Works | 株式会社パイレーツ大阪";
 
-  const [visiblePosts, setVisiblePosts] = useState(30);
-
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    fetchPosts(page);
+  }, [page]);
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (pageNumber) => {
     try {
-      const apiUrl =
-        process.env.NODE_ENV === "development"
-          ? `http://localhost:10039/wp-json/wp/v2/portfolio?per_page=50&_embed`
-          : `https://pirates-osaka.com/illustrationWorks/wp-json/wp/v2/portfolio?per_page=50&_embed`;
-
+      // const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/portfolio?per_page=30&page=${pageNumber}&_embed`;
+      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/portfolio?per_page=30&page=${pageNumber}&_embed`;
       const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      setPosts(data);
+      setPosts((prev) => [...prev, ...data]);
+
+      if (data.length < 20) {
+        setHasMore(false); // データが30件未満なら終了
+      }
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
@@ -42,19 +44,19 @@ function IllustrationWorks() {
 
   const openModal = (image) => {
     const scrollbarWidth = getScrollbarWidth();
-    setScrollPos(window.pageYOffset); // 現在のスクロール位置を保存
-    document.body.style.overflow = "hidden"; // 背景を固定
-    document.body.style.marginRight = `${scrollbarWidth}px`; // スクロールバー分調整
-    setSelectedImage(image); // 画像データをセット
-    setModalIsOpen(true); // モーダルを開く
+    setScrollPos(window.pageYOffset);
+    document.body.style.overflow = "hidden";
+    document.body.style.marginRight = `${scrollbarWidth}px`;
+    setSelectedImage(image);
+    setModalIsOpen(true);
   };
 
   const closeModal = () => {
-    document.body.style.overflow = ""; // 背景スクロールを再有効化
-    document.body.style.marginRight = ""; // スクロールバー調整解除
-    window.scrollTo(0, scrollPos); // スクロール位置を復元
-    setModalIsOpen(false); // モーダルを閉じる
-    setSelectedImage(null); // 画像データをリセット
+    document.body.style.overflow = "";
+    document.body.style.marginRight = "";
+    window.scrollTo(0, scrollPos);
+    setModalIsOpen(false);
+    setSelectedImage(null);
   };
 
   const getScrollbarWidth = () => {
@@ -73,7 +75,8 @@ function IllustrationWorks() {
   };
 
   const loadMorePosts = () => {
-    setVisiblePosts((prev) => prev + 10);
+    setLoading(true);
+    setPage((prev) => prev + 1);
   };
 
   return (
@@ -83,37 +86,33 @@ function IllustrationWorks() {
         <div className="contents_inner">
           <Title>Illustration Works</Title>
           <div className="gallery">
-            {posts.slice(0, visiblePosts).map((post) => {
+            {posts.map((post) => {
               const thumbnailUrl =
-                post._embedded &&
-                post._embedded["wp:featuredmedia"] &&
-                post._embedded["wp:featuredmedia"][0]?.media_details?.sizes
+                post._embedded?.["wp:featuredmedia"]?.[0]?.media_details?.sizes
                   ?.thumbnail?.source_url;
               const fullImageUrl =
-                post._embedded &&
-                post._embedded["wp:featuredmedia"] &&
-                post._embedded["wp:featuredmedia"][0]?.source_url;
+                post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
               const altText =
-                post._embedded &&
-                post._embedded["wp:featuredmedia"] &&
-                post._embedded["wp:featuredmedia"][0]?.alt_text;
+                post._embedded?.["wp:featuredmedia"]?.[0]?.alt_text;
+
+              // ★ 画像がない場合はスキップ！
+              if (!thumbnailUrl) return null;
 
               return (
                 <div key={post.id} className="list js-scroll">
-                  {thumbnailUrl && (
-                    <div
-                      className="gallery-item"
-                      onClick={() => openModal({ fullImageUrl, altText })}
-                    >
-                      <img src={thumbnailUrl} alt={altText} />
-                    </div>
-                  )}
+                  <div
+                    className="gallery-item"
+                    onClick={() => openModal({ fullImageUrl, altText })}
+                  >
+                    <img src={thumbnailUrl} alt={altText} />
+                  </div>
                 </div>
               );
             })}
           </div>
+
           <div id="load-more-container">
-            {visiblePosts < posts.length && (
+            {hasMore && !loading && (
               <button id="more-button" onClick={loadMorePosts}>
                 view more images
                 <img
@@ -122,9 +121,14 @@ function IllustrationWorks() {
                 />
               </button>
             )}
+            {hasMore && loading && (
+              <p className="loading-message">読み込み中...</p> // ←追加
+            )}
           </div>
         </div>
+
         {loading && <p>Loading...</p>}
+
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
