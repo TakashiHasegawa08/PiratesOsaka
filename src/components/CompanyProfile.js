@@ -134,6 +134,10 @@ function CompanyProfile() {
               <div className="tag">Established</div>
               <div className="content">2008年 8月12日</div>
             </div>
+            <div className="profile-item">
+              <div className="tag">Number of employees</div>
+              <div className="content">2名</div>
+            </div>
 
             <div className="profile-item">
               <div className="tag">Business Description</div>

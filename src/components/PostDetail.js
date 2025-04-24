@@ -123,7 +123,7 @@ function PostDetail() {
     <div id="blogPage">
       <Header />
 
-      <div className="contents_inner">
+      <div className="contents_inner" id="blog">
         <div className="layout">
           <div className="postBox">
             <div className="">

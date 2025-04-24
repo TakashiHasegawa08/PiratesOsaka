@@ -45,7 +45,7 @@ const Navigation = ({ onClose, isMobile = false }) => {
             Blog
           </Link>
         </li>
-        <li>
+        {/* <li>
           <a
             href="https://piratesbooks.lovesick.jp/"
             target="_blank"
@@ -55,23 +55,22 @@ const Navigation = ({ onClose, isMobile = false }) => {
           >
             Book
           </a>
-        </li>
+        </li> */}
         <li>
           <Link
-            to="/companyprofile"
+            to="/#companyProfilePage"
             onClick={onClose}
-            className={location.pathname === "/companyprofile" ? "active" : ""}
+            className={location.pathname === "/" ? "active" : ""}
           >
             Company
           </Link>
         </li>
         <li>
           <Link
-            to="/companyprofile/#form"
+            to="/#form"
             onClick={onClose}
             className={
-              location.pathname === "/companyprofile" &&
-              location.hash === "#form"
+              location.pathname === "/" && location.hash === "#form"
                 ? "active"
                 : ""
             }

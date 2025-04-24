@@ -935,7 +935,9 @@ function Music() {
 
       <Header />
       <main className="contents_inner">
-        <Title>Music Works</Title>
+        <Title>
+          Music W<span className="oTxt">O</span>rks
+        </Title>
         <div className="outer">
           <article className="">
             <div className="creditWrap">

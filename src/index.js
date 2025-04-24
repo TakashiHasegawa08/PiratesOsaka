@@ -6,7 +6,7 @@ import PostDetail from "./components/PostDetail"; // 個別投稿
 import Music from "./components/Music";
 import IllustrationWorks from "./components/IllustrationWorks";
 import Blog from "./components/Blog";
-import CompanyProfile from "./components/CompanyProfile";
+// import CompanyProfile from "./components/CompanyProfile";
 import "./components/styles/styles.scss";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
         <Route path="/illustrationWorks" element={<IllustrationWorks />} />{" "}
         {/* IllustrationWorksページ */}
         <Route path="/blog" element={<Blog />} /> {/* blogページ */}
-        <Route path="/companyprofile" element={<CompanyProfile />} />{" "}
+        {/* <Route path="/companyprofile" element={<CompanyProfile />} />{" "} */}
         {/* CompanyProfileページ */}
       </Routes>
     </Router>

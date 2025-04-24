@@ -103,7 +103,7 @@ function Blog() {
       <Header />
       <div className="contents_inner">
         <Title>
-          Blog{" "}
+          Bl<span className="oTxt">O</span>g{" "}
           {selectedCategory && (
             <span>
               -{" "}

@@ -84,7 +84,18 @@ function IllustrationWorks() {
       <Header />
       <main>
         <div className="contents_inner">
-          <Title>Illustration Works</Title>
+          <Title>
+            Illustration W<span className="oTxt">O</span>rks
+          </Title>
+          <div className="creditWrap">
+            <p className="credit">Illustration by</p>
+            <div className="T_HASE_rogo">
+              <img
+                src="/img/music_img/T_HASE_rogo_300px.jpg"
+                alt="T.HASE logo"
+              />
+            </div>
+          </div>
           <div className="gallery">
             {posts.map((post) => {
               const thumbnailUrl =

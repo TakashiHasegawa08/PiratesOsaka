@@ -7,3 +7,18 @@
     padding: 20px 0;
     text-align: center;
 }
+
+.grecaptcha-badge {
+    visibility: hidden;
+}
+
+.recaptcha-note {
+    margin: 15px 0 30px;
+    font-size: 12px;
+
+    a {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        text-decoration-color: rgb(190, 190, 190);
+    }
+}

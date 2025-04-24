@@ -9,15 +9,17 @@ require("dotenv").config({
   path: path.resolve(__dirname, `.env.${process.env.NODE_ENV || "local"}`),
 });
 
+const isDev = process.env.NODE_ENV !== "production";
+
 module.exports = {
-  mode: process.env.NODE_ENV === "production" ? "production" : "development",
-  devtool: process.env.NODE_ENV === "production" ? false : "source-map",
+  mode: isDev ? "development" : "production",
+  devtool: isDev ? "source-map" : false,
   entry: {
     main: "./src/index.js",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name].[contenthash].js", // ユニークなファイル名
+    filename: "[name].[contenthash].js",
     publicPath: process.env.PUBLIC_PATH || "/",
   },
   module: {
@@ -34,11 +36,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
+        use: [
+          isDev ? "style-loader" : MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader",
+        ],
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: [
+          isDev ? "style-loader" : MiniCssExtractPlugin.loader,
+          "css-loader",
+          "sass-loader",
+        ],
       },
     ],
   },
@@ -46,9 +56,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
-    new MiniCssExtractPlugin({
-      filename: "styles.[contenthash].css",
-    }),
+    ...(isDev
+      ? []
+      : [
+          new MiniCssExtractPlugin({
+            filename: "styles.[contenthash].css",
+          }),
+        ]),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -80,7 +94,7 @@ module.exports = {
       },
     },
     runtimeChunk: "single",
-    minimize: process.env.NODE_ENV === "production",
+    minimize: !isDev,
     minimizer: [new TerserPlugin()],
   },
   devServer: {
@@ -90,18 +104,17 @@ module.exports = {
     },
     compress: true,
     port: 3000,
-    hot: true,
-    proxy:
-      process.env.NODE_ENV === "development"
-        ? [
-            {
-              context: ["/wp-json"],
-              target: "http://localhost:10028",
-              secure: false,
-              changeOrigin: true,
-            },
-          ]
-        : [],
+    hot: true, // ← HMRを有効に
+    proxy: isDev
+      ? [
+          {
+            context: ["/wp-json"],
+            target: "http://localhost:10028",
+            secure: false,
+            changeOrigin: true,
+          },
+        ]
+      : [],
   },
   resolve: {
     modules: ["node_modules"],
