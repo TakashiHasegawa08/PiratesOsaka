@@ -204,7 +204,8 @@ function CompanyProfile() {
               <div className="formWrap">
                 <div
                   className="g-recaptcha"
-                  data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // テスト用キー　 本番環境時に変更
+                  // data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // テスト用キー　 本番環境時に変更
+                  data-sitekey="6LcV_SMaAAAAAI3PxzsZ9Ad3RkdPb-jqzrpz25w8" // 本番環境時に変更
                   data-size="invisible"
                 ></div>
               </div>
