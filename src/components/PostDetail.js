@@ -108,7 +108,7 @@ function PostDetail() {
     // YouTube埋め込みをレスポンシブ対応にするため、iframeをラップ
     const responsiveContent = content.replace(
       /<iframe([^>]*)><\/iframe>/g,
-      `<div class="responsive-video"><iframe $1></iframe></div>`
+      `<div className="responsive-video"><iframe $1></iframe></div>`
     );
 
     return (

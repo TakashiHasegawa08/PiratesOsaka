@@ -1,173 +1,99 @@
-import React, { useEffect, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import React, { useRef, useEffect, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
+import Stars from "./Stars";
+import BackgroundSphere from "./BackgroundSphere";
 
 const KV = () => {
-  const pointsMeshRef = useRef();
-  const originalPositionsRef = useRef();
-  const isAnimatingRef = useRef(true);
-  const hoverIndices = useRef(new Set());
+  const { scene } = useGLTF("/img/pirates_mark.glb?v=2");
+  const ref = useRef();
+  const scrollRef = useRef(0);
+
+  const rotationRef = useRef({
+    xSpeed: (Math.random() - 0.5) * 0.01,
+    ySpeed: (Math.random() - 0.5) * 0.01,
+    zSpeed: (Math.random() - 0.5) * 0.01,
+  });
 
   useEffect(() => {
-    const loadImageAndGeneratePoints = async () => {
-      const img = new Image();
-      img.src = "/img/PO_KV_2503.png";
-      img.crossOrigin = "anonymous";
-
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-
-        const imageData = ctx.getImageData(0, 0, img.width, img.height);
-        const data = imageData.data;
-
-        const positions = [];
-        const density = 1;
-
-        for (let y = 0; y < img.height; y += density) {
-          for (let x = 0; x < img.width; x += density) {
-            const index = (y * img.width + x) * 4;
-            const r = data[index];
-            const g = data[index + 1];
-            const b = data[index + 2];
-            const alpha = data[index + 3];
-
-            if (r > 200 && g > 200 && b > 200 && alpha > 200) {
-              const px = x - img.width / 2;
-              const py = -(y - img.height / 2);
-              positions.push(px, py, 0);
-            }
-          }
-        }
-
-        // デバイスごとにY座標を調整
-        const isMobile = window.innerWidth <= 768; // スマホの判定
-        for (let i = 1; i < positions.length; i += 3) {
-          if (isMobile) {
-            positions[i] -= 150; // スマホの場合にY座標を下げる
-          } else {
-            positions[i] -= 50; // PCの場合にY座標を少し下げる
-          }
-        }
-
-        const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute(
-          "position",
-          new THREE.Float32BufferAttribute(positions, 3)
-        );
-
-        const pointsMaterial = new THREE.PointsMaterial({
-          color: 0x000000,
-          size: 1.2,
-        });
-
-        const pointsMesh = new THREE.Points(geometry, pointsMaterial);
-
-        if (pointsMeshRef.current) {
-          pointsMeshRef.current.add(pointsMesh);
-
-          originalPositionsRef.current = positions.slice();
-
-          const positionArray = geometry.attributes.position.array;
-          for (let i = 0; i < positionArray.length; i++) {
-            positionArray[i] += (Math.random() - 0.5) * 2500;
-          }
-          geometry.attributes.position.needsUpdate = true;
-        }
-      };
+    const handleScroll = () => {
+      scrollRef.current = window.scrollY;
     };
-
-    loadImageAndGeneratePoints();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handlePointerMove = (event) => {
-    if (!pointsMeshRef.current || !originalPositionsRef.current) return;
+  // モデルの中心を修正
+  useEffect(() => {
+    scene.position.set(0, 0, 0); // モデル全体を0原点に
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.geometry.center();
 
-    const canvasBounds = event.target.getBoundingClientRect();
-    const mouseX =
-      ((event.clientX || event.touches?.[0]?.clientX) - canvasBounds.left) /
-      canvasBounds.width;
-    const mouseY =
-      ((event.clientY || event.touches?.[0]?.clientY) - canvasBounds.top) /
-      canvasBounds.height;
+        const mat = child.material;
 
-    // キャンバス座標に変換
-    const x = (mouseX - 0.5) * canvasBounds.width;
-    const y = -(mouseY - 0.5) * canvasBounds.height;
+        console.log("✅ マテリアル名:", mat.name);
+        console.log("📦 マテリアルタイプ:", mat.type);
+        console.log("🎨 色:", mat.color?.getHexString());
+        console.log("🔆 透明度:", mat.opacity);
+        console.log("🧾 テクスチャ:", mat.map);
 
-    const geometry = pointsMeshRef.current.children[0].geometry;
-    const positionArray = geometry.attributes.position.array;
+        // 半透明にしたい場合
+        if (child.material) {
+          child.material.transparent = true;
+          child.material.opacity = 0.9;
+          child.material.emissive = child.material.color.clone();
+          child.material.emissiveIntensity = 0.3;
+        }
+        if (mat.name === "Material.003") {
+          mat.transparent = true; // ← これがないと opacity 効かない
+          mat.opacity = 0.5; // さらに薄くしたい場合（例：0.3〜0.5）
 
-    for (let i = 0; i < positionArray.length; i += 3) {
-      const dx = positionArray[i] - x;
-      const dy = positionArray[i + 1] - y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 150) {
-        hoverIndices.current.add(i / 3);
-
-        const influence = Math.pow(1 - distance / 150, 2);
-        positionArray[i] += (Math.random() - 0.5) * 50 * influence;
-        positionArray[i + 1] += (Math.random() - 0.5) * 50 * influence;
-      }
-    }
-
-    geometry.attributes.position.needsUpdate = true;
-  };
-
-  useFrame(() => {
-    if (
-      pointsMeshRef.current &&
-      pointsMeshRef.current.children.length > 0 &&
-      originalPositionsRef.current
-    ) {
-      const geometry = pointsMeshRef.current.children[0].geometry;
-      const positionArray = geometry.attributes.position.array;
-
-      let isComplete = true;
-
-      for (let i = 0; i < positionArray.length; i++) {
-        const original = originalPositionsRef.current[i];
-        const current = positionArray[i];
-        const delta = (original - current) * 0.03;
-
-        positionArray[i] += delta;
-
-        if (hoverIndices.current.has(i / 3)) {
-          hoverIndices.current.delete(i / 3);
-        } else if (Math.abs(delta) > 0.1) {
-          isComplete = false;
+          // 発光させて視認性を高めたい場合
+          mat.emissive = mat.color.clone();
+          mat.emissiveIntensity = 0.2;
         }
       }
+    });
+  }, [scene]);
 
-      if (isAnimatingRef.current && isComplete) {
-        isAnimatingRef.current = false;
-      }
+  useFrame(() => {
+    if (ref.current) {
+      const scrollY = scrollRef.current;
 
-      geometry.attributes.position.needsUpdate = true;
+      const minScale = 0.2;
+      const maxScale = 8.0;
+      const maxScroll = window.innerHeight * 2;
+
+      const scrollRatio = Math.min(scrollY / maxScroll, 1);
+
+      const scaleFactor = maxScale - scrollRatio * (maxScale - minScale);
+      ref.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+      // 回転角度の目標 → 最初に3回転して、最後に0に戻る
+      const totalRotationX = Math.PI * 2;
+      const totalRotationY = Math.PI * 2;
+      const totalRotationZ = Math.PI * 1;
+
+      // 回転をスクロールに応じて「だんだん正面に近づける」
+      const easedRatio = 1 - Math.pow(1 - scrollRatio, 3); // easeOutCubic
+      ref.current.rotation.x = totalRotationX * (1 - easedRatio);
+      ref.current.rotation.y = totalRotationY * (1 - easedRatio);
+      ref.current.rotation.z = totalRotationZ * (1 - easedRatio);
     }
   });
 
   return (
-    <group
-      ref={pointsMeshRef}
-      onPointerMove={(e) => handlePointerMove(e.nativeEvent)}
-      onPointerDown={(e) => handlePointerMove(e.nativeEvent)}
-    />
+    <>
+      <Stars />
+      <primitive
+        ref={ref}
+        object={scene}
+        scale={2.0}
+        position={[0, 0, 0]} // 中央に
+      />
+    </>
   );
 };
 
-export default function App() {
-  return (
-    <div id="KV">
-      <Canvas camera={{ position: [0, 0, 1000], fov: 65 }}>
-        <ambientLight intensity={1} />
-        <KV />
-      </Canvas>
-    </div>
-  );
-}
+export default KV;

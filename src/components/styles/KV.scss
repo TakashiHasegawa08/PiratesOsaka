@@ -2,56 +2,107 @@
 @use './mixins/breakpoints'as breakpoints;
 
 
-
-// 全体のスタイル
 #KV {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
+    width: 100vw;
+    height: 300vh;
+    position: relative;
+    z-index: -1;
 
-    @include breakpoints.sp {
-        top: 0vh;
-    }
-
-    canvas {
-        display: block;
-        width: 100vw;
-        height: 70vh;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .kv-text {
-        position: absolute;
-        top: 10%;
+    .topArrow {
+        width: 40px;
+        position: fixed;
+        bottom: 3%;
         left: 50%;
-        transform: translateX(-50%);
-        font-size: 5rem;
-        color: #333; // デフォルト文字色
+        transform: translate(-50%, 0%);
+        z-index: 100;
+        animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    @keyframes bounceDown {
+
+        0%,
+        100% {
+            transform: translate(-50%, 0%);
+        }
+
+        50% {
+            transform: translate(-50%, 10px);
+        }
+    }
+
+    .topName {
+        position: fixed;
+        top: 3%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+        z-index: 100;
+        color: white;
+        font-size: 14px;
+        letter-spacing: 1em;
+        width: 100%;
         text-align: center;
 
         @include breakpoints.sp {
-            font-size: 1.5rem; // SPサイズに調整
-            position: relative;
-            top: 7vh;
+            font-size: min(3.3vw, 14px);
         }
     }
 
-    .kv-animation {
-        animation: fadeIn 1s ease-in-out forwards;
+    .catchCopy {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+        position: fixed;
+        top: 23%;
+        left: 50%;
+        z-index: 100;
+        color: white;
+        font-size: 25px;
+        letter-spacing: .05em;
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.95);
-            }
+        &.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
 
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+        @include breakpoints.sp {
+            font-size: min(6.3vw, 23px);
         }
     }
+
+}
+
+.canvasBoard {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+}
+
+.header-fadein {
+    opacity: 0;
+    transition: .6s;
+
+    &.show {
+        opacity: 1;
+    }
+}
+
+#KV.js_kv {
+    opacity: 1;
+    transition: opacity 1s ease;
+
+    &.vanish {
+        opacity: 0;
+        pointer-events: none; // 任意（クリック無効にしたい場合）
+    }
+}
+
+.kv-bg {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-size: 100%;
+    background-repeat: repeat-y;
 }

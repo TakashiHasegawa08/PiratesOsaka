@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
-import Slider from "react-slick";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-// import Pagination from "./Pagination";
-// import PostCard from "./PostCard";
 import KV from "./KV";
 import Title from "./Title";
 import { useLocation } from "react-router-dom";
-import { div } from "framer-motion/client";
 import ScrollFadein from "./ScrollFadein";
+import { Canvas } from "@react-three/fiber";
+// import Particles from "./Particles";
+// import Particles from "./Particles";
+// import Pagination from "./Pagination";
+// import PostCard from "./PostCard";
+// import * as THREE from "three";
+// import Slider from "react-slick";
+// import { div } from "framer-motion/client";
 
 // カスタム矢印コンポーネント
 const CustomNextArrow = (props) => {
@@ -38,6 +42,8 @@ function Posts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [bgImage, setBgImage] = useState("/img/BG_line_PC.png");
+  const [kvBgImage, setKvBgImage] = useState("/img/space_pc.png");
+  // const scrollRef = useRef(0);
 
   // useEffect(() => {
   //   fetchPosts(currentPage);
@@ -197,21 +203,148 @@ function Posts() {
     };
   }, []);
 
+  useEffect(() => {
+    const updateBg = () => {
+      const isMobile = window.innerWidth <= 768;
+      setKvBgImage(isMobile ? "/img/space_sp.png" : "/img/space_pc.png");
+    };
+
+    updateBg(); // 初回実行
+    window.addEventListener("resize", updateBg);
+    return () => window.removeEventListener("resize", updateBg);
+  }, []);
+
+  const headerRef = useRef();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const target = document.getElementById("intro");
+      const elements = document.querySelectorAll(".js-header-fadein");
+
+      if (!target || elements.length === 0) return;
+
+      const rect = target.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const triggerPoint =
+        window.innerWidth <= 768 ? viewportHeight * 0.8 : viewportHeight * 0.7;
+
+      // すでにある fade-in 処理
+      elements.forEach((el) => {
+        if (rect.top <= triggerPoint) {
+          el.classList.add("show");
+        } else {
+          el.classList.remove("show");
+        }
+      });
+
+      // ← 追加するこの部分が KV に vanish クラスを制御
+      const kvElement = document.querySelector("#KV.js_kv");
+      if (kvElement) {
+        if (rect.top <= triggerPoint) {
+          kvElement.classList.add("vanish");
+        } else {
+          kvElement.classList.remove("vanish");
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // 初回実行
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const target = document.querySelector(".catchCopy");
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const triggerPoint = window.innerHeight * 0.3;
+
+      if (scrollY >= triggerPoint) {
+        target.classList.add("show");
+      } else {
+        target.classList.remove("show");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // 初期実行
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="TopPage">
-      <div
-        className="TopPageBG"
-        style={{ backgroundImage: `url("${bgImage}")` }}
-      >
+      <section id="KV" className="js_kv">
         {" "}
+        <div
+          className="kv-bg"
+          style={{
+            backgroundImage: `url(${kvBgImage})`,
+          }}
+        >
+          <p className="topName">Pirates Osaka</p>
+          <p className="catchCopy">Be Unique!</p>
+          <div className="canvasBoard">
+            <Canvas camera={{ position: [0, 0, 20], fov: 1500 }}>
+              <ambientLight intensity={2.0} />
+              <directionalLight position={[5, 5, 5]} intensity={1.5} />
+              <hemisphereLight intensity={1.0} groundColor="white" />
+              <KV />
+              {/* <Particles
+                scrollY={scrollRef}
+                maxScroll={window.innerHeight * 2}
+              /> */}
+            </Canvas>
+          </div>{" "}
+          <div className="topArrow">
+            <img src="/img/PO_topArrow.svg" alt="" />
+          </div>
+        </div>
+      </section>
+      <div
+        className="TopPageBG header-fadein js-header-fadein"
+        style={{ backgroundImage: `url("${bgImage}")` }}
+      ></div>{" "}
+      <div className="header-fadein js-header-fadein">
+        <Header />
       </div>
-      <Header />
       <ScrollFadein />
-
-      {/* <KV /> */}
-      <div className="TopWrap">
-        <section id="KV"></section>
-
+      <div className="TopWrap scrollContainer">
+        {/* イントロ */}
+        <section id="intro">
+          <div className="contents_inner">
+            <h1 className="topTitle">
+              Pirates <span className="oTxt">O</span>saka
+            </h1>
+            <p className="catchLead js-fadein">
+              私たちは、<span className="red">WEBサイト</span>や
+              <span className="red">WEBアプリ</span>の制作を中心に、
+              <br className="PC-only" />
+              広告の<span className="red">グラフィックデザイン</span>
+              までを手がける
+              <br className="PC-only" />
+              クリエイティブエージェンシーです。
+              <br className="" />
+              <br className="" />
+              「かっこいい」や「使いやすい」にくわえて
+              <br className="PC-only" />
+              見る人の記憶に残る、
+              <span className="bold">ちょっと変わった、おもしろい</span>
+              ものを。
+              <br className="" />
+              <br className="" />
+              <span className="bold">遊び心</span>と
+              <span className="bold">アイデア</span>を大切にしながら、
+              <br className="" />
+              <span className="red">Be Unique!</span>
+              をモットーに、
+              <br className="PC-only" />
+              私たちは日々、モノづくりに取り組んでいます。
+            </p>
+          </div>
+        </section>
         {/* プロジェクト */}
         <section id="project">
           <div className="contents_inner">
@@ -319,6 +452,16 @@ function Posts() {
           </div>
         </section>
 
+        <section id="add">
+          <div className="contents_inner">
+            <p className="catchLead">
+              仕事のご相談やグラフィックデザインなどの制作事例をご覧になりたい方は
+              <br className="" />
+              <a href="#form">お問い合わせ</a>からお気軽にご連絡ください。
+            </p>
+          </div>
+        </section>
+
         {/* スタッフ紹介 */}
         <section id="profile">
           <div className="contents_inner">
@@ -356,6 +499,22 @@ function Posts() {
                   </div>
                 </li>
               </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* アナウンス */}
+        <section id="announce">
+          <div className="contents_inner">
+            <Title>
+              Ann<span className="oTxt">O</span>unce
+            </Title>
+            <div className="contentBoxWrap wrap02">
+              <div className="contentBox Box1">
+                <a href="https://iwashiz.com/" className="addBanner">
+                  <img src="/img/announce01.jpg" alt="" />
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -454,14 +613,15 @@ function Posts() {
                 <div className="formWrap">
                   <div
                     className="g-recaptcha"
-                    data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // テスト用キー　 本番環境時に変更
+                    // data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // テスト用キー　 本番環境時に変更
+                    data-sitekey="6LcV_SMaAAAAAI3PxzsZ9Ad3RkdPb-jqzrpz25w8" // 本番
                     data-size="invisible"
                   ></div>
                 </div>
 
                 <button type="submit">送信</button>
               </form>
-              <p class="recaptcha-note">
+              <p className="recaptcha-note">
                 このサイトは reCAPTCHA によって保護されています。
                 <a
                   href="https://policies.google.com/privacy"

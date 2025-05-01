@@ -157,15 +157,28 @@ a {
     }
 
     h1 {
-        font-size: 45px;
+        font-size: 60px;
         letter-spacing: .05em;
         line-height: 1.4;
         margin-bottom: 15px;
         font-weight: 600;
         color: var(--pink01);
+        font-family: "Oswald",
+            serif;
 
         @include breakpoints.sp {
             font-size: 38px;
+        }
+
+        &.topTitle {
+            text-align: center;
+            font-size: 70px;
+            margin-bottom: 70px;
+
+            @include breakpoints.sp {
+                font-size: min(12.5vw, 50px);
+                margin-bottom: 50px;
+            }
         }
     }
 
@@ -210,6 +223,33 @@ a {
             font-size: 17px;
         }
     }
+
+    .catchLead {
+        font-size: 18px;
+        letter-spacing: 0.12em;
+        line-height: 1.6;
+        text-align: center;
+
+        .red {
+            font-weight: 700;
+            color: var(--pink01);
+        }
+
+        .bold {
+            font-weight: 700;
+        }
+
+        @include breakpoints.sp {
+            font-size: 17px;
+            text-align: left;
+        }
+
+        a {
+            text-decoration: underline;
+            text-underline-offset: 5px;
+        }
+    }
+
 }
 
 
@@ -234,10 +274,26 @@ a {
     }
 }
 
+header.header {
+    margin-bottom: 100px;
+
+    @include breakpoints.sp {
+        margin-bottom: 80px;
+    }
+}
+
+.TopPage {
+    header.header {
+        margin-bottom: 0;
+
+        @include breakpoints.sp {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+
 .header-logo {
-    // position: fixed;
-    // top: 10px;
-    // left: 10px;
     z-index: 102;
     max-width: 50px;
 
@@ -248,6 +304,7 @@ a {
         max-width: 40px;
     }
 }
+
 
 .postCategory {
     display: flex;
@@ -388,13 +445,6 @@ a {
     border: 0;
 }
 
-header.header {
-    margin-bottom: 100px;
-
-    @include breakpoints.sp {
-        margin-bottom: 80px;
-    }
-}
 
 footer.footer {
     margin-top: 60px;
@@ -444,19 +494,30 @@ footer.footer {
 
 .TopPage {
     position: relative;
+    overflow: hidden;
 
     .TopPageBG {
-        position: absolute;
+        // position: absolute;
+        position: fixed;
+        left: 0;
+        top: 0;
         width: 100%;
         height: 100%;
-        background-size: 100%;
+        background-size: cover;
         background-repeat: repeat-y;
         background-position: top;
         z-index: -1;
-        opacity: .4;
         pointer-events: none;
     }
+}
 
+.header-fadein.TopPageBG {
+    opacity: 0;
+    transition: .3s;
+
+    &.show {
+        opacity: .4;
+    }
 }
 
 .TopWrap {
@@ -484,6 +545,14 @@ footer.footer {
     @include breakpoints.sp {
         flex-direction: column;
         row-gap: 50px;
+    }
+
+    &.wrap02 {
+        justify-content: flex-start;
+
+        @include breakpoints.sp {
+            justify-content: center;
+        }
     }
 
     .contentBox {
