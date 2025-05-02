@@ -482,10 +482,46 @@ function Posts() {
           </div>
         </section>
 
-        {/* クルー紹介 */}
+        <section id="sugPage">
+          <div className="contents_inner">
+            <ul className="linkWrap">
+              <li className="linkList">
+                <a href="/music" className="sugPageLink hoverEffect">
+                  <Title>Music</Title>
+                  <picture className="icon">
+                    <img src="/img/subpage01.svg" alt="" />
+                  </picture>
+                </a>
+              </li>
+              <li className="linkList">
+                <a
+                  href="/illustrationWorks"
+                  className="sugPageLink hoverEffect"
+                >
+                  <Title>Illustration</Title>
+                  <picture className="icon">
+                    <img src="/img/subpage02.svg" alt="" />
+                  </picture>
+                </a>
+              </li>
+              <li className="linkList">
+                <a href="/blog" className="sugPageLink hoverEffect">
+                  <Title>Blog</Title>
+                  <picture className="icon">
+                    <img src="/img/subpage03.svg" alt="" />
+                  </picture>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* プロフィール */}
         <section id="profile">
           <div className="contents_inner">
-            <Title>Crew</Title>
+            <Title>
+              Pr<span className="oTxt">O</span>file
+            </Title>
             <div className="profileBox">
               <ul className="profileWrap">
                 {/* 01　長谷川 */}
