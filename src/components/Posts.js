@@ -314,9 +314,12 @@ function Posts() {
         {/* イントロ */}
         <section id="intro">
           <div className="contents_inner">
-            <h1 className="topTitle">
-              Pirates <span className="oTxt">O</span>saka
-            </h1>
+            <div className="topTitle_wrap">
+              <h1 className="topTitle">
+                Pirates <span className="oTxt">O</span>saka
+              </h1>
+              <p className="ja">株式会社パイレーツ大阪</p>
+            </div>
             <p className="catchLead js-fadein">
               私たちは、<span className="red">WEBサイト</span>や
               <span className="red">WEBアプリ</span>の制作を中心に、

@@ -124,7 +124,7 @@ a {
 
 
 
-.oswald_400 {
+.oswald_500 {
     font-family: "Oswald", serif;
     font-optical-sizing: auto;
     font-weight: 400;
@@ -135,6 +135,12 @@ a {
     font-family: "Oswald", serif;
     font-optical-sizing: auto;
     font-weight: 600;
+    font-style: normal;
+}
+
+.cal-sans-regular {
+    font-family: "Cal Sans", sans-serif;
+    font-weight: 400;
     font-style: normal;
 }
 
@@ -167,13 +173,15 @@ a {
 
     h1 {
         font-size: 60px;
-        letter-spacing: .05em;
+        letter-spacing: .1em;
         line-height: 1.4;
         margin-bottom: 15px;
         font-weight: 600;
         color: var(--pink01);
-        font-family: "Oswald",
-            serif;
+        // font-family: "Oswald",
+        //     serif;
+        font-family: "Cal Sans",
+            sans-serif;
 
         @include breakpoints.sp {
             font-size: 38px;
@@ -182,11 +190,35 @@ a {
         &.topTitle {
             text-align: center;
             font-size: 70px;
-            margin-bottom: 70px;
+            margin-bottom: 0;
+            line-height: 1;
 
             @include breakpoints.sp {
-                font-size: min(12.5vw, 50px);
-                margin-bottom: 50px;
+                // font-size: min(12.5vw, 50px);
+                font-size: min(11.5vw, 48px);
+                margin-bottom: 0;
+                line-height: 1;
+            }
+        }
+    }
+
+    .topTitle_wrap {
+        margin-bottom: 8%;
+
+        @include breakpoints.sp {
+            margin-bottom: 60px;
+        }
+
+        .ja {
+            font-size: 14px;
+            letter-spacing: .3em;
+            text-align: center;
+            color: black;
+            margin-top: 10px;
+
+            @include breakpoints.sp {
+                font-size: min(3.2vw, 11px);
+                margin-top: 8px;
             }
         }
     }
@@ -263,9 +295,12 @@ a {
 
 
 .categoryTitle {
-    font-family: "Oswald",
-        serif;
-    font-weight: 600;
+    // font-family: "Oswald",
+    //     serif;
+    // font-weight: 600;
+    font-family: "Cal Sans",
+        sans-serif;
+    letter-spacing: .1em;
 }
 
 .key-visual {
