@@ -15,18 +15,39 @@
         left: 50%;
         transform: translate(-50%, 0%);
         z-index: 100;
-        animation: bounceDown 1.8s ease-in-out infinite;
+
+        .inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .txt {
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-align: center;
+            margin-bottom: 2px;
+            color: white;
+        }
+
+        .arrow {
+            display: block;
+            margin: 0 auto;
+            animation: bounceDown 1.8s ease-in-out infinite;
+        }
     }
 
     @keyframes bounceDown {
 
         0%,
         100% {
-            transform: translate(-50%, 0%);
+            transform: translate(0%, 0%);
         }
 
         50% {
-            transform: translate(-50%, 10px);
+            transform: translate(0%, 10px);
         }
     }
 
@@ -62,6 +83,10 @@
         text-align: center;
         font-weight: bold;
 
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
+            0 0 10px rgba(255, 255, 255, 0.2),
+            0 0 15px rgba(255, 255, 255, 0.2);
+
         &.show {
             opacity: 1;
             transform: translate(-50%, 0);
@@ -71,6 +96,7 @@
             font-size: min(6.3vw, 23px);
         }
     }
+
 
 }
 
@@ -88,6 +114,39 @@
         opacity: 1;
     }
 }
+
+
+
+.topBtn {
+    position: fixed;
+    z-index: 100;
+    right: 14px;
+    bottom: 14px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 78px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include breakpoints.sp {
+        bottom: 73px;
+    }
+
+    .txt {
+        font-size: 12px;
+        color: black;
+        text-align: center;
+
+        &.arrow {
+            width: 17px;
+        }
+    }
+}
+
 
 #KV.js_kv {
     opacity: 1;

@@ -1,15 +1,19 @@
 import React, { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useLoader, useFrame } from "@react-three/fiber";
+import { TextureLoader, AdditiveBlending } from "three";
 
 const Stars = ({ count = 1000 }) => {
   const groupRef = useRef();
+  const texture = useLoader(TextureLoader, "/img/star.svg");
 
-  // ランダムな位置に星を配置
-  const positions = Array.from({ length: count }, () => [
-    (Math.random() - 0.5) * 100,
-    (Math.random() - 0.5) * 100,
-    (Math.random() - 0.5) * 100,
-  ]);
+  const stars = Array.from({ length: count }, () => ({
+    position: [
+      (Math.random() - 0.5) * 100,
+      (Math.random() - 0.5) * 100,
+      (Math.random() - 0.5) * 100,
+    ],
+    scale: Math.random() * 0.15 + 0.01,
+  }));
 
   useFrame(() => {
     if (groupRef.current) {
@@ -19,12 +23,19 @@ const Stars = ({ count = 1000 }) => {
 
   return (
     <group ref={groupRef}>
-      {positions.map((pos, i) => (
-        <mesh key={i} position={pos}>
-          {/* 星の大きさ */}
-          <sphereGeometry args={[0.05, 64, 64]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
+      {stars.map((star, i) => (
+        <sprite
+          key={i}
+          position={star.position}
+          scale={[star.scale, star.scale, 1]}
+        >
+          <spriteMaterial
+            map={texture}
+            transparent
+            blending={AdditiveBlending}
+            depthWrite={false} // 後ろのオブジェクトと重なったときの透明度確保
+          />
+        </sprite>
       ))}
     </group>
   );

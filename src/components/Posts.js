@@ -6,6 +6,7 @@ import Title from "./Title";
 import { useLocation } from "react-router-dom";
 import ScrollFadein from "./ScrollFadein";
 import { Canvas } from "@react-three/fiber";
+import ReCAPTCHA from "react-google-recaptcha";
 // import Particles from "./Particles";
 // import Particles from "./Particles";
 // import Pagination from "./Pagination";
@@ -45,33 +46,6 @@ function Posts() {
   const [kvBgImage, setKvBgImage] = useState("/img/space_pc.png");
   // const scrollRef = useRef(0);
 
-  // useEffect(() => {
-  //   fetchPosts(currentPage);
-  // }, [currentPage]);
-
-  // const fetchPosts = async (page) => {
-  //   try {
-  //     const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}`;
-
-  //     console.log("Fetching posts from:", apiUrl); // デバッグ用ログ
-
-  //     const response = await fetch(apiUrl);
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-
-  //     const total = response.headers.get("X-WP-TotalPages");
-  //     setTotalPages(Number(total));
-
-  //     const data = await response.json();
-  //     setPosts(data);
-  //   } catch (error) {
-  //     console.error("Error fetching posts:", error);
-  //     alert("記事データの取得に失敗しました。管理者にお問い合わせください。");
-  //   }
-  // };
-
   const sliderSettings = {
     dots: true,
     arrows: true,
@@ -95,6 +69,8 @@ function Posts() {
     ],
   };
 
+  const [token, setToken] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -110,12 +86,6 @@ function Posts() {
       "https://pirates-osaka.com/wp-content/plugins/contact-form-7/includes/js/index.js";
     cf7Script.async = true;
     document.body.appendChild(cf7Script);
-
-    const recaptchaScript = document.createElement("script");
-    recaptchaScript.src = "https://www.google.com/recaptcha/api.js";
-    recaptchaScript.async = true;
-    recaptchaScript.defer = true;
-    document.body.appendChild(recaptchaScript);
   }, []);
 
   const handleChange = (e) => {
@@ -123,27 +93,7 @@ function Posts() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    let token = "";
-    if (window.location.hostname === "localhost") {
-      token = "test-token";
-    } else if (window.grecaptcha) {
-      try {
-        token = await window.grecaptcha.execute(
-          "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
-          { action: "submit" }
-        );
-      } catch (error) {
-        setMessage("reCAPTCHAの取得に失敗しました。");
-        return;
-      }
-    } else {
-      setMessage("reCAPTCHAがロードされていません。");
-      return;
-    }
-
+  const submitForm = async (token) => {
     const formPayload = new FormData();
     formPayload.append("your-name", formData.name);
     formPayload.append("your-email", formData.email);
@@ -165,7 +115,43 @@ function Posts() {
           : "送信に失敗しました。"
       );
     } catch (error) {
-      setMessage("エラーが発生しました。");
+      console.error("送信エラー:", error);
+      setMessage("送信中にエラーが発生しました。");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!token) {
+      setMessage("reCAPTCHA認証が必要です。");
+      return;
+    }
+
+    try {
+      const formPayload = new FormData();
+      formPayload.append("your-name", formData.name);
+      formPayload.append("your-email", formData.email);
+      formPayload.append("your-message", formData.message);
+      formPayload.append("g-recaptcha-response", token);
+
+      const res = await fetch(
+        "https://pirates-osaka.com/wp-json/contact-form-7/v1/contact-forms/67/feedback",
+        {
+          method: "POST",
+          body: formPayload,
+        }
+      );
+      const result = await res.json();
+
+      setMessage(
+        result.status === "mail_sent"
+          ? "お問い合わせが送信されました。"
+          : "送信に失敗しました。"
+      );
+    } catch (err) {
+      console.error(err);
+      setMessage("送信中にエラーが発生しました。");
     }
   };
 
@@ -275,7 +261,7 @@ function Posts() {
   }, []);
 
   return (
-    <div className="TopPage">
+    <div className="TopPage" id="TOP">
       <section id="KV" className="js_kv">
         {" "}
         <div
@@ -299,7 +285,12 @@ function Posts() {
             </Canvas>
           </div>{" "}
           <div className="topArrow">
-            <img src="/img/PO_topArrow.svg" alt="" />
+            <div className="inner">
+              <p className="txt">Scroll</p>
+              <picture className="arrow">
+                <img src="/img/PO_topArrow.svg" alt="" />
+              </picture>
+            </div>
           </div>
         </div>
       </section>
@@ -309,6 +300,14 @@ function Posts() {
       ></div>{" "}
       <div className="header-fadein js-header-fadein">
         <Header />
+      </div>
+      <div className="header-fadein js-header-fadein">
+        <a href="#TOP" className="topBtn">
+          <p className="txt arrow">
+            <img src="/img/topBtn.svg" alt="" />
+          </p>
+          <p className="txt">TOP</p>
+        </a>
       </div>
       <ScrollFadein />
       <div className="TopWrap scrollContainer">
@@ -353,7 +352,7 @@ function Posts() {
             </Title>
             <div className="contentAll">
               <div className="contentBoxWrap">
-                {/* TaskTime */}
+                {/* プロジェクト01 TaskTime */}
                 <div className="contentBox Box1 js-fadein">
                   <div className="visual">
                     <a
@@ -424,28 +423,46 @@ function Posts() {
                   </p>
                 </div>
               </div>
+
               <div className="contentBoxWrap">
+                {/* プロジェクト02 Geminids2 */}
                 <div className="contentBox js-fadein">
                   <div className="visual">
-                    <img src="/img/board_TT.jpg" alt="" />
+                    <a
+                      href="https://geminids2.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_Gemi.jpg" alt="" />
+                    </a>
                   </div>
-                  <p className="name">
-                    TaskTime｜チームのためのタスク・スケジュール・カレンダー管理アプリ
-                  </p>
-                  <p className="lead">
-                    スケジュール×工数管理アプリ『TaskTime』をリリースしました！タスクもスケジュールも、ガントチャートで一元管理。チーム全体の予定と作業時間を「見える化」して、ムダを削減、効率UP！無料で使える、シンプルなのに高機能なタスク管理ツールをぜひご体験ください。
-                  </p>
+                  <div className="banner_exWrap">
+                    <p className="name">Geminids2</p>
+                    <p className="lead">
+                      「宇宙でライブしたい！」がコンセプトのガールズボーカルユニット。T.HASEによるトータルプロデュース。
+                    </p>
+                  </div>
                 </div>
+                {/* プロジェクト03 Pirates Books */}
                 <div className="contentBox js-fadein">
                   <div className="visual">
-                    <img src="/img/board_TT.jpg" alt="" />
+                    <a
+                      href="https://piratesbooks.lovesick.jp/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_PB.jpg" alt="" />
+                    </a>
                   </div>
-                  <p className="name">
-                    TaskTime｜チームのためのタスク・スケジュール・カレンダー管理アプリ
-                  </p>
-                  <p className="lead">
-                    スケジュール×工数管理アプリ『TaskTime』をリリースしました！タスクもスケジュールも、ガントチャートで一元管理。チーム全体の予定と作業時間を「見える化」して、ムダを削減、効率UP！無料で使える、シンプルなのに高機能なタスク管理ツールをぜひご体験ください。
-                  </p>
+                  <div className="banner_exWrap">
+                    <p className="name">Pirates Books</p>
+                    <p className="lead">
+                      作家：黒澤優子　編集者：金川信亮　発行者：長谷川崇
+                      によるユニットで本をつくりました。
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -462,12 +479,10 @@ function Posts() {
           </div>
         </section>
 
-        {/* スタッフ紹介 */}
+        {/* クルー紹介 */}
         <section id="profile">
           <div className="contents_inner">
-            <Title>
-              Pr<span className="oTxt">O</span>file
-            </Title>
+            <Title>Crew</Title>
             <div className="profileBox">
               <ul className="profileWrap">
                 {/* 01　長谷川 */}
@@ -480,9 +495,49 @@ function Posts() {
                     <p className="name">長谷川 崇＠T.HASE</p>
                     <p className="nameEn">Hasegawa Takashi</p>
                     <p className="txt">
-                      自己紹介文自己紹介文自己紹介文自己紹介文 自己紹介文
-                      自己紹介文 自己紹介文 自己紹介文 自己紹介文 自己紹介文
-                      自己紹介文
+                      創る人。／
+                      <a href="/music">Music Works</a>／
+                      <a href="/illustrationWorks">Illustration Works</a>／
+                      <a
+                        href="https://geminids2.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Geminids2プロデューサー
+                      </a>
+                      ／
+                      <a
+                        href="http://goo.gl/e8qFP6"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        イラストのInstagram
+                      </a>
+                      ／
+                      <a
+                        href="https://x.gd/yDLUh"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        YouTube
+                      </a>
+                      ／
+                      <a
+                        href="https://x.gd/7VJSj"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        ラガマフィン（バンド：Bass担当）
+                      </a>
+                      ／
+                      <a
+                        href="https://iwashiz.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        FCイワシーズ所属（フットサルチーム）
+                      </a>
+                      ／ガンバ大阪サポーター
                     </p>
                   </div>
                 </li>
@@ -493,9 +548,9 @@ function Posts() {
                   </picture>
                   <div className="exWrap">
                     <p className="credit">Creative Director</p>
-                    <p className="name">ハンザキシンタロウ</p>
-                    <p className="nameEn">Shintaro Hanzaki</p>
-                    <p className="txt">coming soon!!!</p>
+                    <p className="name">ハンザキ</p>
+                    <p className="nameEn">Hanzaki</p>
+                    <p className="txt">デザイナー／ギャンブル男</p>
                   </div>
                 </li>
               </ul>
@@ -511,9 +566,20 @@ function Posts() {
             </Title>
             <div className="contentBoxWrap wrap02">
               <div className="contentBox Box1">
-                <a href="https://iwashiz.com/" className="addBanner">
-                  <img src="/img/announce01.jpg" alt="" />
-                </a>
+                <div className="visual">
+                  <a
+                    href="https://iwashiz.com/"
+                    className="addBanner hoverEffect"
+                  >
+                    <img src="/img/announce01.jpg" alt="" />
+                  </a>
+                </div>
+                <div className="banner_exWrap">
+                  <p className="name">FCイワシーズ</p>
+                  <p className="lead">
+                    東京都品川区で活動している、初心者向けのフットサルチームです。メンバーを募集しているので、お気軽にお問い合わせください。
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -611,12 +677,10 @@ function Posts() {
                 </div>
 
                 <div className="formWrap">
-                  <div
-                    className="g-recaptcha"
-                    // data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // テスト用キー　 本番環境時に変更
-                    data-sitekey="6LcV_SMaAAAAAI3PxzsZ9Ad3RkdPb-jqzrpz25w8" // 本番
-                    data-size="invisible"
-                  ></div>
+                  <ReCAPTCHA
+                    sitekey="6LcV_SMaAAAAAI3PxzsZ9Ad3RkdPb-jqzrpz25w8" // ←WEBサイトキー
+                    onChange={(value) => setToken(value)}
+                  />
                 </div>
 
                 <button type="submit">送信</button>

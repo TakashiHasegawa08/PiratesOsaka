@@ -20,10 +20,8 @@ function PostDetail() {
 
   const fetchPost = async () => {
     try {
-      // 環境変数を削除し、API URL を直接指定
+      // 現在の投稿を取得
       const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&slug=${slug}`;
-      console.log("Fetching post from:", apiUrl); // デバッグ用
-
       const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -31,18 +29,24 @@ function PostDetail() {
 
       const data = await response.json();
       if (data.length > 0) {
-        setPost(data[0]); // 現在の投稿をセット
+        const currentPost = data[0];
+        setPost(currentPost); // 現在の投稿をセット
 
-        // 前後の投稿を取得
-        const prevNextApiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=2&order=asc&orderby=date&exclude=${data[0].id}`;
-        console.log("Fetching prev/next posts from:", prevNextApiUrl); // デバッグ用
+        const currentDate = currentPost.date;
 
-        const prevNextResponse = await fetch(prevNextApiUrl);
-        const prevNextData = await prevNextResponse.json();
+        // 前の投稿（現在より古い投稿を降順で1件取得）
+        const prevRes = await fetch(
+          `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=1&order=desc&orderby=date&before=${currentDate}`
+        );
+        const prevData = await prevRes.json();
+        setPrevPost(prevData.length > 0 ? prevData[0] : null);
 
-        // 前後の投稿をセット
-        setPrevPost(prevNextData[0] || null);
-        setNextPost(prevNextData[1] || null);
+        // 次の投稿（現在より新しい投稿を昇順で1件取得）
+        const nextRes = await fetch(
+          `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=1&order=asc&orderby=date&after=${currentDate}`
+        );
+        const nextData = await nextRes.json();
+        setNextPost(nextData.length > 0 ? nextData[0] : null);
       } else {
         setError("Post not found.");
       }
