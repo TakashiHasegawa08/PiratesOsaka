@@ -12,6 +12,7 @@ function PostDetail() {
   const [error, setError] = useState(null); // エラー状態
   const [prevPost, setPrevPost] = useState(null); // 前の投稿
   const [nextPost, setNextPost] = useState(null); // 次の投稿
+  const [recommendedPosts, setRecommendedPosts] = useState([]);
 
   useEffect(() => {
     fetchPost(); // 投稿を取得
@@ -47,6 +48,19 @@ function PostDetail() {
         );
         const nextData = await nextRes.json();
         setNextPost(nextData.length > 0 ? nextData[0] : null);
+        const excludeCategoryId = 17; // 「コラム_T.HASE」のカテゴリIDに置き換えてください
+        const sameCategoryId = currentPost.categories.find(
+          (id) => id !== excludeCategoryId
+        );
+
+        // 修正後
+        if (sameCategoryId) {
+          const recommendedRes = await fetch(
+            `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&categories=${sameCategoryId}&per_page=2&orderby=date&order=desc&before=${currentPost.date}&exclude=${currentPost.id}`
+          );
+          const recommendedData = await recommendedRes.json();
+          setRecommendedPosts(recommendedData);
+        }
       } else {
         setError("Post not found.");
       }
@@ -80,7 +94,7 @@ function PostDetail() {
     return (
       <div>
         <Header />
-        <div>Loading...</div>
+        <div className="loading">Loading...</div>
         <Footer />
       </div>
     );
@@ -109,10 +123,10 @@ function PostDetail() {
   const renderPostContent = () => {
     const content = post.content.rendered;
 
-    // YouTube埋め込みをレスポンシブ対応にするため、iframeをラップ
+    // YouTube埋め込みをレスポンシブ対応に
     const responsiveContent = content.replace(
       /<iframe([^>]*)><\/iframe>/g,
-      `<div className="responsive-video"><iframe $1></iframe></div>`
+      `<div class="responsive-video"><iframe $1></iframe></div>`
     );
 
     return (
@@ -152,19 +166,42 @@ function PostDetail() {
                 )) || "未分類"}
               </p>
               {renderPostContent()}
+              <div className="bottomNav">
+                {/* おすすめ記事（同一カテゴリ） */}
+                {recommendedPosts.length > 0 && (
+                  <div className="recommendation">
+                    <h4>おすすめの記事</h4>
+                    <ul className="recommendWrap postNavigation">
+                      {recommendedPosts.map((recPost) => (
+                        <li key={recPost.id} className="link">
+                          <Link to={`/post/${recPost.slug}`}>
+                            {recPost.title.rendered}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-              {/* 前後の投稿ナビゲーション */}
-              <div className="postNavigation">
-                {prevPost && (
-                  <Link to={`/post/${prevPost.slug}`} className="prevPost link">
-                    &lt; 前の投稿: {prevPost.title.rendered}
-                  </Link>
-                )}
-                {nextPost && (
-                  <Link to={`/post/${nextPost.slug}`} className="nextPost link">
-                    次の投稿: {nextPost.title.rendered} &gt;
-                  </Link>
-                )}
+                {/* 前後の投稿ナビゲーション */}
+                <div className="postNavigation">
+                  {prevPost && (
+                    <Link
+                      to={`/post/${prevPost.slug}`}
+                      className="prevPost link"
+                    >
+                      &lt; 前の投稿: {prevPost.title.rendered}
+                    </Link>
+                  )}
+                  {nextPost && (
+                    <Link
+                      to={`/post/${nextPost.slug}`}
+                      className="nextPost link"
+                    >
+                      次の投稿: {nextPost.title.rendered} &gt;
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>

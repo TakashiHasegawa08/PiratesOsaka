@@ -296,6 +296,13 @@ a {
     font-family: "Cal Sans",
         sans-serif;
     letter-spacing: .1em;
+    display: flex;
+    flex-wrap: wrap;
+
+    @include breakpoints.sp {
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .key-visual {
@@ -473,17 +480,24 @@ header.header {
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
+    max-width: 100%;
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
 }
 
-.responsive-video iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
+.loading {
+    display: flex;
+    justify-content: center;
+    font-size: 11px;
 }
-
 
 footer.footer {
     margin-top: 60px;

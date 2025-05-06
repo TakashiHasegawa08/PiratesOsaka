@@ -122,11 +122,13 @@ function Blog() {
                 <PostCard key={post.id} post={post} />
               ))}
             </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            <div className="paginationWrap">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </div>
           <Sidebar categories={categories} />
         </div>

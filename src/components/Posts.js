@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import ScrollFadein from "./ScrollFadein";
 import { Canvas } from "@react-three/fiber";
 import ReCAPTCHA from "react-google-recaptcha";
+import { motion, useInView } from "framer-motion";
 // import Particles from "./Particles";
 // import Particles from "./Particles";
 // import Pagination from "./Pagination";
@@ -260,6 +261,25 @@ function Posts() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const MainTitle = () => {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+    return (
+      <div className="topTitle_wrap" ref={ref}>
+        <motion.h1
+          className="topTitle"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1 }}
+        >
+          Pirates <span className="oTxt">O</span>saka
+        </motion.h1>
+        <p className="ja">株式会社パイレーツ大阪</p>
+      </div>
+    );
+  };
+
   return (
     <div className="TopPage" id="TOP">
       <section id="KV" className="js_kv">
@@ -314,12 +334,7 @@ function Posts() {
         {/* イントロ */}
         <section id="intro">
           <div className="contents_inner">
-            <div className="topTitle_wrap">
-              <h1 className="topTitle">
-                Pirates <span className="oTxt">O</span>saka
-              </h1>
-              <p className="ja">株式会社パイレーツ大阪</p>
-            </div>
+            <MainTitle />
             <p className="catchLead js-fadein">
               私たちは、<span className="red">WEBサイト</span>や
               <span className="red">WEBアプリ</span>の制作を中心に、
@@ -609,6 +624,8 @@ function Posts() {
                   <a
                     href="https://iwashiz.com/"
                     className="addBanner hoverEffect"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <img src="/img/announce01.jpg" alt="" />
                   </a>

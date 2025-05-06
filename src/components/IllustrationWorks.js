@@ -84,9 +84,7 @@ function IllustrationWorks() {
       <Header />
       <main>
         <div className="contents_inner">
-          <Title>
-            Illustration W<span className="oTxt">O</span>rks
-          </Title>
+          <Title>Illustration</Title>
           <div className="creditWrap">
             <p className="credit">Illustration by</p>
             <div className="T_HASE_rogo">
@@ -138,7 +136,7 @@ function IllustrationWorks() {
           </div>
         </div>
 
-        {loading && <p>Loading...</p>}
+        {loading && <p className="loading">Loading...</p>}
 
         <Modal
           isOpen={modalIsOpen}

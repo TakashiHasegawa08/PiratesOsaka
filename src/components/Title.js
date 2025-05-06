@@ -68,11 +68,7 @@ const Title = ({ children }) => {
   };
 
   return (
-    <h2
-      className="categoryTitle"
-      ref={titleRef}
-      style={{ display: "flex", flexWrap: "wrap" }}
-    >
+    <h2 className="categoryTitle" ref={titleRef}>
       {React.Children.map(children, renderAnimated)}
     </h2>
   );
