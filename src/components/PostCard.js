@@ -47,6 +47,11 @@ function PostCard({ post }) {
       ? plainText.substring(0, excerptLength) + "..."
       : plainText;
   };
+  const decodeHtml = (html) => {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  };
 
   return (
     <div className="post js-scroll">
@@ -58,7 +63,7 @@ function PostCard({ post }) {
           />
         </div>
 
-        <h3 className="title">{post.title.rendered}</h3>
+        <h3 className="title">{decodeHtml(post.title.rendered)}</h3>
         <div className="post-excerpt">
           <p>{getExcerpt()}</p>
         </div>

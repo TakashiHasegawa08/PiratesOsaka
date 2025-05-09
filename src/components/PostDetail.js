@@ -89,6 +89,11 @@ function PostDetail() {
       console.error("Error fetching categories:", error);
     }
   };
+  const decodeHtml = (html) => {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  };
 
   if (loading) {
     return (
@@ -145,7 +150,7 @@ function PostDetail() {
         <div className="layout">
           <div className="postBox">
             <div className="">
-              <h1 className="">{post.title.rendered}</h1>
+              <h1 className="">{decodeHtml(post.title.rendered)}</h1>
               <div className="image-wrapper">
                 <img
                   className="post-thumbnail"
