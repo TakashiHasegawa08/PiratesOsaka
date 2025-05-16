@@ -304,14 +304,6 @@ function Posts() {
               /> */}
             </Canvas>
           </div>{" "}
-          <div className="topArrow">
-            <div className="inner">
-              <p className="txt">Scroll</p>
-              <picture className="arrow">
-                <img src="/img/PO_topArrow.svg" alt="" />
-              </picture>
-            </div>
-          </div>
         </div>
       </section>
       <div
@@ -330,6 +322,14 @@ function Posts() {
         </a>
       </div>
       <ScrollFadein />
+      <a href="#intro" className="topArrow">
+        <div className="inner">
+          <p className="txt">Scroll</p>
+          <picture className="arrow">
+            <img src="/img/PO_topArrow.svg" alt="" />
+          </picture>
+        </div>
+      </a>
       <div className="TopWrap scrollContainer">
         {/* イントロ */}
         <section id="intro">
@@ -690,6 +690,7 @@ function Posts() {
               <Title>
                 C<span className="oTxt">O</span>ntact Us
               </Title>
+
               <form onSubmit={handleSubmit}>
                 <div className="formWrap">
                   <p>
