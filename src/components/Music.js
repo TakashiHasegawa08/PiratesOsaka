@@ -290,6 +290,40 @@ function Music() {
         },
       ],
     },
+    // photograph feat.SMITH（すみす）
+    {
+      title: "photograph feat.SMITH（すみす）",
+      sound: "/sounds/photograph.mp3",
+      image: "/img/music_img/photograph_1200px.webp",
+      site: "https://nodee.net/a/nfdy1xp3n1bg",
+      startTime: 63,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/photograph-single/1813795476",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/6XzzdBtouuqT9u8Z7enoq7",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=2z9S9YLSFPQ&si=-pedRCtn9ixWJUxK",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0F82LFDYY?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_lowUZ4DceeGx8pfBwtYHgodzC&trackAsin=B0F82X9T5M",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb000000000461616d&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://nodee.net/a/nfdy1xp3n1bg",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // CHOCOLATE LADY feat. momono.
     {
       title: "CHOCOLATE LADY feat. momono.",

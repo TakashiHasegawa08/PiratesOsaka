@@ -49,7 +49,7 @@ function ContactPage() {
             </p>
             <p className="sub">
               対応可能な技術領域：HTML / CSS / JavaScript / PHP / WordPress /
-              Firebase ほか
+              React / Firebase ほか
             </p>
           </div>
           <ContactForm />
