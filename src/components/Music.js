@@ -256,6 +256,40 @@ function Music() {
         },
       ],
     },
+    // らせん feat.Yasu
+    {
+      title: "らせん feat.Yasu",
+      sound: "/sounds/rasen.mp3",
+      image: "/img/music_img/rasen_3000px.webp",
+      site: "https://nodee.net/a/7zysag90mfqq",
+      startTime: 65,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/rasen-feat-yasu-single/1825266767",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/intl-ja/track/3sR2YRh5KmjsjB2JO4FaQb?si=a7a70130e393420e",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=eQPKggBqtYY&si=H7BOL4alegDnm26t",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0FGXJTMP8?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_X3c3MHGdbEbF8Es2gWLbjSIBc&trackAsin=B0FGXD8VVN",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/webapp/album/mb0000000004881b2a",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://nodee.net/a/7zysag90mfqq",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // Jumping Now feat.ゆきみもっち
     {
       title: "Jumping Now feat.ゆきみもっち",
