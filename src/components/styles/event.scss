@@ -1,19 +1,62 @@
 @charset "UTF-8";
 @use './mixins/breakpoints'as breakpoints;
 
-#eventPage {}
+#eventPage {
 
-.eventContainer {
-    max-width: 500px;
-    width: 90%;
-    display: block;
-    margin: 0 auto;
+    .eventContainer {
+        max-width: 500px;
+        width: 90%;
+        display: block;
+        margin: 0 auto;
 
-    .eventLead {
-        font-size: 16px;
+        .eventTitle {
+            max-width: 350px;
+            display: block;
+            margin: 0 auto 30px;
+        }
+
+        .eventLead {
+            font-size: 16px;
+            letter-spacing: .05em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .eventInfo {
+            font-size: 14px;
+            letter-spacing: .05em;
+            line-height: 1.5;
+            margin-bottom: 10px;
+
+            .little {
+                font-size: 85%;
+            }
+
+            a {
+                color: black;
+                text-decoration: underline;
+                text-underline-offset: 2px;
+                text-decoration-thickness: 1px;
+            }
+        }
     }
 
-    .eventInfo {
-        font-size: 14px;
+    .map-container {
+        position: relative;
+        padding-bottom: 56.25%; // 16:9比率（必要なら変更可）
+        height: 0;
+        overflow: hidden;
+        width: 100%;
+        max-width: 100%; // コンテンツ幅にフィット
+        margin: 2rem auto; // 上下マージン調整
+        border-radius: 8px; // 任意：角丸にしたい場合
+    }
+
+    .map-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
 }

@@ -7,7 +7,7 @@ import Music from "./components/Music";
 import IllustrationWorks from "./components/IllustrationWorks";
 import Blog from "./components/Blog";
 import ContactPage from "./components/ContactPage";
-import Event from "./components/Event";
+import Event250811 from "./components/event/event250811";
 // import CompanyProfile from "./components/CompanyProfile";
 import "./components/styles/styles.scss";
 
@@ -23,7 +23,7 @@ function App() {
         {/* IllustrationWorksページ */}
         <Route path="/blog" element={<Blog />} /> {/* blogページ */}
         <Route path="/contact" element={<ContactPage />} />{" "}
-        <Route path="/event" element={<Event />} /> {/* ⭐️ 追加 */}
+        <Route path="/event/event250811" element={<Event250811 />} />
         {/* お問い合わせページ */}
       </Routes>
     </Router>
