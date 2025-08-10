@@ -33,7 +33,7 @@ function Event250811() {
         <div className="eventContainer">
           <h1 className="eventTitle">
             <img
-              src="/img/PM_rogo.png"
+              src="/img/PM_rogo_02.png"
               alt="Playing Music 〜T.HASE 生誕祭 50th Anniversary〜"
             />
           </h1>

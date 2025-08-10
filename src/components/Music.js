@@ -256,6 +256,40 @@ function Music() {
         },
       ],
     },
+    // Lucky Girl, Good Luck Boy feat. Mai Shiroi
+    {
+      title: "Lucky Girl, Good Luck Boy feat. Mai Shiroi",
+      sound: "/sounds/LuckyGirl.mp3",
+      image: "/img/music_img/Lucky_Girl_Good_Luck_Boy_3000px.webp",
+      site: "https://nodee.net/a/v4qsps3yjb7g",
+      startTime: 47,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/lucky-girl-good-luck-boy-single/1830161433",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/1ej7G1Whodpqa6ZrIFG9pX",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=wvsFpiGShVE&si=7-CkMx3xxRJUuqhM",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0FKG44PZ9?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_gNsfDSEQqDswfLcXMe0pgd3E6&trackAsin=B0FKFMVQGX",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb000000000492c063&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://nodee.net/a/v4qsps3yjb7g",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // らせん feat.Yasu
     {
       title: "らせん feat.Yasu",
@@ -989,16 +1023,30 @@ function Music() {
         />
         <meta
           property="og:description"
-          content="T.HASEが手がけた楽曲を試聴・配信リンクからチェックできます。"
+          content="T.HASEが手がけた楽曲を試聴・配信リンクからチェックできます♪"
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://pirates-osaka.com/music" />
         <meta
           property="og:image"
-          content="https://pirates-osaka.com/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg"
+          content="https://pirates-osaka.com/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg?v=20250810"
         />
         <meta property="og:site_name" content="株式会社パイレーツ大阪" />
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Music Works | 株式会社パイレーツ大阪"
+        />
+        <meta
+          name="twitter:description"
+          content="T.HASEが手がけた楽曲を試聴・配信リンクからチェックできます♪"
+        />
+        <meta
+          name="twitter:image"
+          content="https://pirates-osaka.com/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg?v=20250810"
+        />
+        <link rel="canonical" href="https://pirates-osaka.com/music" />
       </Helmet>
 
       <Header />
