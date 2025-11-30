@@ -154,6 +154,40 @@ function Music() {
         },
       ],
     },
+    // Baby Baby feat.キャベ椿
+    {
+      title: "Baby Baby feat.キャベ椿",
+      sound: "/sounds/BabyBaby.mp3",
+      image: "/img/music_img/Baby Baby_jacket_1200px.webp",
+      site: "https://nodee.net/a/tggitbrw8riv",
+      startTime: 63,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/baby-baby-single/1854723659",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/2DhtU6io02M594WpsjHf1W",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=NQSRyx-hL-A&si=ymyg5VJAyhpMBp1E",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://www.amazon.co.jp/music/player/albums/B0G37DL4Q5?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_mPDSyFMh7az6WhDHfm7bkCByN&trackAsin=B0G37H4R1H",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb0000000004d6f6d3&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://nodee.net/a/tggitbrw8riv",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // ユラ-ユラ feat.ゆきみもっち
     {
       title: "ユラ-ユラ feat.ゆきみもっち",
