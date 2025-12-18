@@ -15,8 +15,10 @@
         transform: translate(-50%, 0%);
         z-index: 100;
         color: white;
+        color: black;
         font-size: 14px;
         letter-spacing: 1em;
+        letter-spacing: 0.2em;
         width: 100%;
         text-align: center;
 
@@ -34,6 +36,7 @@
         left: 50%;
         z-index: 100;
         color: white;
+        color: rgb(44, 44, 44);
         font-size: 25px;
         letter-spacing: .05em;
         width: 100%;
@@ -121,6 +124,8 @@
     height: 100vh;
     background-size: 100%;
     background-repeat: repeat-y;
+
+    background: radial-gradient(#fefbfa, #afafaf);
 }
 
 .topArrow {
@@ -145,6 +150,7 @@
         text-align: center;
         margin-bottom: 2px;
         color: white;
+        // color: black;
     }
 
     .arrow {

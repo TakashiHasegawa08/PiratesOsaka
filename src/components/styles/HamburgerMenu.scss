@@ -53,9 +53,8 @@
             padding-bottom: 3px;
             transition: color 0.3s ease-in-out;
             font-family: "Oswald",
-                serif;
-            // font-weight: 600;
-            font-weight: 500;
+                sans-serif;
+            font-weight: 400;
 
             &.active {
                 color: var(--pink01);
@@ -99,11 +98,13 @@
 
         &:checked+.hamburger>div {
             transform: rotate(135deg);
+            background: rgb(255, 255, 255);
 
             &:before,
             &:after {
                 top: 0;
                 transform: rotate(90deg);
+                background: rgb(255, 255, 255);
             }
 
             &:after {
@@ -120,7 +121,7 @@
         width: 50px;
         height: 50px;
         padding: 0.5em 1em;
-        background: var(--black01);
+        // background: var(--black01);
         border-radius: 0.12em;
         cursor: pointer;
         transition: box-shadow 0.4s ease;
@@ -133,6 +134,7 @@
             width: 100%;
             height: 2px;
             background: #fefefe;
+            background: black;
             transition: all 0.4s ease;
             display: flex;
             align-items: center;
@@ -147,6 +149,7 @@
                 width: 100%;
                 height: 2px;
                 background: inherit;
+                background: black;
                 transition: all 0.4s ease;
             }
 
@@ -202,8 +205,8 @@
                             color: #fefefe;
                             transition: color 0.4s ease;
                             font-family: "Oswald",
-                                serif;
-                            font-weight: 600;
+                                sans-serif;
+                            font-weight: 400;
                             font-size: 22px;
                         }
                     }

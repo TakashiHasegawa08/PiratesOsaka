@@ -8,6 +8,7 @@ import ScrollFadein from "./ScrollFadein";
 import { Canvas } from "@react-three/fiber";
 import ReCAPTCHA from "react-google-recaptcha";
 import { motion, useInView } from "framer-motion";
+import TopPageBG from "./TopPageBG";
 // import Particles from "./Particles";
 // import Particles from "./Particles";
 // import Pagination from "./Pagination";
@@ -40,10 +41,11 @@ const CustomPrevArrow = (props) => {
 };
 
 function Posts() {
+  const [showTopArrow, setShowTopArrow] = useState(true);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [bgImage, setBgImage] = useState("/img/BG_line_PC.png");
+  // const [bgImage, setBgImage] = useState("/img/BG_line_PC.png");
   const [kvBgImage, setKvBgImage] = useState("/img/space_pc.png");
   // const scrollRef = useRef(0);
 
@@ -80,11 +82,11 @@ function Posts() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    document.title = "Pirate Osaka | 株式会社パイレーツ大阪";
+    document.title = "株式会社PO";
 
     const cf7Script = document.createElement("script");
     cf7Script.src =
-      "https://pirates-osaka.com/wp-content/plugins/contact-form-7/includes/js/index.js";
+      "https://p-o.ltd/wp-content/plugins/contact-form-7/includes/js/index.js";
     cf7Script.async = true;
     document.body.appendChild(cf7Script);
   }, []);
@@ -103,7 +105,7 @@ function Posts() {
 
     try {
       const response = await fetch(
-        "https://pirates-osaka.com/wp-json/contact-form-7/v1/contact-forms/67/feedback",
+        "https://p-o.ltd/wp-json/contact-form-7/v1/contact-forms/67/feedback",
         {
           method: "POST",
           body: formPayload,
@@ -137,7 +139,7 @@ function Posts() {
       formPayload.append("g-recaptcha-response", token);
 
       const res = await fetch(
-        "https://pirates-osaka.com/wp-json/contact-form-7/v1/contact-forms/67/feedback",
+        "https://p-o.ltd/wp-json/contact-form-7/v1/contact-forms/67/feedback",
         {
           method: "POST",
           body: formPayload,
@@ -159,6 +161,52 @@ function Posts() {
   const location = useLocation();
 
   useEffect(() => {
+    const introEl = document.getElementById("intro");
+    if (!introEl) return;
+
+    const getIntroTop = () => {
+      const rect = introEl.getBoundingClientRect();
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      return rect.top + y; // introの「ページ内」トップ座標
+    };
+
+    let introTop = getIntroTop();
+    let rafId = null;
+
+    const update = () => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+
+      // ✅ introより上だけ表示
+      setShowTopArrow(y < introTop);
+    };
+
+    const onScroll = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        update();
+      });
+    };
+
+    const onResize = () => {
+      // レイアウト変化でintro位置がズレるので再計算
+      introTop = getIntroTop();
+      update();
+    };
+
+    // 初期化
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace("#", "");
       const el = document.getElementById(id);
@@ -170,25 +218,25 @@ function Posts() {
     }
   }, [location]);
 
-  useEffect(() => {
-    const updateBackground = () => {
-      if (window.innerWidth <= 768) {
-        setBgImage("/img/BG_line_sp.png");
-      } else {
-        setBgImage("/img/BG_line_PC.png");
-      }
-    };
+  // useEffect(() => {
+  //   const updateBackground = () => {
+  //     if (window.innerWidth <= 768) {
+  //       setBgImage("/img/BG_line_sp.png");
+  //     } else {
+  //       setBgImage("/img/BG_line_PC.png");
+  //     }
+  //   };
 
-    // 初期実行
-    updateBackground();
+  //   // 初期実行
+  //   updateBackground();
 
-    // リサイズ監視
-    window.addEventListener("resize", updateBackground);
+  //   // リサイズ監視
+  //   window.addEventListener("resize", updateBackground);
 
-    return () => {
-      window.removeEventListener("resize", updateBackground);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", updateBackground);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const updateBg = () => {
@@ -267,22 +315,22 @@ function Posts() {
 
     return (
       <div className="topTitle_wrap" ref={ref}>
-        <motion.h1
+        {/* <motion.h1
           className="topTitle"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1 }}
         >
-          Pirates <span className="oTxt">O</span>saka
-        </motion.h1>
-        <p className="ja">株式会社パイレーツ大阪</p>
+          P <span className="oTxt">O</span>
+        </motion.h1> */}
+        {/* <p className="ja">株式会社PO</p> */}
       </div>
     );
   };
 
   return (
     <div className="TopPage" id="TOP">
-      <section id="KV" className="js_kv">
+      {/* <section id="KV" className="js_kv">
         {" "}
         <div
           className="kv-bg"
@@ -290,7 +338,7 @@ function Posts() {
             backgroundImage: `url(${kvBgImage})`,
           }}
         >
-          <p className="topName">Pirates Osaka</p>
+          <p className="topName">PO Co., Ltd.</p>
           <p className="catchCopy">Be Unique!</p>
           <div className="canvasBoard">
             <Canvas camera={{ position: [0, 0, 20], fov: 1500 }}>
@@ -298,18 +346,29 @@ function Posts() {
               <directionalLight position={[5, 5, 5]} intensity={1.5} />
               <hemisphereLight intensity={1.0} groundColor="white" />
               <KV />
-              {/* <Particles
-                scrollY={scrollRef}
-                maxScroll={window.innerHeight * 2}
-              /> */}
             </Canvas>
           </div>{" "}
         </div>
+      </section> */}
+      <section id="KV" className="js_kv">
+        <div className="kv-bg">
+          <p className="topName">PO Co., Ltd.</p>
+          <p className="catchCopy">Be Unique!</p>
+          <div className="canvasBoard">
+            <Canvas camera={{ position: [0, 0, 20], fov: 1500 }}>
+              <ambientLight intensity={2.0} />
+              <directionalLight position={[5, 5, 5]} intensity={1.5} />
+              <hemisphereLight intensity={1.0} groundColor="white" />
+              <KV />
+            </Canvas>
+          </div>
+        </div>
       </section>
-      <div
+      {/* <div
         className="TopPageBG header-fadein js-header-fadein"
         style={{ backgroundImage: `url("${bgImage}")` }}
-      ></div>{" "}
+      ></div>{" "} */}
+      <TopPageBG />
       <div className="header-fadein js-header-fadein">
         <Header />
       </div>
@@ -322,27 +381,34 @@ function Posts() {
         </a>
       </div>
       <ScrollFadein />
-      <a href="#intro" className="topArrow">
-        <div className="inner">
-          <p className="txt">Scroll</p>
-          <picture className="arrow">
-            <img src="/img/PO_topArrow.svg" alt="" />
-          </picture>
-        </div>
-      </a>
+      {showTopArrow && (
+        <a href="#intro" className="topArrow">
+          <div className="inner">
+            <p className="txt">Scroll</p>
+            <picture className="arrow">
+              <img src="/img/PO_topArrow.svg" alt="" />
+            </picture>
+          </div>
+        </a>
+      )}
       <div className="TopWrap scrollContainer">
         {/* イントロ */}
         <section id="intro">
           <div className="contents_inner">
             <MainTitle />
             <p className="catchLead js-fadein">
-              私たちは、<span className="red">WEBサイト</span>や
-              <span className="red">WEBアプリ</span>の制作を中心に、
-              <br className="PC-only" />
-              広告の<span className="red">グラフィックデザイン</span>
-              までを手がける
+              株式会社
+              <ruby>
+                PO<rt>ピーオー</rt>
+              </ruby>
+              は、
               <br className="PC-only" />
               クリエイティブエージェンシーです。
+              <br className="PC-only" />
+              広告の<span className="red">グラフィックデザイン</span>
+              や<br className="PC-only" />
+              <span className="red">WEBサイト</span>・
+              <span className="red">WEBアプリ</span>の制作を手掛けています。
               <br className="" />
               <br className="" />
               「かっこいい」や「使いやすい」にくわえて
@@ -549,7 +615,7 @@ function Posts() {
                     <p className="name">長谷川 崇＠T.HASE</p>
                     <p className="nameEn">Hasegawa Takashi</p>
                     <p className="txt">
-                      創る人。／
+                      創り人。／
                       <a href="/music">Music Works</a>／
                       <a href="/illustrationWorks">Illustration Works</a>／
                       <a
@@ -651,7 +717,15 @@ function Posts() {
             <div className="company-profile js-fadein">
               <div className="profile-item">
                 <div className="tag">Company Name</div>
-                <div className="content">株式会社パイレーツ大阪</div>
+                <div className="content">
+                  株式会社
+                  <ruby>
+                    PO<rt>ピーオー</rt>
+                  </ruby>
+                  <span className="sub">
+                    （旧社名：株式会社パイレーツ大阪）
+                  </span>
+                </div>
               </div>
 
               <div className="profile-item">
@@ -679,7 +753,7 @@ function Posts() {
                     <li>・音楽制作・プロデュース業務</li>
                     <li>・出版事業</li>
                     <li>・イベント制作</li>
-                    <li>・映像制作 ほか</li>
+                    <li>・映像制作 他</li>
                   </ul>
                 </div>
               </div>
@@ -735,7 +809,7 @@ function Posts() {
 
                 <div className="formWrap">
                   <ReCAPTCHA
-                    sitekey="6LcV_SMaAAAAAI3PxzsZ9Ad3RkdPb-jqzrpz25w8" // ←WEBサイトキー
+                    sitekey="6Le2ES4sAAAAAM-itrRzxzKt7tUJWk9nNjPZklsy" // ←WEBサイトキー
                     onChange={(value) => setToken(value)}
                   />
                 </div>

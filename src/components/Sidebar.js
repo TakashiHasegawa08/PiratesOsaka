@@ -16,7 +16,7 @@ function Sidebar({ categories }) {
     try {
       console.log("API へリクエストを送信中...");
       const response = await fetch(
-        "https://pirates-osaka.com/wp-json/custom/v1/featured-posts"
+        "https://p-o.ltd/wp-json/custom/v1/featured-posts"
       );
 
       console.log("API レスポンスステータス:", response.status);

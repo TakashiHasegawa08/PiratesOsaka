@@ -33,7 +33,7 @@ const ContactForm = () => {
 
     try {
       const res = await fetch(
-        "https://pirates-osaka.com/wp-json/contact-form-7/v1/contact-forms/67/feedback",
+        "https://p-o.ltd/wp-json/contact-form-7/v1/contact-forms/67/feedback",
         {
           method: "POST",
           body: formPayload,
@@ -109,7 +109,7 @@ const ContactForm = () => {
 
         <div className="formWrap">
           <ReCAPTCHA
-            sitekey="6LcV_SMaAAAAAI3PxzsZ9Ad3RkdPb-jqzrpz25w8"
+            sitekey="6Le2ES4sAAAAAM-itrRzxzKt7tUJWk9nNjPZklsy"
             onChange={(value) => setToken(value)}
           />
         </div>

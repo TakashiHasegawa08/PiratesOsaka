@@ -14,7 +14,7 @@ function Music() {
     const canvas = document.getElementById("audioVisualizer");
     const ctx = canvas.getContext("2d");
 
-    document.title = "Music Works | 株式会社パイレーツ大阪";
+    document.title = "Music Works | 株式会社PO";
 
     let audioContext;
     let sourceNode;
@@ -1050,37 +1050,31 @@ function Music() {
     <div id="musicPage">
       {/* OGP設定 */}
       <Helmet>
-        <title>Music Works | 株式会社パイレーツ大阪</title>
-        <meta
-          property="og:title"
-          content="Music Works | 株式会社パイレーツ大阪"
-        />
+        <title>Music Works | 株式会社PO</title>
+        <meta property="og:title" content="Music Works | 株式会社PO" />
         <meta
           property="og:description"
           content="T.HASEが手がけた楽曲を試聴・配信リンクからチェックできます♪"
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://pirates-osaka.com/music" />
+        <meta property="og:url" content="https://p-o.ltd/music" />
         <meta
           property="og:image"
-          content="https://pirates-osaka.com/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg?v=20250810"
+          content="https://p-o.ltd/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg?v=20250810"
         />
-        <meta property="og:site_name" content="株式会社パイレーツ大阪" />
+        <meta property="og:site_name" content="株式会社PO" />
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Music Works | 株式会社パイレーツ大阪"
-        />
+        <meta name="twitter:title" content="Music Works | 株式会社PO" />
         <meta
           name="twitter:description"
           content="T.HASEが手がけた楽曲を試聴・配信リンクからチェックできます♪"
         />
         <meta
           name="twitter:image"
-          content="https://pirates-osaka.com/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg?v=20250810"
+          content="https://p-o.ltd/img/music_img/T_HASE_music_works_OGP_bunner_1200_628px.jpg?v=20250810"
         />
-        <link rel="canonical" href="https://pirates-osaka.com/music" />
+        <link rel="canonical" href="https://p-o.ltd/music" />
       </Helmet>
 
       <Header />

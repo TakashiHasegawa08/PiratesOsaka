@@ -7,19 +7,16 @@ function Event250811() {
   return (
     <div id="eventPage">
       <Helmet>
-        <title>Event | 株式会社パイレーツ大阪</title>
-        <meta property="og:title" content="Event | 株式会社パイレーツ大阪" />
+        <title>Event | 株式会社PO</title>
+        <meta property="og:title" content="Event | 株式会社PO" />
         <meta
           property="og:description"
           content="イベント情報をご紹介します。"
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://pirates-osaka.com/event" />
-        <meta
-          property="og:image"
-          content="https://pirates-osaka.com/img/event_ogp.jpg"
-        />
-        <meta property="og:site_name" content="株式会社パイレーツ大阪" />
+        <meta property="og:url" content="https://p-o.ltd/event" />
+        <meta property="og:image" content="https://p-o.ltd/img/event_ogp.jpg" />
+        <meta property="og:site_name" content="株式会社PO" />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 

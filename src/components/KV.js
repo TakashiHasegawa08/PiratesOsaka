@@ -1,97 +1,175 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import React, { useRef, useEffect, useMemo } from "react";
+import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import * as THREE from "three";
 import Stars from "./Stars";
-import BackgroundSphere from "./BackgroundSphere";
 
 const KV = () => {
-  const { scene } = useGLTF("/img/pirates_mark.glb?v=2");
   const ref = useRef();
+  const matRef = useRef();
   const scrollRef = useRef(0);
+  const { size } = useThree();
 
-  const rotationRef = useRef({
-    xSpeed: (Math.random() - 0.5) * 0.01,
-    ySpeed: (Math.random() - 0.5) * 0.01,
-    zSpeed: (Math.random() - 0.5) * 0.01,
-  });
+  const texture = useLoader(THREE.TextureLoader, "/img/PO_rogo_251216.png");
 
   useEffect(() => {
-    const handleScroll = () => {
-      scrollRef.current = window.scrollY;
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => (scrollRef.current = window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // モデルの中心を修正
   useEffect(() => {
-    scene.position.set(0, 0, 0); // モデル全体を0原点に
-    scene.traverse((child) => {
-      if (child.isMesh) {
-        child.geometry.center();
+    if (!texture) return;
 
-        const mat = child.material;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
 
-        console.log("✅ マテリアル名:", mat.name);
-        console.log("📦 マテリアルタイプ:", mat.type);
-        console.log("🎨 色:", mat.color?.getHexString());
-        console.log("🔆 透明度:", mat.opacity);
-        console.log("🧾 テクスチャ:", mat.map);
+    // PNG縁の滲み保険
+    texture.magFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-        // 半透明にしたい場合
-        if (child.material) {
-          child.material.transparent = true;
-          child.material.opacity = 0.9;
-          child.material.emissive = child.material.color.clone();
-          child.material.emissiveIntensity = 0.3;
+    texture.needsUpdate = true;
+  }, [texture]);
+
+  // ✅ 画像の縦横比（変倍防止）
+  const planeArgs = useMemo(() => {
+    const img = texture?.image;
+    if (!img?.width || !img?.height) return [1, 1];
+    const aspect = img.width / img.height;
+    return [aspect, 1];
+  }, [texture]);
+
+  // ✅ 角が出にくい “丸い” ブラー寄り（17-tap）＋ UVクランプ
+  const material = useMemo(() => {
+    const w = Math.max(1, size.width);
+    const h = Math.max(1, size.height);
+
+    return new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      uniforms: {
+        uMap: { value: texture },
+        uBlur: { value: 0.0 }, // px相当（useFrameで更新）
+        uTexel: { value: new THREE.Vector2(1 / w, 1 / h) },
+        uOpacity: { value: 0.95 }, // 透明度固定
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
-        if (mat.name === "Material.003") {
-          mat.transparent = true; // ← これがないと opacity 効かない
-          mat.opacity = 0.5; // さらに薄くしたい場合（例：0.3〜0.5）
+      `,
+      fragmentShader: `
+        uniform sampler2D uMap;
+        uniform float uBlur;
+        uniform vec2 uTexel;
+        uniform float uOpacity;
+        varying vec2 vUv;
 
-          // 発光させて視認性を高めたい場合
-          mat.emissive = mat.color.clone();
-          mat.emissiveIntensity = 0.2;
+        vec4 sampleBlur(vec2 uv, float r){
+          // 端が出るのを抑える（UV外サンプル防止）
+          uv = clamp(uv, vec2(0.001), vec2(0.999));
+
+          vec2 t = uTexel * r;
+
+          // 17-tap（円形寄り）：角が出にくい
+          vec4 c = texture2D(uMap, uv) * 0.16;
+
+          // 1段目
+          c += texture2D(uMap, uv + vec2( t.x, 0.0)) * 0.08;
+          c += texture2D(uMap, uv + vec2(-t.x, 0.0)) * 0.08;
+          c += texture2D(uMap, uv + vec2(0.0,  t.y)) * 0.08;
+          c += texture2D(uMap, uv + vec2(0.0, -t.y)) * 0.08;
+
+          c += texture2D(uMap, uv + vec2( t.x,  t.y)) * 0.07;
+          c += texture2D(uMap, uv + vec2(-t.x,  t.y)) * 0.07;
+          c += texture2D(uMap, uv + vec2( t.x, -t.y)) * 0.07;
+          c += texture2D(uMap, uv + vec2(-t.x, -t.y)) * 0.07;
+
+          // 2段目（少し広げる）
+          vec2 t2 = t * 1.8;
+          c += texture2D(uMap, uv + vec2( t2.x, 0.0)) * 0.05;
+          c += texture2D(uMap, uv + vec2(-t2.x, 0.0)) * 0.05;
+          c += texture2D(uMap, uv + vec2(0.0,  t2.y)) * 0.05;
+          c += texture2D(uMap, uv + vec2(0.0, -t2.y)) * 0.05;
+
+          c += texture2D(uMap, uv + vec2( t2.x,  t2.y)) * 0.04;
+          c += texture2D(uMap, uv + vec2(-t2.x,  t2.y)) * 0.04;
+          c += texture2D(uMap, uv + vec2( t2.x, -t2.y)) * 0.04;
+          c += texture2D(uMap, uv + vec2(-t2.x, -t2.y)) * 0.04;
+
+          return c;
         }
-      }
+
+        void main() {
+          float r = max(uBlur, 0.0);
+          vec4 col = (r < 0.01) ? texture2D(uMap, vUv) : sampleBlur(vUv, r);
+
+          // 透明PNG：alpha維持（opacityは固定）
+          gl_FragColor = vec4(col.rgb, col.a * uOpacity);
+        }
+      `,
     });
-  }, [scene]);
+  }, [texture, size.width, size.height]);
+
+  // リサイズ追随（ブラーのpx感を維持）
+  useEffect(() => {
+    if (!material) return;
+    material.uniforms.uTexel.value.set(
+      1 / Math.max(1, size.width),
+      1 / Math.max(1, size.height)
+    );
+  }, [material, size.width, size.height]);
+
+  useEffect(() => {
+    const mat = matRef.current;
+    if (!mat?.uniforms) return;
+
+    const vw = window.innerWidth || 9999;
+    const isSP = vw <= 768;
+    mat.uniforms.uBlur.value = isSP ? 4.0 : 14.0;
+  }, []);
 
   useFrame(() => {
-    if (ref.current) {
-      const scrollY = scrollRef.current;
+    if (!ref.current) return;
 
-      const minScale = 0.2;
-      const maxScale = 8.0;
-      const maxScroll = window.innerHeight * 2;
+    const mat = matRef.current; // ← ここ重要：実際にアタッチされてるmaterial
+    if (!mat?.uniforms) return;
 
-      const scrollRatio = Math.min(scrollY / maxScroll, 1);
+    const scrollY = scrollRef.current;
+    const maxScroll = window.innerHeight * 2;
+    const scrollRatio = Math.min(scrollY / maxScroll, 1);
+    const easedRatio = 1 - Math.pow(1 - scrollRatio, 3);
 
-      const scaleFactor = maxScale - scrollRatio * (maxScale - minScale);
-      ref.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    // スケール・回転
+    const minScale = 4.0;
+    const maxScale = 40.0;
+    const scaleFactor = maxScale - scrollRatio * (maxScale - minScale);
+    ref.current.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-      // 回転角度の目標 → 最初に3回転して、最後に0に戻る
-      const totalRotationX = Math.PI * 2;
-      const totalRotationY = Math.PI * 2;
-      const totalRotationZ = Math.PI * 1;
+    ref.current.rotation.x = Math.PI * 2 * (1 - easedRatio);
+    ref.current.rotation.y = Math.PI * 2 * (1 - easedRatio);
+    ref.current.rotation.z = Math.PI * 1 * (1 - easedRatio);
 
-      // 回転をスクロールに応じて「だんだん正面に近づける」
-      const easedRatio = 1 - Math.pow(1 - scrollRatio, 3); // easeOutCubic
-      ref.current.rotation.x = totalRotationX * (1 - easedRatio);
-      ref.current.rotation.y = totalRotationY * (1 - easedRatio);
-      ref.current.rotation.z = totalRotationZ * (1 - easedRatio);
-    }
+    // ✅ SP判定（viewport）
+    const vw = window.innerWidth || 9999;
+    const isSP = vw <= 768;
+
+    const blurMaxPC = 14.0;
+    const blurMaxSP = 4.0;
+    const blurMax = isSP ? blurMaxSP : blurMaxPC;
+
+    mat.uniforms.uBlur.value = (1 - easedRatio) * blurMax;
   });
 
   return (
     <>
       <Stars />
-      <primitive
-        ref={ref}
-        object={scene}
-        scale={2.0}
-        position={[0, 0, 0]} // 中央に
-      />
+      <mesh ref={ref} position={[0, 0, 0]}>
+        <planeGeometry args={planeArgs} />
+        <primitive object={material} ref={matRef} attach="material" />
+      </mesh>
     </>
   );
 };

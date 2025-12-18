@@ -22,7 +22,7 @@ function PostDetail() {
   const fetchPost = async () => {
     try {
       // 現在の投稿を取得
-      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&slug=${slug}`;
+      const apiUrl = `https://p-o.ltd/wp-json/wp/v2/posts?_embed&slug=${slug}`;
       const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -37,14 +37,14 @@ function PostDetail() {
 
         // 前の投稿（現在より古い投稿を降順で1件取得）
         const prevRes = await fetch(
-          `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=1&order=desc&orderby=date&before=${currentDate}`
+          `https://p-o.ltd/wp-json/wp/v2/posts?_embed&per_page=1&order=desc&orderby=date&before=${currentDate}`
         );
         const prevData = await prevRes.json();
         setPrevPost(prevData.length > 0 ? prevData[0] : null);
 
         // 次の投稿（現在より新しい投稿を昇順で1件取得）
         const nextRes = await fetch(
-          `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=1&order=asc&orderby=date&after=${currentDate}`
+          `https://p-o.ltd/wp-json/wp/v2/posts?_embed&per_page=1&order=asc&orderby=date&after=${currentDate}`
         );
         const nextData = await nextRes.json();
         setNextPost(nextData.length > 0 ? nextData[0] : null);
@@ -56,7 +56,7 @@ function PostDetail() {
         // 修正後
         if (sameCategoryId) {
           const recommendedRes = await fetch(
-            `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&categories=${sameCategoryId}&per_page=2&orderby=date&order=desc&before=${currentPost.date}&exclude=${currentPost.id}`
+            `https://p-o.ltd/wp-json/wp/v2/posts?_embed&categories=${sameCategoryId}&per_page=2&orderby=date&order=desc&before=${currentPost.date}&exclude=${currentPost.id}`
           );
           const recommendedData = await recommendedRes.json();
           setRecommendedPosts(recommendedData);
@@ -75,7 +75,7 @@ function PostDetail() {
   const fetchCategories = async () => {
     try {
       // 環境変数を削除し、API URL を直接指定
-      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/categories`;
+      const apiUrl = `https://p-o.ltd/wp-json/wp/v2/categories`;
       console.log("Fetching categories from:", apiUrl); // デバッグ用
 
       const response = await fetch(apiUrl);

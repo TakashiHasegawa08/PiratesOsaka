@@ -6,7 +6,7 @@ import ContactForm from "./ContactForm";
 
 function ContactPage() {
   useEffect(() => {
-    document.title = "お問い合わせ | 株式会社パイレーツ大阪";
+    document.title = "お問い合わせ | 株式会社PO";
 
     if (
       !document.querySelector(

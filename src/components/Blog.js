@@ -16,7 +16,7 @@ function Blog() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const location = useLocation();
-  document.title = "Blog | 株式会社パイレーツ大阪";
+  document.title = "Blog | 株式会社PO";
 
   useEffect(() => {
     fetchCategories();
@@ -36,7 +36,7 @@ function Blog() {
   const fetchCategories = async () => {
     try {
       // 環境変数を削除し、API URL を直接指定
-      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/categories`;
+      const apiUrl = `https://p-o.ltd/wp-json/wp/v2/categories`;
       console.log("Fetching categories from:", apiUrl); // デバッグ用
 
       const response = await fetch(apiUrl);
@@ -53,7 +53,7 @@ function Blog() {
   const fetchPosts = async (page) => {
     try {
       // 環境変数を削除し、API URL を直接指定
-      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}`;
+      const apiUrl = `https://p-o.ltd/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}`;
       console.log("Fetching posts from:", apiUrl); // デバッグ用
 
       const response = await fetch(apiUrl);
@@ -73,7 +73,7 @@ function Blog() {
   const fetchPostsByCategory = async (categoryId, page) => {
     try {
       // 環境変数を削除し、API URL を直接指定
-      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}&categories=${categoryId}`;
+      const apiUrl = `https://p-o.ltd/wp-json/wp/v2/posts?_embed&per_page=20&page=${page}&categories=${categoryId}`;
       console.log("Fetching posts by category from:", apiUrl); // デバッグ用
 
       const response = await fetch(apiUrl);

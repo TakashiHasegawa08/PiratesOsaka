@@ -15,7 +15,7 @@ function IllustrationWorks() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  document.title = "Illustration Works | 株式会社パイレーツ大阪";
+  document.title = "Illustration Works | 株式会社PO";
 
   useEffect(() => {
     fetchPosts(page);
@@ -24,7 +24,7 @@ function IllustrationWorks() {
   const fetchPosts = async (pageNumber) => {
     try {
       // const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/portfolio?per_page=30&page=${pageNumber}&_embed`;
-      const apiUrl = `https://pirates-osaka.com/wp-json/wp/v2/portfolio?per_page=30&page=${pageNumber}&_embed`;
+      const apiUrl = `https://p-o.ltd/wp-json/wp/v2/portfolio?per_page=30&page=${pageNumber}&_embed`;
       const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
