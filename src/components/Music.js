@@ -188,6 +188,40 @@ function Music() {
         },
       ],
     },
+    // Always,リバー feat.MaiShiroi
+    {
+      title: "Always,リバー feat.MaiShiroi",
+      sound: "/sounds/Alway_river.mp3",
+      image: "/img/music_img/AlwaysRiver_Jacket_1200px.webp",
+      site: "https://nodee.net/a/2s8574sww9gy",
+      startTime: 61,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/always-river-single/1858456426",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/1s2Jc5aExtlE9MNBq5FF8k",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=W8ZSd4GLv-c&si=08L7Az_sSi-Vuuyf",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0G51N4H89?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_6NuuNO8FELr4kewldt5XFxUZw&trackAsin=B0G51L2HM7",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?taarget=album&item=mb0000000004dd7424&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://nodee.net/a/2s8574sww9gy",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // ユラ-ユラ feat.ゆきみもっち
     {
       title: "ユラ-ユラ feat.ゆきみもっち",
