@@ -256,6 +256,40 @@ function Music() {
         },
       ],
     },
+    // AI LOV U feat.ゆきみもっち
+    {
+      title: "AI LOV U feat.ゆきみもっち",
+      sound: "/sounds/AILOVU.mp3",
+      image: "/img/music_img/AILOVU_Jacket_3000px.webp",
+      site: "https://n0.com/a/bmczc9c70tgi",
+      startTime: 62,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/ai-lov-u-single/1863899688",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/704EawZbVCek3Wu956gwEn",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=tUyytvE-8dw&si=QxcF-zGSds9jQSEe",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0GCDB7GGH?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_Y8xR3cLWbOBIA19vhgqWqooLs",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb0000000004e77413&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/bmczc9c70tgi",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // Do Dance feat.MaiShiroi
     {
       title: "Do Dance feat.MaiShiroi",
