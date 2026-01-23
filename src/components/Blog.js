@@ -109,7 +109,7 @@ function Blog() {
               -{" "}
               {
                 categories.find(
-                  (category) => category.id === Number(selectedCategory)
+                  (category) => category.id === Number(selectedCategory),
                 )?.name
               }
             </span>

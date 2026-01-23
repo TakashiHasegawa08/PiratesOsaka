@@ -1,0 +1,32 @@
+#appPage .appSection,
+#privacyPage .privacyArticle {
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.9;
+
+    h2 {
+        margin-top: 0;
+        font-size: 22px;
+    }
+
+    h3 {
+        font-size: 18px;
+        margin-top: 19px;
+    }
+
+    .appLinks {
+        margin-top: 16px;
+    }
+
+    .link {
+        text-decoration: underline;
+    }
+
+    .app_content_wrap {
+        .app_content {
+            .app_icon {
+                width: 120px;
+            }
+        }
+    }
+}

@@ -9,6 +9,8 @@ import Blog from "./components/Blog";
 import ContactPage from "./components/ContactPage";
 import Event250811 from "./components/event/event250811";
 // import CompanyProfile from "./components/CompanyProfile";
+import AppLanding from "./components/app/AppLanding";
+import BuyCyclePrivacy from "./components/app/BuyCyclePrivacy";
 import "./components/styles/styles.scss";
 
 function App() {
@@ -24,7 +26,9 @@ function App() {
         <Route path="/blog" element={<Blog />} /> {/* blogページ */}
         <Route path="/contact" element={<ContactPage />} />{" "}
         <Route path="/event/event250811" element={<Event250811 />} />
-        {/* お問い合わせページ */}
+        {/* ✅ App Store 審査用 */}
+        <Route path="/app" element={<AppLanding />} />
+        <Route path="/app/buycycle" element={<BuyCyclePrivacy />} />
       </Routes>
     </Router>
   );
