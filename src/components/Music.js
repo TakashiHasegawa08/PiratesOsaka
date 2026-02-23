@@ -37,7 +37,7 @@ function Music() {
             console.error("再生エラー:", error);
           }
         },
-        { once: true }
+        { once: true },
       );
 
       modal.classList.remove("hidden");
@@ -218,6 +218,40 @@ function Music() {
         },
         {
           href: "https://nodee.net/a/2s8574sww9gy",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+    // So Long feat.Kaho Jojima
+    {
+      title: "So Long feat.Kaho Jojima",
+      sound: "/sounds/SoLong.mp3",
+      image: "/img/music_img/So Long_1500px.webp",
+      site: "https://n0.com/a/44z0urtggqwp",
+      startTime: 51,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/so-long-single/1876718726",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/3CYQqzOxsDjBzLI6sbxvw6",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=NFkpPvPMujg&si=4cjB84spE-74jhoM",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0GMYYQH9C?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_fRinVMUUrhxApdUPfAoQkh83J&trackAsin=B0GMYS78JP",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/webapp/album/mb0000000005078a76",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/44z0urtggqwp",
           icon: "/img/music_img/icon/all.png",
         },
       ],
@@ -1180,7 +1214,7 @@ function Music() {
                           openModalRef.current(
                             song.sound,
                             song.title,
-                            song.startTime
+                            song.startTime,
                           )
                         }
                       >
