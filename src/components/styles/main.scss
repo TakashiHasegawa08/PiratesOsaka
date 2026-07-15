@@ -306,6 +306,7 @@ a {
     letter-spacing: .1em;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 
     @include breakpoints.sp {
         align-items: center;
@@ -328,13 +329,21 @@ a {
     }
 }
 
-header.header {
-    margin-bottom: 100px;
+body:not(.top-page) {
+    padding-top: 100px;
 
     @include breakpoints.sp {
-        margin-bottom: 80px;
+        padding-top: 80px;
     }
 }
+
+// header.header {
+//     margin-bottom: 100px;
+
+//     @include breakpoints.sp {
+//         margin-bottom: 80px;
+//     }
+// }
 
 .TopPage {
     header.header {
@@ -601,7 +610,11 @@ footer.footer {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    row-gap: 50px;
+    row-gap: 80px;
+
+    @include breakpoints.sp {
+        row-gap: 50px;
+    }
 }
 
 .contentBoxWrap {
@@ -615,7 +628,8 @@ footer.footer {
     }
 
     &.wrap02 {
-        justify-content: flex-start;
+        // justify-content: flex-start;
+        justify-content: center;
 
         @include breakpoints.sp {
             justify-content: center;

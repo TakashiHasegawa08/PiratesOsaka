@@ -18,16 +18,29 @@ function AppLanding() {
             <div className="postWrap" style={{ display: "block" }}>
               <section className="appSection">
                 <div className="app_content_wrap">
-                  <h2>BuyCycle</h2>
+                  {/* 01 BuyCycle */}
                   <div className="app_content">
+                    <h2>BuyCycle</h2>
                     <div className="app_icon">
-                      <img src="/img/app/BC_thumb_480px.png" alt="" />
+                      <a
+                        href="https://apps.apple.com/jp/app/buycycle/id6758200587"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img src="/img/app/BC_thumb.png" alt="BuyCycle" />
+                      </a>
                     </div>
-                    <Link
-                      to="/app/buycycle"
-                      className="linkBtn link"
-                      style={{ display: "inline-block", marginLeft: 12 }}
-                    >
+                    <Link to="/app/buycycle" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+                  {/* 02 Guitap */}
+                  <div className="app_content">
+                    <h2>Guitap</h2>
+                    <div className="app_icon">
+                      <img src="/img/app/Gitap_icon.png" alt="BuyCycle" />
+                    </div>
+                    <Link to="/app/Guitap" className="linkBtn link">
                       プライバシーポリシー
                     </Link>
                   </div>

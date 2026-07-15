@@ -188,6 +188,40 @@ function Music() {
         },
       ],
     },
+    // Do Dance feat.MaiShiroi
+    {
+      title: "Do Dance feat.MaiShiroi",
+      sound: "/sounds/DoDance.mp3",
+      image: "/img/music_img/Do_Dance_jacket_3000px.webp",
+      site: "https://n0.com/a/vvg3fenyenhm",
+      startTime: 45,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/do-dance-single/1779931690",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/3PiKXmnE3iM2bVAko6ZQkR",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=OcirHxnXfEw&si=0ucipZI-QjgYNsaD",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0DN6GD92N",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb0000000004003f80",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/vvg3fenyenhm",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // Always,リバー feat.MaiShiroi
     {
       title: "Always,リバー feat.MaiShiroi",
@@ -290,74 +324,6 @@ function Music() {
         },
       ],
     },
-    // AI LOV U feat.ゆきみもっち
-    {
-      title: "AI LOV U feat.ゆきみもっち",
-      sound: "/sounds/AILOVU.mp3",
-      image: "/img/music_img/AILOVU_Jacket_3000px.webp",
-      site: "https://n0.com/a/bmczc9c70tgi",
-      startTime: 62,
-      stores: [
-        {
-          href: "https://music.apple.com/jp/album/ai-lov-u-single/1863899688",
-          icon: "/img/music_img/icon/apple_music.png",
-        },
-        {
-          href: "https://open.spotify.com/album/704EawZbVCek3Wu956gwEn",
-          icon: "/img/music_img/icon/spotify.png",
-        },
-        {
-          href: "https://music.youtube.com/watch?v=tUyytvE-8dw&si=QxcF-zGSds9jQSEe",
-          icon: "/img/music_img/icon/youtube_music_key.png",
-        },
-        {
-          href: "https://amazon.co.jp/music/player/albums/B0GCDB7GGH?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_Y8xR3cLWbOBIA19vhgqWqooLs",
-          icon: "/img/music_img/icon/amazon_music_unlimited.png",
-        },
-        {
-          href: "https://music.line.me/launch?target=album&item=mb0000000004e77413&cc=JP&v=1",
-          icon: "/img/music_img/icon/line.png",
-        },
-        {
-          href: "https://n0.com/a/bmczc9c70tgi",
-          icon: "/img/music_img/icon/all.png",
-        },
-      ],
-    },
-    // Do Dance feat.MaiShiroi
-    {
-      title: "Do Dance feat.MaiShiroi",
-      sound: "/sounds/DoDance.mp3",
-      image: "/img/music_img/Do_Dance_jacket_3000px.webp",
-      site: "https://n0.com/a/vvg3fenyenhm",
-      startTime: 45,
-      stores: [
-        {
-          href: "https://music.apple.com/jp/album/do-dance-single/1779931690",
-          icon: "/img/music_img/icon/apple_music.png",
-        },
-        {
-          href: "https://open.spotify.com/album/3PiKXmnE3iM2bVAko6ZQkR",
-          icon: "/img/music_img/icon/spotify.png",
-        },
-        {
-          href: "https://music.youtube.com/watch?v=OcirHxnXfEw&si=0ucipZI-QjgYNsaD",
-          icon: "/img/music_img/icon/youtube_music_key.png",
-        },
-        {
-          href: "https://amazon.co.jp/music/player/albums/B0DN6GD92N",
-          icon: "/img/music_img/icon/amazon_music_unlimited.png",
-        },
-        {
-          href: "https://music.line.me/launch?target=album&item=mb0000000004003f80",
-          icon: "/img/music_img/icon/line.png",
-        },
-        {
-          href: "https://n0.com/a/vvg3fenyenhm",
-          icon: "/img/music_img/icon/all.png",
-        },
-      ],
-    },
     // notFound feat.kyon.
     {
       title: "notFound feat.kyon.",
@@ -422,6 +388,109 @@ function Music() {
         },
         {
           href: "https://nodee.net/a/v4qsps3yjb7g",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+    // Fuzzy Beat feat.Rinne
+    {
+      title: "Fuzzy Beat feat.Rinne",
+      sound: "/sounds/FuzzyBeat.mp3",
+      image: "/img/music_img/FuzzyBeat_jacket_last_3000px.webp",
+      site: "https://n0.com/a/6mcykfycije5",
+      startTime: 51,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/fuzzy-beat-single/1884187689",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/intl-ja/track/1cArvhJLuXYKxN4CtxvQqq?si=abfc0b85f62048ab",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=iPgz4aFbVcc&si=vixvi9YR9_6EPS0L",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0GS4223VS?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_HiZb6l20HxF3UNtbZ5EuU8BeI",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/webapp/album/mb00000000051a8f1a",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/6mcykfycije5",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+
+    // AI LOV U feat.ゆきみもっち
+    {
+      title: "AI LOV U feat.ゆきみもっち",
+      sound: "/sounds/AILOVU.mp3",
+      image: "/img/music_img/AILOVU_Jacket_3000px.webp",
+      site: "https://n0.com/a/bmczc9c70tgi",
+      startTime: 62,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/ai-lov-u-single/1863899688",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/704EawZbVCek3Wu956gwEn",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=tUyytvE-8dw&si=QxcF-zGSds9jQSEe",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0GCDB7GGH?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_Y8xR3cLWbOBIA19vhgqWqooLs",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb0000000004e77413&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/bmczc9c70tgi",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
+    // ドライマティーニ feat.kayumai
+    {
+      title: "ドライマティーニ feat.kayumai",
+      sound: "/sounds/DryMartini.mp3",
+      image: "/img/music_img/DryMartini_jacket.webp",
+      site: "https://n0.com/a/qtxm6s38m8tj",
+      startTime: 55,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/dry-martini-single/6767474902",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/3wY3PDzYxZyPDA0gx7nHiJ",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=pM7sHEgbe3Y&si=SRZU3jiRwjM12726",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0GZZ3ZJN3?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_1nmyF1xuuziOqwTR2fhqRD7M3",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb000000000545f56c&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/qtxm6s38m8tj",
           icon: "/img/music_img/icon/all.png",
         },
       ],

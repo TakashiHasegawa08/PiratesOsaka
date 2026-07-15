@@ -2,11 +2,22 @@
 @use './mixins/breakpoints'as breakpoints;
 
 #companyProfilePage {
-    .company-profile {
+
+    .company-profile_wrap {
         display: flex;
+        justify-content: center;
+
+        @include breakpoints.sp {
+            justify-content: flex-start;
+        }
+    }
+
+    .company-profile {
+        // display: flex;
         flex-direction: column;
         row-gap: 20px;
         // margin-top: 45px;
+        display: inline;
         margin-bottom: 60px;
 
         // @include breakpoints.sp {
@@ -14,15 +25,22 @@
         // }
 
         .profile-item {
+            // display: flex;
+            // flex-direction: column;
+            display: inline;
+
             .tag {
                 color: var(--pink01);
                 font-size: 13px;
+                display: inline-block;
             }
 
             .content {
                 font-size: 16px;
                 letter-spacing: .05em;
                 line-height: 1.4;
+                display: inline-block;
+                margin-bottom: 15px;
 
                 .sub {
                     font-size: 80%;
@@ -42,6 +60,15 @@
                 }
             }
 
+        }
+    }
+
+    .contact-formBox {
+        display: flex;
+        justify-content: center;
+
+        @include breakpoints.sp {
+            justify-content: flex-start;
         }
     }
 }

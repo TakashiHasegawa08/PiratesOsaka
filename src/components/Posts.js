@@ -109,13 +109,13 @@ function Posts() {
         {
           method: "POST",
           body: formPayload,
-        }
+        },
       );
       const result = await response.json();
       setMessage(
         result.status === "mail_sent"
           ? "お問い合わせが送信されました。"
-          : "送信に失敗しました。"
+          : "送信に失敗しました。",
       );
     } catch (error) {
       console.error("送信エラー:", error);
@@ -143,14 +143,14 @@ function Posts() {
         {
           method: "POST",
           body: formPayload,
-        }
+        },
       );
       const result = await res.json();
 
       setMessage(
         result.status === "mail_sent"
           ? "お問い合わせが送信されました。"
-          : "送信に失敗しました。"
+          : "送信に失敗しました。",
       );
     } catch (err) {
       console.error(err);
@@ -327,6 +327,14 @@ function Posts() {
       </div>
     );
   };
+
+  useEffect(() => {
+    document.body.classList.add("top-page");
+
+    return () => {
+      document.body.classList.remove("top-page");
+    };
+  }, []);
 
   return (
     <div className="TopPage" id="TOP">
@@ -509,6 +517,55 @@ function Posts() {
               </div>
 
               <div className="contentBoxWrap">
+                {/* プロジェクト02 ワタクシゴト */}
+                <div className="contentBox Box1 js-fadein">
+                  <div className="visual">
+                    <a
+                      href="https://www.watakushigoto.work/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_WM.jpg" alt="" />
+                    </a>
+                  </div>
+                  <p className="name">ワタクシゴト（YouTubeチャンネル）</p>
+                  <p className="lead">
+                    <span className="red">「ワタシとシゴト」</span>
+                    というテーマで1人のゲストをお迎えし、「この仕事を選んだきっかけ」や「どんな想いで現在に至ったのか」などを伺う
+                    <span className="red">YouTubeチャンネルの制作・運営</span>
+                    を行なっています。 <br className="" />
+                    出演者の方々、それぞれの人生を「過去・いま・未来」の3つの視点から紐解き、一人ひとりのリアルなストーリーをお届けします。
+                  </p>
+                </div>
+              </div>
+
+              <div className="contentBoxWrap">
+                {/* プロジェクト03 BuyCycle */}
+                <div className="contentBox Box1 js-fadein">
+                  <div className="visual">
+                    <a
+                      href="https://apps.apple.com/jp/app/buycycle/id6758200587"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_BC.jpg" alt="" />
+                    </a>
+                  </div>
+                  <p className="name">BuyCycle 買い物iPhoneアプリ</p>
+                  <p className="lead">
+                    <span className="red">BuyCycle</span>
+                    は、
+                    <span className="red">毎日の買い物をシンプルに管理</span>
+                    できるリストアプリです。
+                    <br className="" />
+                    「買うもの」と「家にあるもの」を分けて管理でき、ボタン操作やドラッグ操作で直感的に整理できます。毎日の小さな買い物を、迷わず、ストレスなく。常に自然になじむ買い物管理をサポートします。
+                  </p>
+                </div>
+              </div>
+
+              <div className="contentBoxWrap">
                 {/* プロジェクト02 Geminids2 */}
                 <div className="contentBox js-fadein">
                   <div className="visual">
@@ -670,7 +727,7 @@ function Posts() {
                     <p className="credit">Creative Director</p>
                     <p className="name">ハンザキ</p>
                     <p className="nameEn">Hanzaki</p>
-                    <p className="txt">デザイナー／ギャンブル男</p>
+                    <p className="txt">デザイナー</p>
                   </div>
                 </li>
               </ul>
@@ -679,7 +736,7 @@ function Posts() {
         </section>
 
         {/* アナウンス */}
-        <section id="announce">
+        {/* <section id="announce">
           <div className="contents_inner">
             <Title>
               Ann<span className="oTxt">O</span>unce
@@ -705,7 +762,7 @@ function Posts() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* 会社概要／問い合わせ */}
         <section id="companyProfilePage">
@@ -713,129 +770,140 @@ function Posts() {
             <Title>
               C<span className="oTxt">O</span>mpany
             </Title>
-
-            <div className="company-profile js-fadein">
-              <div className="profile-item">
-                <div className="tag">Company Name</div>
-                <div className="content">
-                  株式会社
-                  <ruby>
-                    PO<rt>ピーオー</rt>
-                  </ruby>
-                  <span className="sub">
-                    （旧社名：株式会社パイレーツ大阪）
-                  </span>
+            <div className="company-profile_wrap">
+              <div className="company-profile js-fadein">
+                <div className="profile-item">
+                  <div className="tag">Company Name</div>
+                  <br className="" />
+                  <div className="content">
+                    株式会社
+                    <ruby>
+                      PO<rt>ピーオー</rt>
+                    </ruby>
+                    <span className="sub">
+                      （旧社名：株式会社パイレーツ大阪）
+                    </span>
+                  </div>
                 </div>
-              </div>
+                <br className="" />
 
-              <div className="profile-item">
-                <div className="tag">Representative</div>
-                <div className="content">長谷川 崇</div>
-              </div>
+                <div className="profile-item">
+                  <div className="tag">Representative</div>
+                  <br className="" />
+                  <div className="content">長谷川 崇</div>
+                </div>
+                <br className="" />
 
-              <div className="profile-item">
-                <div className="tag">Established</div>
-                <div className="content">2008年 8月12日</div>
-              </div>
-              <div className="profile-item">
-                <div className="tag">Number of employees</div>
-                <div className="content">2名</div>
-              </div>
+                <div className="profile-item">
+                  <div className="tag">Established</div>
+                  <br className="" />
+                  <div className="content">2008年 8月12日</div>
+                </div>
+                <br className="" />
+                <div className="profile-item">
+                  <div className="tag">Number of employees</div>
+                  <br className="" />
+                  <div className="content">2名</div>
+                </div>
+                <br className="" />
 
-              <div className="profile-item">
-                <div className="tag">Business Description</div>
-                <div className="content">
-                  <ul>
-                    <li>・WEBサイト・アプリ制作</li>
-                    <li>・グラフィックデザイン制作</li>
-                    <li>・イラストレーション制作</li>
-                    <li>・広告企画全般のプランニング</li>
-                    <li>・音楽制作・プロデュース業務</li>
-                    <li>・出版事業</li>
-                    <li>・イベント制作</li>
-                    <li>・映像制作 他</li>
-                  </ul>
+                <div className="profile-item">
+                  <div className="tag">Business Description</div>
+                  <br className="" />
+                  <div className="content">
+                    <ul>
+                      <li>・WEBサイト・アプリ制作</li>
+                      <li>・グラフィックデザイン制作</li>
+                      <li>・イラストレーション制作</li>
+                      <li>・広告企画全般のプランニング</li>
+                      <li>・音楽制作・プロデュース業務</li>
+                      <li>・出版事業</li>
+                      <li>・イベント制作</li>
+                      <li>・映像制作 他</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-
             {/* Contact Form */}
-            <div className="contact-form" id="form">
-              <Title>
-                C<span className="oTxt">O</span>ntact Us
-              </Title>
+            <div className="contact-formBox">
+              <div className="contact-form" id="form">
+                <Title>
+                  C<span className="oTxt">O</span>ntact Us
+                </Title>
 
-              <form onSubmit={handleSubmit}>
-                <div className="formWrap">
-                  <p>
-                    <span className="tag">お名前（必須）</span>
-                    <br />
-                    <input
-                      type="text"
-                      id="your-name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
+                <form onSubmit={handleSubmit}>
+                  <div className="formWrap">
+                    <p>
+                      <span className="tag">お名前（必須）</span>
+                      <br />
+                      <input
+                        type="text"
+                        id="your-name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                      />
+                    </p>
+                  </div>
+
+                  <div className="formWrap">
+                    <p>
+                      <span className="tag">メールアドレス（必須）</span>
+                      <br />
+                      <input
+                        type="email"
+                        id="your-email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                      />
+                    </p>
+                  </div>
+
+                  <div className="formWrap">
+                    <p>
+                      <span className="tag">メッセージ本文</span>
+                      <br />
+                      <textarea
+                        id="your-message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                      />
+                    </p>
+                  </div>
+
+                  <div className="formWrap">
+                    <ReCAPTCHA
+                      sitekey="6Le2ES4sAAAAAM-itrRzxzKt7tUJWk9nNjPZklsy" // ←WEBサイトキー
+                      onChange={(value) => setToken(value)}
                     />
-                  </p>
-                </div>
+                  </div>
 
-                <div className="formWrap">
-                  <p>
-                    <span className="tag">メールアドレス（必須）</span>
-                    <br />
-                    <input
-                      type="email"
-                      id="your-email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                    />
-                  </p>
-                </div>
-
-                <div className="formWrap">
-                  <p>
-                    <span className="tag">メッセージ本文</span>
-                    <br />
-                    <textarea
-                      id="your-message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                    />
-                  </p>
-                </div>
-
-                <div className="formWrap">
-                  <ReCAPTCHA
-                    sitekey="6Le2ES4sAAAAAM-itrRzxzKt7tUJWk9nNjPZklsy" // ←WEBサイトキー
-                    onChange={(value) => setToken(value)}
-                  />
-                </div>
-
-                <button type="submit">送信</button>
-              </form>
-              <p className="recaptcha-note">
-                このサイトは reCAPTCHA によって保護されています。
-                <a
-                  href="https://policies.google.com/privacy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  プライバシーポリシー
-                </a>{" "}
-                と
-                <a
-                  href="https://policies.google.com/terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  利用規約
-                </a>{" "}
-                が適用されます。
-              </p>
-              {message && <p className="message">{message}</p>}
+                  <button type="submit">送信</button>
+                </form>
+                <p className="recaptcha-note">
+                  このサイトは reCAPTCHA によって保護されています。
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    プライバシーポリシー
+                  </a>{" "}
+                  と
+                  <a
+                    href="https://policies.google.com/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    利用規約
+                  </a>{" "}
+                  が適用されます。
+                </p>
+                {message && <p className="message">{message}</p>}
+              </div>
             </div>
           </div>
         </section>

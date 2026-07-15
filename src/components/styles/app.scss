@@ -23,9 +23,22 @@
     }
 
     .app_content_wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5%;
+
         .app_content {
+            display: flex;
+            width: calc((100% - 5%) / 2);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
             .app_icon {
-                width: 120px;
+                width: 94px;
+                border-radius: 10px;
+                overflow: hidden;
+                margin-bottom: 10px;
             }
         }
     }

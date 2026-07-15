@@ -37,13 +37,13 @@ const ContactForm = () => {
         {
           method: "POST",
           body: formPayload,
-        }
+        },
       );
       const result = await res.json();
       setMessage(
         result.status === "mail_sent"
           ? "お問い合わせが送信されました。"
-          : "送信に失敗しました。"
+          : "送信に失敗しました。",
       );
     } catch (err) {
       console.error(err);
