@@ -1,3 +1,6 @@
+@charset "UTF-8";
+@use './mixins/breakpoints'as breakpoints;
+
 #appPage .appSection,
 #privacyPage .privacyArticle {
     max-width: 900px;
@@ -7,11 +10,19 @@
     h2 {
         margin-top: 0;
         font-size: 22px;
+
+        @include breakpoints.sp {
+            font-size: min(4.8vw, 20px);
+        }
     }
 
     h3 {
         font-size: 18px;
         margin-top: 19px;
+
+        @include breakpoints.sp {
+            font-size: min(4.3vw, 17px);
+        }
     }
 
     .appLinks {
@@ -26,6 +37,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 5%;
+        row-gap: 50px;
 
         .app_content {
             display: flex;

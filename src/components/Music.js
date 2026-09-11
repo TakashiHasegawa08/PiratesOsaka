@@ -222,6 +222,40 @@ function Music() {
         },
       ],
     },
+    // Sparkling Starlight feat.キャベ椿
+    {
+      title: "Sparkling Starlight feat.キャベ椿",
+      sound: "/sounds/SparklingStarlight.mp3",
+      image: "/img/music_img/SparklingStarlight_Jacket_1200px.webp",
+      site: "https://n0.com/a/3wixym7b3q18",
+      startTime: 61,
+      stores: [
+        {
+          href: "https://music.apple.com/jp/album/sparkling-starlight-single/6793813430",
+          icon: "/img/music_img/icon/apple_music.png",
+        },
+        {
+          href: "https://open.spotify.com/album/6gErSPfVP5rxZVv2WyYnAP",
+          icon: "/img/music_img/icon/spotify.png",
+        },
+        {
+          href: "https://music.youtube.com/watch?v=cn80hig6OUs&si=qJ2wwEvAVJKT0oIT",
+          icon: "/img/music_img/icon/youtube_music_key.png",
+        },
+        {
+          href: "https://amazon.co.jp/music/player/albums/B0HB46CPX1?marketplaceId=A1VC38T7YXB528&musicTerritory=JP&ref=dm_sh_eivNneypqNI7RRNwZWBbmy8td&trackAsin=B0HB4596P7",
+          icon: "/img/music_img/icon/amazon_music_unlimited.png",
+        },
+        {
+          href: "https://music.line.me/launch?target=album&item=mb000000000582fafa&cc=JP&v=1",
+          icon: "/img/music_img/icon/line.png",
+        },
+        {
+          href: "https://n0.com/a/3wixym7b3q18",
+          icon: "/img/music_img/icon/all.png",
+        },
+      ],
+    },
     // Always,リバー feat.MaiShiroi
     {
       title: "Always,リバー feat.MaiShiroi",

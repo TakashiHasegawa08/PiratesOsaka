@@ -673,6 +673,17 @@ footer.footer {
                 font-size: 95%;
             }
         }
+
+        .appStoreBadge {
+            display: inline-block;
+            margin-top: 5px;
+
+            img {
+                width: 110px;
+                height: auto;
+                display: block;
+            }
+        }
     }
 }
 
@@ -787,7 +798,7 @@ footer.footer {
                 row-gap: 2px;
 
                 .icon {
-                    width: 80px;
+                    width: 110px;
                     display: block;
                     margin: 0 auto;
                 }

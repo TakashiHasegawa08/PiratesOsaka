@@ -21,7 +21,11 @@ export default function TopPageBG() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const dpr = Math.min(isMobile ? 1.5 : 2, window.devicePixelRatio || 1);
     const rand = (min, max) => min + Math.random() * (max - min);
 
     const biasedY = (height, bias = 0.72) => {
@@ -109,6 +113,13 @@ export default function TopPageBG() {
               baseWobble,
               isBig,
               isSmall,
+              motionX: 0,
+              motionY: 0,
+              velocityX: 0,
+              velocityY: 0,
+              kick: 0,
+              burstAngle: rand(0, Math.PI * 2),
+              burstStrength: rand(0.72, 1.2),
             });
 
             placed = true;
@@ -146,6 +157,13 @@ export default function TopPageBG() {
             baseWobble,
             isBig,
             isSmall,
+            motionX: 0,
+            motionY: 0,
+            velocityX: 0,
+            velocityY: 0,
+            kick: 0,
+            burstAngle: rand(0, Math.PI * 2),
+            burstStrength: rand(0.72, 1.2),
           });
         }
       }
@@ -156,20 +174,38 @@ export default function TopPageBG() {
     resize();
     init();
 
-    let lastY = window.scrollY || 0;
-    let scrollBoost = 0;
+    let canvasWidth = canvas.getBoundingClientRect().width;
+    const scrollState = {
+      lastY: window.scrollY || document.documentElement.scrollTop || 0,
+      pending: 0,
+    };
+    let lastTime = 0;
+
+    const onScroll = () => {
+      const currentY = window.scrollY || document.documentElement.scrollTop || 0;
+      const delta = currentY - scrollState.lastY;
+
+      scrollState.lastY = currentY;
+      scrollState.pending = Math.max(
+        isMobile ? -24 : -90,
+        Math.min(isMobile ? 24 : 90, scrollState.pending + delta),
+      );
+    };
 
     const draw = (ms) => {
       const t = ms * 0.001;
+      const deltaTime = Math.min(
+        0.05,
+        lastTime ? (ms - lastTime) * 0.001 : 1 / 60,
+      );
+      lastTime = ms;
       const { width, height } = canvas.getBoundingClientRect();
+      const scrollImpulse = scrollState.pending;
+      scrollState.pending *= 0.45;
 
-      const sy = window.scrollY || 0;
-      const dScroll = sy - lastY;
-      lastY = sy;
-
-      scrollBoost += Math.min(34, Math.abs(dScroll));
-      scrollBoost *= 0.9;
-      const boost = Math.min(22, scrollBoost);
+      if (Math.abs(scrollState.pending) < 0.1) {
+        scrollState.pending = 0;
+      }
 
       // ✅ 背景：上をさらに明るく
       ctx.clearRect(0, 0, width, height);
@@ -209,46 +245,91 @@ export default function TopPageBG() {
       ctx.fillRect(0, 0, width, height);
 
       circlesRef.current.forEach((c) => {
-        const boostK = c.isBig ? 0.05 : c.isSmall ? 0.22 : 0.14;
-        const wob = c.baseWobble + boost * boostK;
-
         const spd = c.isBig ? 0.55 : c.isSmall ? 1.15 : 0.85;
+        const floatAmplitude = c.isBig ? 26 : c.isSmall ? 48 : 36;
+        const floatX = Math.cos(t * 0.48 * spd + c.phase) * floatAmplitude;
+        const floatY = Math.sin(t * 0.42 * spd + c.phase) * floatAmplitude;
 
-        const driftX = c.vx + Math.cos(t * 0.85 * spd + c.phase) * 0.11 * wob;
-        const driftY = c.vy + Math.sin(t * 0.78 * spd + c.phase) * 0.11 * wob;
+        if (!prefersReducedMotion) {
+          const response =
+            (c.isBig ? 6.2 : c.isSmall ? 10.5 : 8.4) *
+            (isMobile ? 0.48 : 1);
+          const burst = Math.abs(scrollImpulse) * response * c.burstStrength;
+          const burstDirection = c.burstAngle + Math.sin(t * 0.7 + c.phase) * 0.35;
 
-        const amp = c.isBig ? 14 : c.isSmall ? 34 : 24;
+          c.velocityX += Math.cos(burstDirection) * burst;
+          c.velocityY += Math.sin(burstDirection) * burst;
+          c.velocityX *= Math.exp(-3.2 * deltaTime);
+          c.velocityY *= Math.exp(-3.2 * deltaTime);
+          c.motionX += c.velocityX * deltaTime;
+          c.motionY += c.velocityY * deltaTime;
+          c.kick = Math.min(0.14, c.kick + Math.abs(scrollImpulse) * 0.0014);
+          c.kick *= Math.exp(-7 * deltaTime);
 
-        c.x = c.baseX + driftX * amp;
-        c.y = c.baseY + driftY * amp;
+          const movementLimit =
+            (c.isBig ? 160 : c.isSmall ? 240 : 200) *
+            (isMobile ? 0.65 : 1);
+          if (Math.abs(c.motionX) > movementLimit) {
+            c.motionX = Math.sign(c.motionX) * movementLimit;
+            c.velocityX *= -0.35;
+          }
+          if (Math.abs(c.motionY) > movementLimit) {
+            c.motionY = Math.sign(c.motionY) * movementLimit;
+            c.velocityY *= -0.35;
+          }
+        }
 
-        const pad = c.r + 42;
-        if (c.baseX < -pad) c.baseX = width + pad;
-        if (c.baseX > width + pad) c.baseX = -pad;
-        if (c.baseY < -pad) c.baseY = height + pad;
-        if (c.baseY > height + pad) c.baseY = -pad;
+        c.x = c.baseX + floatX + c.motionX;
+        c.y = c.baseY + floatY + c.motionY;
+        const sphereRadius = c.r * (1 + c.kick);
+        const hue = 205 + Math.sin(c.phase) * 18;
+        const sphereGradient = ctx.createRadialGradient(
+          c.x - sphereRadius * 0.32,
+          c.y - sphereRadius * 0.38,
+          sphereRadius * 0.06,
+          c.x,
+          c.y,
+          sphereRadius,
+        );
+
+        sphereGradient.addColorStop(0, "rgba(255, 255, 255, 0.5)");
+        sphereGradient.addColorStop(0.2, `hsla(${hue}, 62%, 90%, 0.3)`);
+        sphereGradient.addColorStop(0.58, `hsla(${hue}, 56%, 74%, 0.22)`);
+        sphereGradient.addColorStop(1, `hsla(${hue}, 48%, 62%, 0.075)`);
 
         ctx.beginPath();
-        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(110, 116, 128, ${c.a})`;
-        ctx.lineWidth = c.lw;
+        ctx.arc(c.x, c.y, sphereRadius, 0, Math.PI * 2);
+        ctx.fillStyle = sphereGradient;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${hue}, 40%, 60%, ${c.a * 0.72})`;
+        ctx.lineWidth = c.lw * 0.8;
         ctx.stroke();
       });
 
-      rafRef.current = requestAnimationFrame(draw);
+      if (!prefersReducedMotion) {
+        rafRef.current = requestAnimationFrame(draw);
+      }
     };
 
     rafRef.current = requestAnimationFrame(draw);
 
     const onResize = () => {
+      const nextWidth = canvas.getBoundingClientRect().width;
+      const widthChanged = Math.abs(nextWidth - canvasWidth) > 1;
+
       resize();
-      init();
+      if (widthChanged) {
+        canvasWidth = nextWidth;
+        init();
+      }
     };
     window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [count]);
 

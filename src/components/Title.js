@@ -16,16 +16,10 @@ const Title = ({ children }) => {
         Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
       const isHalfVisible = visibleHeight > rect.height / 2;
 
-      console.log(
-        `[Title] (${children}) 可視: ${isHalfVisible}, 高さ: ${rect.height}, 表示: ${visibleHeight}`
-      );
-
       if (isHalfVisible && !isVisible) {
         setIsVisible(true);
-        console.log("🔥 表示トリガー ON");
       } else if (!isHalfVisible && isVisible) {
         setIsVisible(false);
-        console.log("💤 表示トリガー OFF");
       }
     };
 

@@ -413,10 +413,11 @@ function Posts() {
               <br className="PC-only" />
               クリエイティブエージェンシーです。
               <br className="PC-only" />
-              広告の<span className="red">グラフィックデザイン</span>
-              や<br className="PC-only" />
-              <span className="red">WEBサイト</span>・
-              <span className="red">WEBアプリ</span>の制作を手掛けています。
+              <span className="red">グラフィックデザイン</span>や
+              <span className="red">WEBサイト制作</span>・
+              <br className="PC-only" />
+              <span className="red">アプリ開発</span>・
+              <span className="red">イベント制作</span>を手掛けています。
               <br className="" />
               <br className="" />
               「かっこいい」や「使いやすい」にくわえて
@@ -436,15 +437,45 @@ function Posts() {
             </p>
           </div>
         </section>
-        {/* プロジェクト */}
-        <section id="project">
+        {/* App */}
+        <section id="app">
           <div className="contents_inner">
-            <Title>
-              Pr<span className="oTxt">O</span>ject
-            </Title>
+            <Title>App</Title>
             <div className="contentAll">
               <div className="contentBoxWrap">
-                {/* プロジェクト01 TaskTime */}
+                {/* App 01 Guitap */}
+                <div className="contentBox Box1 js-fadein">
+                  <div className="visual">
+                    <a
+                      href="https://p-o.ltd/Guitap/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_GT.jpg" alt="Guitap" />
+                    </a>
+                  </div>
+                  <p className="name">Guitap -スマホギター- iPhoneアプリ</p>
+                  <p className="lead">
+                    <span className="red">Guitap（ギタップ）</span>
+                    は、iPhoneをギターのように構え、画面の弦をタップ＆ストロークして演奏を楽しめるバーチャルギターアプリです。アコギ・エレキの音色やコード練習、チョーキングなど、多彩な演奏表現を手軽に楽しめます。
+                  </p>
+                  <a
+                    href="https://apps.apple.com/jp/app/guitap-pocket-guitar/id6773235836"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="appStoreBadge"
+                  >
+                    <img
+                      src="/img/Download_on_the_App_Store_Badge_JP_RGB_blk_100317.svg"
+                      alt="Download on the App Store"
+                    />
+                  </a>
+                </div>
+              </div>
+
+              <div className="contentBoxWrap">
+                {/* App 02 TaskTime */}
                 <div className="contentBox Box1 js-fadein">
                   <div className="visual">
                     <a
@@ -517,31 +548,7 @@ function Posts() {
               </div>
 
               <div className="contentBoxWrap">
-                {/* プロジェクト02 ワタクシゴト */}
-                <div className="contentBox Box1 js-fadein">
-                  <div className="visual">
-                    <a
-                      href="https://www.watakushigoto.work/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hoverEffect"
-                    >
-                      <img src="/img/board_WM.jpg" alt="" />
-                    </a>
-                  </div>
-                  <p className="name">ワタクシゴト（YouTubeチャンネル）</p>
-                  <p className="lead">
-                    <span className="red">「ワタシとシゴト」</span>
-                    というテーマで1人のゲストをお迎えし、「この仕事を選んだきっかけ」や「どんな想いで現在に至ったのか」などを伺う
-                    <span className="red">YouTubeチャンネルの制作・運営</span>
-                    を行なっています。 <br className="" />
-                    出演者の方々、それぞれの人生を「過去・いま・未来」の3つの視点から紐解き、一人ひとりのリアルなストーリーをお届けします。
-                  </p>
-                </div>
-              </div>
-
-              <div className="contentBoxWrap">
-                {/* プロジェクト03 BuyCycle */}
+                {/* App 03 BuyCycle */}
                 <div className="contentBox Box1 js-fadein">
                   <div className="visual">
                     <a
@@ -564,9 +571,40 @@ function Posts() {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Project */}
+        <section id="project">
+          <div className="contents_inner">
+            <Title>
+              Pr<span className="oTxt">O</span>ject
+            </Title>
+            <div className="contentAll">
+              <div className="contentBoxWrap">
+                {/* Project 01 ワタクシゴト */}
+                <div className="contentBox Box1 js-fadein">
+                  <div className="visual">
+                    <a
+                      href="https://www.watakushigoto.work/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_WM.jpg" alt="ワタクシゴト" />
+                    </a>
+                  </div>
+                  <p className="name">ワタクシゴト（YouTubeチャンネル）</p>
+                  <p className="lead">
+                    <span className="red">「ワタシとシゴト」</span>
+                    をテーマに、ゲストの仕事への想いや人生のストーリーを「過去・いま・未来」の視点から届けるYouTubeチャンネルを制作・運営しています。
+                  </p>
+                </div>
+              </div>
 
               <div className="contentBoxWrap">
-                {/* プロジェクト02 Geminids2 */}
+                {/* Project 02 Geminids2 */}
                 <div className="contentBox js-fadein">
                   <div className="visual">
                     <a
@@ -585,7 +623,7 @@ function Posts() {
                     </p>
                   </div>
                 </div>
-                {/* プロジェクト03 Pirates Books */}
+                {/* Project 03 Pirates Books */}
                 <div className="contentBox js-fadein">
                   <div className="visual">
                     <a
@@ -604,6 +642,35 @@ function Posts() {
                       によるユニットで本をつくりました。
                     </p>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Event */}
+        <section id="event">
+          <div className="contents_inner">
+            <Title>Event</Title>
+            <div className="contentAll">
+              <div className="contentBoxWrap">
+                <div className="contentBox Box1 js-fadein">
+                  <div className="visual">
+                    <a
+                      href="https://tunagate.com/circle/225613"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_BY.jpg" alt="バンドヤロウ" />
+                    </a>
+                  </div>
+                  <p className="name">バンドヤロウ</p>
+                  <p className="lead">
+                    初心者が気軽にバンド楽器に触れて楽しめる
+                    <span className="red">音楽ワークショップ</span>
+                    を開催しています。ギター、ベース、ピアノ、ドラムがそろった会場で、自由な演奏や簡単なセッションを楽しめます。楽器は用意しているため、手ぶらでも参加できます。
+                  </p>
                 </div>
               </div>
             </div>

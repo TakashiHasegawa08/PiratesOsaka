@@ -13,6 +13,9 @@ import Event260726_02 from "./components/event/event260726_02";
 import AppLanding from "./components/app/AppLanding";
 import BuyCyclePrivacy from "./components/app/BuyCyclePrivacy";
 import GuitapPrivacy from "./components/app/GuitapPrivacy";
+import PocketSketchPrivacy from "./components/app/PocketSketchPrivacy";
+import SoundSketchPrivacy from "./components/app/SoundSketchPrivacy";
+import EnglishMEMOPrivacy from "./components/app/EnglishMEMOPrivacy";
 import "./components/styles/styles.scss";
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
         <Route path="/app" element={<AppLanding />} />
         <Route path="/app/buycycle" element={<BuyCyclePrivacy />} />
         <Route path="/app/guitap" element={<GuitapPrivacy />} />
+        <Route path="/app/PocketSketch" element={<PocketSketchPrivacy />} />
+        <Route path="/app/SoundSketch" element={<SoundSketchPrivacy />} />
+        <Route path="/app/englishmemo" element={<EnglishMEMOPrivacy />} />
       </Routes>
     </Router>
   );
