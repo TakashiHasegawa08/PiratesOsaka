@@ -3,8 +3,9 @@ import React, { useEffect, useRef } from "react";
 // =====================================================================
 // TopPageBG — 線で描く背景モチーフ（シンプル版）
 //   ペンが画面のどこかから現れ、1〜2回 円を描くように曲がったあと、
-//   長い直線で画面の外までまっすぐ進む。線は後ろから消えていき、
-//   見えなくなったら別の場所から次のペンが現れる。
+//   長い直線で（縦か横に）画面の外までまっすぐ進む。線は後ろから消えていく。
+//   ペンが画面の外へ抜けて線が消えかかるタイミングで、次のペンが別の場所から現れる。
+//   カーブの大きさは毎回ランダム、速さは一定。
 //   2回曲がるときは、2回目の半径が黄金比で小さくなる（さり気ない引用）。
 //   ペン先はピンクの点。
 // =====================================================================
@@ -14,9 +15,9 @@ const INK = "35,24,21";
 const PINK = "232,82,152";
 const LINE_A = 0.5; // 線の濃さ（ラッパーの opacity .4 と掛け合わさる）
 const LINE_W = 1.2; // 線の太さ(px)
-const SPEED = 110; // ペンの速さ(px/秒)
-const PENS_PC = 2;
-const PENS_SP = 1;
+const SPEED = 110; // ペンの速さ(px/秒)・全ペン共通
+const R_MIN = 0.6; // カーブ半径の最小（単位）
+const R_MAX = 3.2; // カーブ半径の最大（単位）
 const PHI = (1 + Math.sqrt(5)) / 2;
 
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -82,7 +83,7 @@ export default function TopPageBG() {
         };
 
         line(unit * rand(0.3, 1.2));
-        let r = unit * rand(1.1, 2.0);
+        let r = unit * rand(R_MIN, Math.min(R_MAX, (Math.min(W, H) * 0.42) / unit));
         let side = Math.random() < 0.5 ? 1 : -1;
         const turns = Math.random() < 0.5 ? 1 : 2;
         for (let k = 0; k < turns; k++) {
@@ -92,7 +93,11 @@ export default function TopPageBG() {
         }
         if (!ok) continue;
         line(W + H); // 画面の外まで
-        return { segs, total };
+        // 直線が画面の端に届くまでの道のり
+        const L = segs[segs.length - 1];
+        const [dx, dy] = DIRS[h];
+        const toEdge = dx > 0 ? W - L.x0 : dx < 0 ? L.x0 : dy > 0 ? H - L.y0 : L.y0;
+        return { segs, total, exitAt: L.start + toEdge };
       }
       return null;
     };
@@ -104,29 +109,38 @@ export default function TopPageBG() {
         ...path,
         head: -SPEED * delay, // delay 秒後に描き始める
         tail: (W <= 768 ? rand(5, 7) : rand(7, 11)) * unit, // 残す線の長さ
-        speed: SPEED * rand(0.85, 1.15),
+        speed: SPEED,
+        spawned: false,
       };
     };
 
     const init = () => {
-      const n = W <= 768 ? PENS_SP : PENS_PC;
       pens = [];
-      for (let k = 0; k < n; k++) {
-        const p = makePen(0);
-        if (!p) continue;
-        // 最初から線が見えている状態にする（ずらして配置）
-        p.head = rand(0.3, 0.9) * (p.segs[p.segs.length - 1].start + p.tail * 0.5);
+      const p = makePen(0);
+      if (p) {
+        // 最初から線が見えている状態にする
+        p.head = rand(0.4, 0.8) * p.exitAt;
         pens.push(p);
       }
     };
 
     const step = (dt) => {
-      pens = pens.map((p) => {
+      const born = [];
+      pens.forEach((p) => {
         p.head += p.speed * dt;
-        const exitAt = p.segs[p.segs.length - 1].start + Math.hypot(W, H);
-        if (p.head - p.tail > exitAt) return makePen(rand(0.5, 2.5)) || p; // 消えたら次へ
-        return p;
+        // ペン先が画面の外へ抜けた（線が消えかかる）ら、次のペンを出す
+        if (!p.spawned && p.head >= p.exitAt) {
+          p.spawned = true;
+          const next = makePen(0.2);
+          if (next) born.push(next);
+        }
       });
+      // 線が全部画面から消えたペンは片付ける
+      pens = pens.filter((p) => p.head - p.tail < p.exitAt + 20).concat(born);
+      if (!pens.length) {
+        const p = makePen(0.5);
+        if (p) pens.push(p);
+      }
     };
 
     const trace = (segs, from, to) => {
