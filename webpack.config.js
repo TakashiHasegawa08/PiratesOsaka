@@ -21,6 +21,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash].js",
     publicPath: process.env.PUBLIC_PATH || "/",
+    clean: true, // ビルドのたびに dist を空にして最新分だけ残す
   },
   module: {
     rules: [
