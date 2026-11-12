@@ -6,6 +6,8 @@ import React, { useEffect, useRef } from "react";
 //   描き進む。通った線は一定の長さで後ろから消えていくので、
 //   直線と曲線が画面のあちこちで交錯し続ける。
 //   円弧の半径はロゴと同じ比率（外径98:内径50 ≒ 2:1）。
+//   あわせて、黄金長方形の分割線→黄金らせん、の作図が1つずつ現れては消える。
+//   スマホはペン1本＋らせんのみ（グリッドなし）で控えめに。
 // =====================================================================
 
 const BASE = "#F4EFE7"; // 薄いベージュ
@@ -17,7 +19,16 @@ const GUIDE_A = 0.14; // カーブ時に一瞬見える円ガイド
 const GRID_A = 0.05; // 全体のグリッド線
 const SPEED = 110; // ペンの速さ(px/秒)
 
+const SPIRAL_GUIDE_A = 0.26; // 黄金長方形の分割線
+const SPIRAL_A = 0.7; // 黄金らせん本体
+const PHI = (1 + Math.sqrt(5)) / 2;
+
 const rand = (a, b) => a + Math.random() * (b - a);
+const clamp01 = (x) => Math.max(0, Math.min(1, x));
+const eio = (x) => {
+  x = clamp01(x);
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+};
 const DIRS = [[1, 0], [0, 1], [-1, 0], [0, -1]]; // 右・下・左・上（画面座標）
 
 export default function TopPageBG() {
@@ -73,7 +84,10 @@ export default function TopPageBG() {
       if (r1 < 0.5) options.push(straight());
       options.push(turn(Math.random() < 0.5 ? 1 : -1, Math.random() < 0.5 ? 1 : 2));
       options.push(turn(1, 1), turn(-1, 1), straight(), turn(1, 2), turn(-1, 2));
-      const o = options.find((op) => inside(op.ni, op.nj)) || turn(1, 1);
+      const dc = (op) => Math.hypot(op.ni - cols / 2, op.nj - rows / 2);
+      const o =
+        options.find((op) => inside(op.ni, op.nj)) ||
+        options.slice().sort((a, b) => dc(a) - dc(b))[0]; // はみ出しそうなら中央寄りへ
 
       const x0 = gx(pen.i), y0 = gy(pen.j);
       let seg;
@@ -111,16 +125,125 @@ export default function TopPageBG() {
       return pen;
     };
 
+    // ---------- 黄金らせん ----------
+    // 黄金長方形を正方形で分割していく線（直線）を引き、
+    // その正方形を四分円でつないだらせん（曲線）を描いて、しばらく残して消える。
+    let spirals = [];
+    let nextSpiralAt = 0;
+    const SP_T = { squares: 0.22, squareDur: 0.5, arcStart: 1.0, arcDur: 3.6, hold: 8, fade: 1.6 };
+
+    const makeSpiral = (born) => {
+      const isSp = W <= 768;
+      const L = Math.min(
+        rand(cell * (isSp ? 2.4 : 3), cell * (isSp ? 3.4 : 5)),
+        Math.min(W, H) * (isSp ? 0.62 : 0.55),
+      );
+      const steps = 9;
+      let px = 0, py = 0, h = 0, r = L;
+      const arcs = [], squares = [];
+      let minX = 0, minY = 0, maxX = 0, maxY = 0;
+      for (let k = 0; k < steps; k++) {
+        const [fx, fy] = DIRS[h];
+        const nh = (h + 1) % 4;
+        const [sx, sy] = DIRS[nh];
+        const cx = px + sx * r, cy = py + sy * r;
+        const ex = px + (fx + sx) * r, ey = py + (fy + sy) * r;
+        arcs.push({ cx, cy, r, a0: Math.atan2(py - cy, px - cx), len: (r * Math.PI) / 2 });
+        const sq = [px, py, px + fx * r, py + fy * r, ex, ey, cx, cy];
+        squares.push(sq);
+        for (let i = 0; i < 8; i += 2) {
+          minX = Math.min(minX, sq[i]); maxX = Math.max(maxX, sq[i]);
+          minY = Math.min(minY, sq[i + 1]); maxY = Math.max(maxY, sq[i + 1]);
+        }
+        px = ex; py = ey; h = nh; r /= PHI;
+      }
+      const rot = Math.floor(rand(0, 4)) * (Math.PI / 2);
+      const mirror = Math.random() < 0.5 ? -1 : 1;
+      const bw0 = maxX - minX, bh0 = maxY - minY;
+      const odd = Math.round(rot / (Math.PI / 2)) % 2 === 1;
+      const bw = odd ? bh0 : bw0, bh = odd ? bw0 : bh0;
+      const m = 16;
+      const place = (size, span) =>
+        span - size - m * 2 > 0 ? rand(size / 2 + m, span - size / 2 - m) : span / 2;
+      return {
+        arcs, squares, born, rot, mirror,
+        total: arcs.reduce((s, a) => s + a.len, 0),
+        bcx: (minX + maxX) / 2, bcy: (minY + maxY) / 2,
+        x: place(bw, W), y: place(bh, H),
+      };
+    };
+
+    const drawSpiral = (sp, now) => {
+      const t = now - sp.born;
+      const end = SP_T.hold + SP_T.fade;
+      if (t > end) return false;
+      if (t < 0) return true;
+      const fade = 1 - clamp01((t - SP_T.hold) / SP_T.fade);
+      ctx.save();
+      ctx.translate(sp.x, sp.y);
+      ctx.rotate(sp.rot);
+      ctx.scale(sp.mirror, 1);
+      ctx.translate(-sp.bcx, -sp.bcy);
+
+      // 分割線（正方形を一辺ずつ描く）
+      ctx.strokeStyle = `rgba(${INK},${SPIRAL_GUIDE_A * fade})`;
+      ctx.lineWidth = 1;
+      sp.squares.forEach((q, k) => {
+        const p = eio((t - k * SP_T.squares) / SP_T.squareDur) * 4;
+        if (p <= 0) return;
+        ctx.beginPath();
+        ctx.moveTo(q[0], q[1]);
+        for (let e = 0; e < 4; e++) {
+          const a = (e * 2) % 8, b = ((e + 1) * 2) % 8;
+          const f = clamp01(p - e);
+          if (f <= 0) break;
+          ctx.lineTo(q[a] + (q[b] - q[a]) * f, q[a + 1] + (q[b + 1] - q[a + 1]) * f);
+        }
+        ctx.stroke();
+      });
+
+      // らせん本体
+      const head = eio((t - SP_T.arcStart) / SP_T.arcDur) * sp.total;
+      if (head > 0) {
+        ctx.strokeStyle = `rgba(${INK},${SPIRAL_A * fade})`;
+        ctx.lineWidth = LINE_W * 1.3;
+        ctx.beginPath();
+        let acc = 0, hx = 0, hy = 0;
+        for (const a of sp.arcs) {
+          if (acc >= head) break;
+          const f = Math.min(1, (head - acc) / a.len);
+          const a1 = a.a0 + (Math.PI / 2) * f;
+          ctx.arc(a.cx, a.cy, a.r, a.a0, a1, false);
+          hx = a.cx + Math.cos(a1) * a.r;
+          hy = a.cy + Math.sin(a1) * a.r;
+          acc += a.len;
+        }
+        ctx.stroke();
+        if (head < sp.total) {
+          ctx.fillStyle = `rgba(${PINK},0.85)`;
+          ctx.beginPath();
+          ctx.arc(hx, hy, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+      return true;
+    };
+
     const init = (now) => {
-      const n = W <= 768 ? 3 : 5;
+      const isSp = W <= 768;
+      const n = isSp ? 1 : 4;
       pens = [];
       for (let k = 0; k < n; k++) {
         const p = makePen(now);
-        p.pink = k === 0;
+        p.pink = !isSp && k === 0;
+        if (isSp) p.tail = rand(3, 5) * cell; // スマホは短く
         pens.push(p);
       }
       // 最初から線がある状態で始める
       for (let t = 0; t < 8; t += 1 / 30) step(1 / 30, now - 8 + t);
+      spirals = [makeSpiral(now - 2.5)]; // 描きかけのらせんから始める
+      nextSpiralAt = Infinity;
     };
 
     const step = (dt, now) => {
@@ -179,9 +302,19 @@ export default function TopPageBG() {
     const render = (now) => {
       ctx.fillStyle = BASE;
       ctx.fillRect(0, 0, W, H);
-      drawGrid();
+      if (W > 768) drawGrid(); // スマホはグリッドなし
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
+
+      // 黄金らせん：1つ描き終えて消えたら、少し間をおいて次を別の場所に
+      spirals = spirals.filter((sp) => drawSpiral(sp, now));
+      if (!spirals.length) {
+        if (nextSpiralAt === Infinity) nextSpiralAt = now + rand(1.2, 3);
+        else if (now >= nextSpiralAt) {
+          spirals.push(makeSpiral(now));
+          nextSpiralAt = Infinity;
+        }
+      }
 
       pens.forEach((p) => {
         const color = p.pink ? PINK : INK;
@@ -236,6 +369,7 @@ export default function TopPageBG() {
     last = performance.now() / 1000;
     init(last);
     if (reduce) {
+      spirals = [makeSpiral(last - 6)]; // らせんが描き終わった状態
       render(last); // 動きを減らす設定：線が描かれた状態で止める
     } else {
       raf = requestAnimationFrame(loop);
