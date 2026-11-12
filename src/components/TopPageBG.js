@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from "react";
 //   「ガイド線 → 塗りが伸びる → しばらく留まる → 抜ける」を繰り返す。
 // =====================================================================
 
-const BASE = "#F7F6F5";
+const BASE = "#F4EFE7"; // 薄いベージュ
 const INK = "35,24,21";
 const PINK = "232,82,152";
 const FILL_A = 0.22; // 塗りの濃さ（ラッパーの opacity .4 と掛け合わさる）
