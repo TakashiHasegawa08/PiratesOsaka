@@ -1,15 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-// import KV from "./KV"; // 旧KV（3D押し出しロゴ）
-import KVDraw from "./KVDraw";
+import KV from "./KV"; // 旧KV（3D押し出しロゴ）
+import KVDraw from "./KVDraw"; // 描線KV
 import Title from "./Title";
 import { useLocation } from "react-router-dom";
 import ScrollFadein from "./ScrollFadein";
 import { Canvas } from "@react-three/fiber";
 import ReCAPTCHA from "react-google-recaptcha";
 import { motion, useInView } from "framer-motion";
-import TopPageBG from "./TopPageBG";
+import TopPageBG from "./TopPageBG"; // 線の背景
+import TopPageBGCircles from "./TopPageBGCircles"; // 旧背景（円がフワフワ動く）
+
+// ===== トップの KV・背景の切り替えスイッチ =====
+// true にすると以前の 3D KV（押し出しロゴ）に戻ります
+const USE_3D_KV = false;
+// true にすると以前の円の背景に戻ります
+const USE_CIRCLE_BG = false;
 // import Particles from "./Particles";
 // import Particles from "./Particles";
 // import Pagination from "./Pagination";
@@ -360,11 +367,20 @@ function Posts() {
         </div>
       </section> */}
       <section id="KV" className="js_kv">
-        <div className="kv-bg kv-bg--draw">
+        <div className={USE_3D_KV ? "kv-bg" : "kv-bg kv-bg--draw"}>
           <p className="topName">PO Co., Ltd.</p>
           <p className="catchCopy">Be Unique!</p>
           <div className="canvasBoard">
-            <KVDraw />
+            {USE_3D_KV ? (
+              <Canvas camera={{ position: [0, 0, 20], fov: 1500 }}>
+                <ambientLight intensity={2.0} />
+                <directionalLight position={[5, 5, 5]} intensity={1.5} />
+                <hemisphereLight intensity={1.0} groundColor="white" />
+                <KV />
+              </Canvas>
+            ) : (
+              <KVDraw />
+            )}
           </div>
         </div>
       </section>
@@ -372,7 +388,7 @@ function Posts() {
         className="TopPageBG header-fadein js-header-fadein"
         style={{ backgroundImage: `url("${bgImage}")` }}
       ></div>{" "} */}
-      <TopPageBG />
+      {USE_CIRCLE_BG ? <TopPageBGCircles /> : <TopPageBG />}
       <div className="header-fadein js-header-fadein">
         <Header />
       </div>
@@ -386,11 +402,19 @@ function Posts() {
       </div>
       <ScrollFadein />
       {showTopArrow && (
-        <a href="#intro" className="topArrow">
+        <a
+          href="#intro"
+          className={USE_3D_KV ? "topArrow" : "topArrow topArrow--dark"}
+        >
           <div className="inner">
             <p className="txt">Scroll</p>
             <picture className="arrow">
-              <img src="/img/PO_topArrow_bla.svg" alt="" />
+              <img
+                src={
+                  USE_3D_KV ? "/img/PO_topArrow.svg" : "/img/PO_topArrow_bla.svg"
+                }
+                alt=""
+              />
             </picture>
           </div>
         </a>
