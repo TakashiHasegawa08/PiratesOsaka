@@ -171,3 +171,17 @@
         transform: translate(0%, 10px);
     }
 }
+
+// ===== KVDraw（描線KV） =====
+.kv-bg.kv-bg--draw {
+    background: #ffffff;
+}
+
+.kvDraw {
+    width: 100%;
+    height: 100%;
+}
+
+.top-page .topArrow .txt {
+    color: #231815;
+}

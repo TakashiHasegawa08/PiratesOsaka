@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import KV from "./KV";
+// import KV from "./KV"; // 旧KV（3D押し出しロゴ）
+import KVDraw from "./KVDraw";
 import Title from "./Title";
 import { useLocation } from "react-router-dom";
 import ScrollFadein from "./ScrollFadein";
@@ -359,16 +360,11 @@ function Posts() {
         </div>
       </section> */}
       <section id="KV" className="js_kv">
-        <div className="kv-bg">
+        <div className="kv-bg kv-bg--draw">
           <p className="topName">PO Co., Ltd.</p>
           <p className="catchCopy">Be Unique!</p>
           <div className="canvasBoard">
-            <Canvas camera={{ position: [0, 0, 20], fov: 1500 }}>
-              <ambientLight intensity={2.0} />
-              <directionalLight position={[5, 5, 5]} intensity={1.5} />
-              <hemisphereLight intensity={1.0} groundColor="white" />
-              <KV />
-            </Canvas>
+            <KVDraw />
           </div>
         </div>
       </section>
@@ -394,7 +390,7 @@ function Posts() {
           <div className="inner">
             <p className="txt">Scroll</p>
             <picture className="arrow">
-              <img src="/img/PO_topArrow.svg" alt="" />
+              <img src="/img/PO_topArrow_bla.svg" alt="" />
             </picture>
           </div>
         </a>
