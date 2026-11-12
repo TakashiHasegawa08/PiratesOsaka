@@ -150,6 +150,8 @@ const KV = () => {
   const mesh3D = useRef();
   const meshFlat = useRef();
   const scrollRef = useRef(0);
+  const idleWeight = useRef(0);
+  const reducedMotion = useRef(false);
   const { gl, scene } = useThree();
 
   const svgData = useLoader(SVGLoader, "/img/PO_rogo_251216.svg");
@@ -173,6 +175,14 @@ const KV = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => (reducedMotion.current = preference.matches);
+    update();
+    preference.addEventListener("change", update);
+    return () => preference.removeEventListener("change", update);
   }, []);
 
   // SVG → Geometry（全 subPath を拾って再構築）
@@ -252,7 +262,7 @@ const KV = () => {
   useEffect(() => () => material3D.dispose(), [material3D]);
   useEffect(() => () => materialFlat?.dispose(), [materialFlat]);
 
-  useFrame(() => {
+  useFrame(({ clock }, delta) => {
     if (!group.current) return;
     const scrollY = scrollRef.current;
     const maxScroll = window.innerHeight * 2;
@@ -267,6 +277,23 @@ const KV = () => {
     group.current.rotation.x = Math.PI * 2 * (1 - easedRatio);
     group.current.rotation.y = Math.PI * 2 * (1 - easedRatio);
     group.current.rotation.z = Math.PI * 1 * (1 - easedRatio);
+
+    // 冒頭の浮遊をスクロール開始時に減衰させる。
+    const idleTarget = scrollY <= 0 && !reducedMotion.current ? 1 : 0;
+    idleWeight.current = THREE.MathUtils.damp(
+      idleWeight.current, idleTarget, 8, Math.min(delta, 0.05),
+    );
+    if (idleTarget === 0 && idleWeight.current < 0.001) idleWeight.current = 0;
+    const weight = reducedMotion.current ? 0 : idleWeight.current;
+    const time = clock.elapsedTime;
+    group.current.position.set(
+      Math.sin(time * 0.45) * 0.35 * weight,
+      Math.sin(time * 0.6) * 0.5 * weight,
+      0,
+    );
+    group.current.rotation.x += Math.sin(time * 0.4) * 0.025 * weight;
+    group.current.rotation.y += Math.sin(time * 0.5) * 0.035 * weight;
+    group.current.rotation.z += Math.sin(time * 0.35) * 0.015 * weight;
 
     // 終端クロスフェード：scrollRatio 0.88 → 1.0 で 3D → SVG
     const FADE_START = 0.88;

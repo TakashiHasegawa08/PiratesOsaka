@@ -4,7 +4,7 @@ import Footer from "../Footer";
 import Title from "../Title";
 
 function EnglishMEMOPrivacy() {
-  document.title = "EnglishMEMO プライバシーポリシー | 株式会社PO";
+  document.title = "EnglishTraining プライバシーポリシー | 株式会社PO";
 
   return (
     <div id="privacyPage">
@@ -16,7 +16,7 @@ function EnglishMEMOPrivacy() {
           <div className="postBox">
             <div className="postWrap" style={{ display: "block" }}>
               <article className="privacyArticle">
-                <h2>EnglishMEMO プライバシーポリシー</h2>
+                <h2>EnglishTraining プライバシーポリシー</h2>
                 <p>制定日：2026年9月4日</p>
                 <p>運営者：株式会社PO</p>
 

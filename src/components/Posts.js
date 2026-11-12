@@ -648,6 +648,33 @@ function Posts() {
           </div>
         </section>
 
+        <section id="website">
+          <div className="contents_inner">
+            <Title>Web site</Title>
+            <div className="contentAll">
+              <div className="contentBoxWrap">
+                <div className="contentBox Box1 js-fadein">
+                  <div className="visual">
+                    <a
+                      href="https://p-o.ltd/World-Music-Charts/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hoverEffect"
+                    >
+                      <img src="/img/board_WMC.jpg" alt="World Music Charts" />
+                    </a>
+                  </div>
+                  <p className="name">World Music Charts</p>
+                  <p className="lead">
+                    <span className="red">世界18か国のApple Music Top 10</span>
+                    を地図から探索できるWEBサイトです。各国のランキングをたどりながら、楽曲やアーティストをチェック。世界で聴かれている音楽を通じて、まだ知らなかった一曲との出会いを楽しめます。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Event */}
         <section id="event">
           <div className="contents_inner">

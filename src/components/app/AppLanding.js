@@ -52,7 +52,99 @@ function AppLanding() {
                     </Link>
                   </div>
 
-                  {/* 03 PocketSketch */}
+                  {/* 03 EnglishTraining */}
+                  <div className="app_content">
+                    <h2>EnglishTraining</h2>
+                    <div className="app_icon">
+                      <img
+                        src="/img/app/EnglishMEMO_icon.png"
+                        alt="EnglishTraining"
+                      />
+                    </div>
+                    <Link to="/app/englishtraining" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 04 DrinkCTRL */}
+                  <div className="app_content">
+                    <h2>DrinkCTRL</h2>
+                    <div className="app_icon">
+                      <img src="/img/app/DrinkCTRL_icon.png" alt="DrinkCTRL" />
+                    </div>
+                    <Link to="/app/drinkctrl" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 05 MiniStick */}
+                  <div className="app_content">
+                    <h2>MiniStick</h2>
+                    <div className="app_icon">
+                      <img src="/img/app/MiniStick_icon.png" alt="MiniStick" />
+                    </div>
+                    <Link to="/app/ministick" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 06 Noir Calendar */}
+                  <div className="app_content">
+                    <h2>Noir Calendar</h2>
+                    <div className="app_icon">
+                      <img
+                        src="/img/app/NoirCalendar_icon.png"
+                        alt="Noir Calendar"
+                      />
+                    </div>
+                    <Link to="/app/noircalendar" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 07 Noir Player */}
+                  <div className="app_content">
+                    <h2>Noir Player</h2>
+                    <div className="app_icon">
+                      <img
+                        src="/img/app/NoirPlayer_icon.png"
+                        alt="Noir Player"
+                      />
+                    </div>
+                    <Link to="/app/noirplayer" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 08 Noir Clock */}
+                  <div className="app_content">
+                    <h2>Noir Clock</h2>
+                    <div className="app_icon">
+                      <img
+                        src="/img/app/noir_clock_icon_square_512.png"
+                        alt="Noir Clock"
+                      />
+                    </div>
+                    <Link to="/app/noirclock" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 09 CineTone Camera */}
+                  <div className="app_content">
+                    <h2>CineTone Camera</h2>
+                    <div className="app_icon">
+                      <img
+                        src="/img/app/Cine_AppIcon.png"
+                        alt="CineTone Camera"
+                      />
+                    </div>
+                    <Link to="/app/cinetone" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 10 PocketSketch */}
                   <div className="app_content">
                     <h2>PocketSketch</h2>
                     <div className="app_icon">
@@ -66,7 +158,7 @@ function AppLanding() {
                     </Link>
                   </div>
 
-                  {/* 04 SoundSketch */}
+                  {/* 11 SoundSketch */}
                   <div className="app_content">
                     <h2>SoundSketch</h2>
                     <div className="app_icon">
@@ -76,20 +168,6 @@ function AppLanding() {
                       />
                     </div>
                     <Link to="/app/SoundSketch" className="linkBtn link">
-                      プライバシーポリシー
-                    </Link>
-                  </div>
-
-                  {/* 05 EnglishMEMO */}
-                  <div className="app_content">
-                    <h2>EnglishMEMO</h2>
-                    <div className="app_icon">
-                      <img
-                        src="/img/app/EnglishMEMO_icon.png"
-                        alt="EnglishMEMO"
-                      />
-                    </div>
-                    <Link to="/app/englishmemo" className="linkBtn link">
                       プライバシーポリシー
                     </Link>
                   </div>

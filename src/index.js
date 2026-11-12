@@ -16,6 +16,12 @@ import GuitapPrivacy from "./components/app/GuitapPrivacy";
 import PocketSketchPrivacy from "./components/app/PocketSketchPrivacy";
 import SoundSketchPrivacy from "./components/app/SoundSketchPrivacy";
 import EnglishMEMOPrivacy from "./components/app/EnglishMEMOPrivacy";
+import DrinkCTRLPrivacy from "./components/app/DrinkCTRLPrivacy";
+import MiniStickPrivacy from "./components/app/MiniStickPrivacy";
+import NoirCalendarPrivacy from "./components/app/NoirCalendarPrivacy";
+import NoirPlayerPrivacy from "./components/app/NoirPlayerPrivacy";
+import NoirClockPrivacy from "./components/app/NoirClockPrivacy";
+import CineToneCameraPrivacy from "./components/app/CineToneCameraPrivacy";
 import "./components/styles/styles.scss";
 
 function App() {
@@ -38,7 +44,13 @@ function App() {
         <Route path="/app/guitap" element={<GuitapPrivacy />} />
         <Route path="/app/PocketSketch" element={<PocketSketchPrivacy />} />
         <Route path="/app/SoundSketch" element={<SoundSketchPrivacy />} />
-        <Route path="/app/englishmemo" element={<EnglishMEMOPrivacy />} />
+        <Route path="/app/englishtraining" element={<EnglishMEMOPrivacy />} />
+        <Route path="/app/drinkctrl" element={<DrinkCTRLPrivacy />} />
+        <Route path="/app/ministick" element={<MiniStickPrivacy />} />
+        <Route path="/app/noircalendar" element={<NoirCalendarPrivacy />} />
+        <Route path="/app/noirplayer" element={<NoirPlayerPrivacy />} />
+        <Route path="/app/noirclock" element={<NoirClockPrivacy />} />
+        <Route path="/app/cinetone" element={<CineToneCameraPrivacy />} />
       </Routes>
     </Router>
   );
