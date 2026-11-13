@@ -10,7 +10,12 @@ import * as THREE from "three";
 // =====================================================================
 
 const LOGO_URL = "/img/PO_rogo_251216.svg";
-const LOGO_SCALE = 0.6; // ロゴの表示サイズ（1 = 元の大きさ。0.75 × 0.8）
+// ロゴの大きさ（開いた直後＝最大）：画面幅に対するロゴ横幅の割合
+const LOGO_W_PC = 0.34;
+const LOGO_W_SP = 0.43;
+const LOGO_H_MAX = 0.4; // 縦長でない画面ではロゴの高さを画面の40%までに
+// スクロールしきったときの大きさ（最大に対する割合）
+const LOGO_MIN_SCALE = 0.35;
 const INK = 0x231815;
 const PINK = 0xe85298;
 const GUIDE = 0xb9b0ab;
@@ -188,8 +193,10 @@ export default function KVDraw() {
       camera.updateProjectionMatrix();
 
       const isSp = W <= 768;
-      const S =
-        Math.min((W * (isSp ? 0.72 : 0.5)) / logo.w, (H * 0.42) / logo.h) * LOGO_SCALE;
+      const S = Math.min(
+        (W * (isSp ? LOGO_W_SP : LOGO_W_PC)) / logo.w,
+        (H * LOGO_H_MAX) / logo.h,
+      );
       const toW = (x, y) => [(x - logo.w / 2) * S, -(y - logo.h / 2) * S];
       const mapPts = (pts) => {
         const out = [];
@@ -275,7 +282,7 @@ export default function KVDraw() {
 
       // スクロール（KV は 300vh。2画面分で完了）
       const sr = eio(window.scrollY / (window.innerHeight * 2));
-      root.scale.setScalar(1 - 0.38 * sr);
+      root.scale.setScalar(1 - (1 - LOGO_MIN_SCALE) * sr);
 
       const introGuide = 1 - eout((t - T_GUIDE_OUT[0]) / T_GUIDE_OUT[1]);
       const guideAlpha = 0.9 * Math.max(introGuide, sr * 0.7);
