@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 // TopPageBG — 線で描く背景モチーフ（シンプル版）
 //   ペンが画面のどこかから現れ、1〜2回 円を描くように曲がったあと、
 //   長い直線で（縦か横に）画面の外までまっすぐ進む。線は後ろから消えていく。
-//   ペンが画面の外へ抜けて線が消えかかるタイミングで、次のペンが別の場所から現れる。
+//   ペンがある程度描き進んだところ（NEXT_AT）で、次のペンが別の場所から現れる。
 //   カーブの大きさは毎回ランダム、速さは一定。
 //   2回曲がるときは、2回目の半径が黄金比で小さくなる（さり気ない引用）。
 //   ペン先はピンクの点。
@@ -18,6 +18,8 @@ const LINE_W = 1.2; // 線の太さ(px)
 const SPEED = 110; // ペンの速さ(px/秒)・全ペン共通
 const R_MIN = 0.6; // カーブ半径の最小（単位）
 const R_MAX = 3.2; // カーブ半径の最大（単位）
+// 次のペンを出すタイミング：今のペンが「画面の端まで」の道のりのこの割合まで進んだら
+const NEXT_AT = 0.55;
 const PHI = (1 + Math.sqrt(5)) / 2;
 
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -128,8 +130,8 @@ export default function TopPageBG() {
       const born = [];
       pens.forEach((p) => {
         p.head += p.speed * dt;
-        // ペン先が画面の外へ抜けた（線が消えかかる）ら、次のペンを出す
-        if (!p.spawned && p.head >= p.exitAt) {
+        // ペンがある程度描き進んだら、次のペンを出す
+        if (!p.spawned && p.head >= p.exitAt * NEXT_AT) {
           p.spawned = true;
           const next = makePen(0.2);
           if (next) born.push(next);
