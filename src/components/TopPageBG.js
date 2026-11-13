@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 
 // =====================================================================
 // TopPageBG — 線で描く背景モチーフ（シンプル版）
-//   ペンが画面の外から直線で入ってきて、45°カーブしたあと、
-//   斜めの直線で画面の外までまっすぐ進む。線は後ろから消えていく。
+//   ペンが画面の外から直線で入ってきて、90°カーブしたあと、
+//   直線で画面の外までまっすぐ進む。線は後ろから消えていく。
 //   常に LINES 本のペンが描いている状態を保ち、1本が画面の外へ抜けると次が別の場所から現れる。
 //   カーブの大きさは毎回ランダム、速さは一定。
 //   ペン先はピンクの点。
@@ -15,7 +15,7 @@ const PINK = "232,82,152";
 const LINE_A = 0.5; // 線の濃さ（ラッパーの opacity .4 と掛け合わさる）
 const LINE_W = 1.2; // 線の太さ(px)
 const SPEED = 110; // ペンの速さ(px/秒)・全ペン共通
-const R_MIN = 0.6; // カーブ半径の最小（単位）
+const R_MIN = 1.6; // カーブ半径の最小（単位）。小さすぎる円にならないように
 const R_MAX = 3.2; // カーブ半径の最大（単位）
 // 同時に描いているペンの本数（画面の外へ抜けたら次が出る。消えかけの線はこれとは別に残る）
 const LINES = 2;
@@ -75,18 +75,18 @@ export default function TopPageBG() {
         const line = (len) =>
           push({ kind: "line", x0: x, y0: y, x1: x + Math.cos(th) * len, y1: y + Math.sin(th) * len, len });
 
-        // 直線で入ってくる → 45°カーブ → 直線で抜けていく
+        // 直線で入ってくる → 90°カーブ → 直線で抜けていく
         line(back);
         const r = unit * rand(R_MIN, Math.min(R_MAX, (Math.min(W, H) * 0.42) / unit));
         const side = Math.random() < 0.5 ? 1 : -1;
-        const turn = (Math.PI / 4) * side;
+        const turn = (Math.PI / 2) * side;
         const cx = x + Math.cos(th + (side * Math.PI) / 2) * r;
         const cy = y + Math.sin(th + (side * Math.PI) / 2) * r;
         push({ kind: "arc", cx, cy, r, a0: Math.atan2(y - cy, x - cx), da: turn, len: r * Math.abs(turn) });
         th += turn;
         if (x < m || x > W - m || y < m || y > H - m) continue; // カーブの終点が画面内のものだけ使う
 
-        // 斜めの直線で画面の外まで
+        // 直線で画面の外まで
         const dx = Math.cos(th), dy = Math.sin(th);
         const tX = dx > 1e-6 ? (W - x) / dx : dx < -1e-6 ? -x / dx : Infinity;
         const tY = dy > 1e-6 ? (H - y) / dy : dy < -1e-6 ? -y / dy : Infinity;
