@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 
 // =====================================================================
 // TopPageBG — 線で描く背景モチーフ（シンプル版）
-//   ペンが画面の外から直線で入ってきて、円の90°分カーブしたあと、
-//   直線で（縦か横に）画面の外までまっすぐ進む。線は後ろから消えていく。
+//   ペンが画面の外から直線で入ってきて、45°カーブしたあと、
+//   斜めの直線で画面の外までまっすぐ進む。線は後ろから消えていく。
 //   常に LINES 本のペンが描いている状態を保ち、1本が画面の外へ抜けると次が別の場所から現れる。
 //   カーブの大きさは毎回ランダム、速さは一定。
 //   ペン先はピンクの点。
@@ -62,43 +62,37 @@ export default function TopPageBG() {
     const makePath = () => {
       const m = unit * 0.5;
       for (let attempt = 0; attempt < 30; attempt++) {
-        // カーブに入る位置と、そこへ向かう向き
+        // カーブに入る位置と、そこへ向かう向き（上下左右のどれか）
         const tx = rand(W * 0.12, W * 0.88), ty = rand(H * 0.12, H * 0.88);
-        let h = Math.floor(rand(0, 4));
-        const [hx, hy] = DIRS[h];
+        const [hx, hy] = DIRS[Math.floor(rand(0, 4))];
+        let th = Math.atan2(hy, hx); // 進行方向（角度）
         // 画面の外（進行方向の反対側）からまっすぐ入ってくる
         const back = (hx > 0 ? tx : hx < 0 ? W - tx : hy > 0 ? ty : H - ty) + 20;
         let x = tx - hx * back, y = ty - hy * back;
         const segs = [];
         let total = 0;
-        let ok = true;
-        const push = (s) => { s.start = total; total += s.len; segs.push(s); [x, y] = pointAt(s, s.len); };
-        const line = (len) => {
-          const [dx, dy] = DIRS[h];
-          push({ kind: "line", x0: x, y0: y, x1: x + dx * len, y1: y + dy * len, len });
-        };
-        const arc = (r, side, quarters) => {
-          const [sx, sy] = DIRS[(h + side + 4) % 4];
-          const cx = x + sx * r, cy = y + sy * r;
-          // 円が画面内に収まるものだけ使う
-          const [ex, ey] = [x + (DIRS[h][0] + sx) * r, y + (DIRS[h][1] + sy) * r]; // カーブの終点
-          if (ex < m || ex > W - m || ey < m || ey > H - m) ok = false;
-          const da = (Math.PI / 2) * quarters * side;
-          push({ kind: "arc", cx, cy, r, a0: Math.atan2(y - cy, x - cx), da, len: r * Math.abs(da) });
-          h = (h + side * quarters + 8) % 4;
-        };
+        const push = (sg) => { sg.start = total; total += sg.len; segs.push(sg); [x, y] = pointAt(sg, sg.len); };
+        const line = (len) =>
+          push({ kind: "line", x0: x, y0: y, x1: x + Math.cos(th) * len, y1: y + Math.sin(th) * len, len });
 
-        // 直線で入ってくる → 90°カーブ → 直線で抜けていく
+        // 直線で入ってくる → 45°カーブ → 直線で抜けていく
         line(back);
         const r = unit * rand(R_MIN, Math.min(R_MAX, (Math.min(W, H) * 0.42) / unit));
-        arc(r, Math.random() < 0.5 ? 1 : -1, 1);
-        if (!ok) continue;
-        line(W + H); // 画面の外まで
-        // 直線が画面の端に届くまでの道のり
-        const L = segs[segs.length - 1];
-        const [dx, dy] = DIRS[h];
-        const toEdge = dx > 0 ? W - L.x0 : dx < 0 ? L.x0 : dy > 0 ? H - L.y0 : L.y0;
-        return { segs, total, exitAt: L.start + toEdge };
+        const side = Math.random() < 0.5 ? 1 : -1;
+        const turn = (Math.PI / 4) * side;
+        const cx = x + Math.cos(th + (side * Math.PI) / 2) * r;
+        const cy = y + Math.sin(th + (side * Math.PI) / 2) * r;
+        push({ kind: "arc", cx, cy, r, a0: Math.atan2(y - cy, x - cx), da: turn, len: r * Math.abs(turn) });
+        th += turn;
+        if (x < m || x > W - m || y < m || y > H - m) continue; // カーブの終点が画面内のものだけ使う
+
+        // 斜めの直線で画面の外まで
+        const dx = Math.cos(th), dy = Math.sin(th);
+        const tX = dx > 1e-6 ? (W - x) / dx : dx < -1e-6 ? -x / dx : Infinity;
+        const tY = dy > 1e-6 ? (H - y) / dy : dy < -1e-6 ? -y / dy : Infinity;
+        const toEdge = Math.min(tX, tY);
+        line(W + H);
+        return { segs, total, exitAt: segs[segs.length - 1].start + toEdge };
       }
       return null;
     };
