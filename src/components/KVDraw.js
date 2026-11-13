@@ -10,6 +10,7 @@ import * as THREE from "three";
 // =====================================================================
 
 const LOGO_URL = "/img/PO_rogo_251216.svg";
+const LOGO_SCALE = 0.75; // ロゴの表示サイズ（1 = 元の大きさ）
 const INK = 0x231815;
 const PINK = 0xe85298;
 const GUIDE = 0xb9b0ab;
@@ -187,7 +188,8 @@ export default function KVDraw() {
       camera.updateProjectionMatrix();
 
       const isSp = W <= 768;
-      const S = Math.min((W * (isSp ? 0.72 : 0.5)) / logo.w, (H * 0.42) / logo.h);
+      const S =
+        Math.min((W * (isSp ? 0.72 : 0.5)) / logo.w, (H * 0.42) / logo.h) * LOGO_SCALE;
       const toW = (x, y) => [(x - logo.w / 2) * S, -(y - logo.h / 2) * S];
       const mapPts = (pts) => {
         const out = [];
