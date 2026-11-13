@@ -12,7 +12,7 @@ import * as THREE from "three";
 const LOGO_URL = "/img/PO_rogo_251216.svg";
 // ロゴの大きさ（開いた直後＝最大）：画面幅に対するロゴ横幅の割合
 const LOGO_W_PC = 0.34;
-const LOGO_W_SP = 0.43;
+const LOGO_W_SP = 0.49; // 0.43 × 1.15
 const LOGO_H_MAX = 0.4; // 縦長でない画面ではロゴの高さを画面の40%までに
 // スクロールしきったときの大きさ（最大に対する割合）
 const LOGO_MIN_SCALE = 0.35;
