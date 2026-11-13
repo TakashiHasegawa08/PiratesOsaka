@@ -2,11 +2,10 @@ import React, { useEffect, useRef } from "react";
 
 // =====================================================================
 // TopPageBG — 線で描く背景モチーフ（シンプル版）
-//   ペンが画面のどこかから現れ、1〜2回 円を描くように曲がったあと、
-//   長い直線で（縦か横に）画面の外までまっすぐ進む。線は後ろから消えていく。
+//   ペンが画面の外から直線で入ってきて、円の90°分カーブしたあと、
+//   直線で（縦か横に）画面の外までまっすぐ進む。線は後ろから消えていく。
 //   常に LINES 本のペンが描いている状態を保ち、1本が画面の外へ抜けると次が別の場所から現れる。
 //   カーブの大きさは毎回ランダム、速さは一定。
-//   2回曲がるときは、2回目の半径が黄金比で小さくなる（さり気ない引用）。
 //   ペン先はピンクの点。
 // =====================================================================
 
@@ -20,7 +19,6 @@ const R_MIN = 0.6; // カーブ半径の最小（単位）
 const R_MAX = 3.2; // カーブ半径の最大（単位）
 // 同時に描いているペンの本数（画面の外へ抜けたら次が出る。消えかけの線はこれとは別に残る）
 const LINES = 2;
-const PHI = (1 + Math.sqrt(5)) / 2;
 
 const rand = (a, b) => a + Math.random() * (b - a);
 const DIRS = [[1, 0], [0, 1], [-1, 0], [0, -1]]; // 右・下・左・上（画面座標）
@@ -64,8 +62,13 @@ export default function TopPageBG() {
     const makePath = () => {
       const m = unit * 0.5;
       for (let attempt = 0; attempt < 30; attempt++) {
-        let x = rand(W * 0.12, W * 0.88), y = rand(H * 0.12, H * 0.88);
+        // カーブに入る位置と、そこへ向かう向き
+        const tx = rand(W * 0.12, W * 0.88), ty = rand(H * 0.12, H * 0.88);
         let h = Math.floor(rand(0, 4));
+        const [hx, hy] = DIRS[h];
+        // 画面の外（進行方向の反対側）からまっすぐ入ってくる
+        const back = (hx > 0 ? tx : hx < 0 ? W - tx : hy > 0 ? ty : H - ty) + 20;
+        let x = tx - hx * back, y = ty - hy * back;
         const segs = [];
         let total = 0;
         let ok = true;
@@ -78,21 +81,17 @@ export default function TopPageBG() {
           const [sx, sy] = DIRS[(h + side + 4) % 4];
           const cx = x + sx * r, cy = y + sy * r;
           // 円が画面内に収まるものだけ使う
-          if (cx - r < m || cx + r > W - m || cy - r < m || cy + r > H - m) ok = false;
+          const [ex, ey] = [x + (DIRS[h][0] + sx) * r, y + (DIRS[h][1] + sy) * r]; // カーブの終点
+          if (ex < m || ex > W - m || ey < m || ey > H - m) ok = false;
           const da = (Math.PI / 2) * quarters * side;
           push({ kind: "arc", cx, cy, r, a0: Math.atan2(y - cy, x - cx), da, len: r * Math.abs(da) });
           h = (h + side * quarters + 8) % 4;
         };
 
-        line(unit * rand(0.3, 1.2));
-        let r = unit * rand(R_MIN, Math.min(R_MAX, (Math.min(W, H) * 0.42) / unit));
-        let side = Math.random() < 0.5 ? 1 : -1;
-        const turns = Math.random() < 0.5 ? 1 : 2;
-        for (let k = 0; k < turns; k++) {
-          arc(r, side, 1 + Math.floor(rand(0, 3))); // 90°〜270°
-          r /= PHI;
-          if (Math.random() < 0.4) side = -side;
-        }
+        // 直線で入ってくる → 90°カーブ → 直線で抜けていく
+        line(back);
+        const r = unit * rand(R_MIN, Math.min(R_MAX, (Math.min(W, H) * 0.42) / unit));
+        arc(r, Math.random() < 0.5 ? 1 : -1, 1);
         if (!ok) continue;
         line(W + H); // 画面の外まで
         // 直線が画面の端に届くまでの道のり
