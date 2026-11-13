@@ -10,7 +10,7 @@ import * as THREE from "three";
 // =====================================================================
 
 const LOGO_URL = "/img/PO_rogo_251216.svg";
-const LOGO_SCALE = 0.75; // ロゴの表示サイズ（1 = 元の大きさ）
+const LOGO_SCALE = 0.6; // ロゴの表示サイズ（1 = 元の大きさ。0.75 × 0.8）
 const INK = 0x231815;
 const PINK = 0xe85298;
 const GUIDE = 0xb9b0ab;
