@@ -819,26 +819,15 @@ footer.footer {
     transform: translateY(0);
 }
 
+// ホバーで薄くする。白い板を重ねる方式だと背景色の上で白い四角が見えるため、
+// 要素そのものの不透明度を下げる方式にしている
 .hoverEffect {
     display: block;
     position: relative;
-
-    &::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        background-color: white;
-        transition: .3s;
-        left: 0;
-        top: 0;
-    }
+    transition: opacity .3s;
 
     &:hover {
-        &::after {
-            opacity: 0.7;
-        }
+        opacity: 0.45;
     }
 }
 
