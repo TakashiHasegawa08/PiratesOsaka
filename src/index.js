@@ -22,6 +22,7 @@ import NoirCalendarPrivacy from "./components/app/NoirCalendarPrivacy";
 import NoirPlayerPrivacy from "./components/app/NoirPlayerPrivacy";
 import NoirClockPrivacy from "./components/app/NoirClockPrivacy";
 import CineToneCameraPrivacy from "./components/app/CineToneCameraPrivacy";
+import EventRegisterPrivacy from "./components/app/EventRegisterPrivacy";
 import "./components/styles/styles.scss";
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
         <Route path="/app/noirplayer" element={<NoirPlayerPrivacy />} />
         <Route path="/app/noirclock" element={<NoirClockPrivacy />} />
         <Route path="/app/cinetone" element={<CineToneCameraPrivacy />} />
+        <Route path="/app/eventregister" element={<EventRegisterPrivacy />} />
       </Routes>
     </Router>
   );

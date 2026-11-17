@@ -144,7 +144,21 @@ function AppLanding() {
                     </Link>
                   </div>
 
-                  {/* 10 PocketSketch */}
+                  {/* 10 EventRegister */}
+                  <div className="app_content">
+                    <h2>EventRegister</h2>
+                    <div className="app_icon">
+                      <img
+                        src="/img/app/EventRegister_icon.png"
+                        alt="EventRegister"
+                      />
+                    </div>
+                    <Link to="/app/eventregister" className="linkBtn link">
+                      プライバシーポリシー
+                    </Link>
+                  </div>
+
+                  {/* 11 PocketSketch */}
                   <div className="app_content">
                     <h2>PocketSketch</h2>
                     <div className="app_icon">
@@ -158,7 +172,7 @@ function AppLanding() {
                     </Link>
                   </div>
 
-                  {/* 11 SoundSketch */}
+                  {/* 12 SoundSketch */}
                   <div className="app_content">
                     <h2>SoundSketch</h2>
                     <div className="app_icon">
